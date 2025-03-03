@@ -1,75 +1,8 @@
-using Unity.VisualScripting;
+//using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static UnityEditor.Progress;
+//using static UnityEditor.Progress;
 
-//public class pick_up_items : MonoBehaviour
-//{
-//    private PlayerInput playerInput;
-//    private bool pickUp;
-//    private GameObject playerHands;
-//    private bool isHolding = true;
-//    private Rigidbody rb;
-//    private bool inRange = false;
-//    private float throwForce = 1f;
-//    private void Awake()
-//    {
-//        playerInput = GetComponent<PlayerInput>();
-//        rb = this.GetComponent<Rigidbody>();
-//        Transform[] children = transform.GetComponentsInChildren<Transform>();
-        
-//        foreach (Transform child in children)
-//        {
-//            if(child.CompareTag("PlayerHands"))
-//            {
-//                playerHands = child.gameObject;
-//                break;  // Exit loop once we found our hands
-//            }
-//        }
-//    }
-
-//    private void OnEnable()
-//    {
-//        var controls = playerInput.actions;
-
-//        controls["Interact"].started += Interact;
-//    }
-
-
-//    private void OnTriggerStay(Collider other)
-//    {
-        
-//        if(other.gameObject.tag == ("Item") && !pickUp)
-//        {
-
-//                Vector3 playerPos = this.transform.position;
-//                other.transform.position = playerHands.transform.position;
-//                other.GetComponent<BoxCollider>().enabled = false;
-//                isHolding = true;
-            
-//        }
-//        if(other.gameObject.tag == ("Item") && isHolding && pickUp)
-//        {
-//            other.GetComponent<BoxCollider>().enabled = true;
-//            Vector3 throwVelocity = this.rb.linearVelocity;
-
-//            //// Optionally add some upward force to prevent immediate dropping
-//            throwVelocity += Vector3.up * 2f;
-
-//            //// Apply the velocity
-//            other.GetComponent<Rigidbody>().linearVelocity = throwVelocity * throwForce;
-//        }
-//    }
-//    private void Interact(InputAction.CallbackContext context)
-//    {
-//        pickUp = !pickUp;
-//    }
-
-
-//}
-
-using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class pick_up_items : MonoBehaviour
 {
@@ -138,10 +71,11 @@ public class pick_up_items : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         inRange = false;
+        wantsToPickup = false;
     }
 
     private void OnInteractPerformed(InputAction.CallbackContext context)
-    {
+    { 
         if(inRange)
         {
             wantsToPickup = !wantsToPickup;
