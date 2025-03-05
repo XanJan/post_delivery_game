@@ -52,9 +52,10 @@ public class pick_up_items : MonoBehaviour
     {
         inRange = true;
         // If player wants to pickup and we're not holding anything, pickup item when it enters range
-        if (wantsToPickup && heldItem == null && other.CompareTag("Item"))
+        if (wantsToPickup && heldItem == null && other.CompareTag("Item") && other.gameObject.GetComponent<item_script>().isPickedUp == false)
         {
             PickupItem(other.gameObject);
+            other.gameObject.GetComponent<item_script>().isPickedUp = true;
         }
     }
 
@@ -62,9 +63,10 @@ public class pick_up_items : MonoBehaviour
     {
 
         // If player wants to pickup and we're not holding anything, pickup item while in range
-        if (wantsToPickup && heldItem == null && other.CompareTag("Item"))
+        if (wantsToPickup && heldItem == null && other.CompareTag("Item") && other.gameObject.GetComponent<item_script>().isPickedUp == false)
         {
             PickupItem(other.gameObject);
+            other.gameObject.GetComponent<item_script>().isPickedUp = true;
         }
     }
 
@@ -72,6 +74,7 @@ public class pick_up_items : MonoBehaviour
     {
         inRange = false;
         wantsToPickup = false;
+        other.gameObject.GetComponent<item_script>().isPickedUp = false;
     }
 
     private void OnInteractPerformed(InputAction.CallbackContext context)
