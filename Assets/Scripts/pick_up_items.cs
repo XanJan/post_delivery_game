@@ -52,7 +52,7 @@ public class pick_up_items : MonoBehaviour
     {
         inRange = true;
         // If player wants to pickup and we're not holding anything, pickup item when it enters range
-        if (wantsToPickup && heldItem == null && other.CompareTag("Item"))
+        if (wantsToPickup && heldItem == null && other.CompareTag("Package"))
         {
             PickupItem(other.gameObject);
         }
@@ -62,7 +62,7 @@ public class pick_up_items : MonoBehaviour
     {
 
         // If player wants to pickup and we're not holding anything, pickup item while in range
-        if (wantsToPickup && heldItem == null && other.CompareTag("Item"))
+        if (wantsToPickup && heldItem == null && other.CompareTag("Package"))
         {
             PickupItem(other.gameObject);
         }
