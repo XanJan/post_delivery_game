@@ -16,6 +16,7 @@ public class pick_up_items : MonoBehaviour
 
     private bool wantsToPickup = false; 
     private bool inRange = false;
+    private wagon_storage nearbyWagon;
 
     private void Awake()
     {
@@ -50,43 +51,49 @@ public class pick_up_items : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        inRange = true;
         // If player wants to pickup and we're not holding anything, pickup item when it enters range
-        if (wantsToPickup && heldItem == null && other.CompareTag("Package"))
+        if (other.CompareTag("Package"))
         {
-            PickupItem(other.gameObject);
+            inRange = true;
+        }
+        else if(other.CompareTag("Wagon"))
+        {
+            nearbyWagon = other.GetComponent<wagon_storage>();
         }
     }
 
     private void OnTriggerStay(Collider other)
     {
-
         // If player wants to pickup and we're not holding anything, pickup item while in range
         if (wantsToPickup && heldItem == null && other.CompareTag("Package"))
         {
             PickupItem(other.gameObject);
         }
-    }
+     }
 
     private void OnTriggerExit(Collider other)
     {
         inRange = false;
-        wantsToPickup = false;
+        wantsToPickup = false; 
+        if (other.CompareTag("Wagon"))
+        {
+            nearbyWagon = null;
+        }
     }
 
     private void OnInteractPerformed(InputAction.CallbackContext context)
     { 
-        if(inRange)
-        {
+        if(heldItem != null){
+            DropItem();
+        }
+        else if(inRange){
             wantsToPickup = !wantsToPickup;
         }
-        
-        
-
-        // If we're holding an item and player toggles pickup off, drop it
-        if (!wantsToPickup && heldItem != null)
-        {
-            DropItem();
+        else if(nearbyWagon != null && !nearbyWagon.IsEmpty()){
+            GameObject package = nearbyWagon.RemovePackage();
+            if(package != null){
+                PickupItem(package);
+            }
         }
     }
 

@@ -56,5 +56,6 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "post_delivery_game.sln"
+    "dotnet.defaultSolution": "post_delivery_game.sln",
+    "git.ignoreLimitWarning": true
 }
