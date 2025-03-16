@@ -7,7 +7,7 @@
 /// NOT THREAD SAFE.
 /// </summary>
 /// <typeparam name="T">Value type.</typeparam>
-public class ObservableValue<T>
+public class observable_value<T>
 {
     /// <summary>
     /// The name of the value as a string representation. This is used since Unity
@@ -33,7 +33,7 @@ public class ObservableValue<T>
     /// Only constructor, name defenition needed when initializing.
     /// </summary>
     /// <param name="name"></param>
-    public ObservableValue(string name)
+    public observable_value(string name)
     {
         Name = name;
     }

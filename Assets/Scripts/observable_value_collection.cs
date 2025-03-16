@@ -12,7 +12,7 @@ using UnityEngine;
 /// that gameobject. Names are used as identifiers and should match corresponding
 /// names in other scripts. Duplicate names are discarded. NOT THREAD SAFE.
 /// </summary>
-public class ObservableValueCollection : MonoBehaviour
+public class observable_value_collection : MonoBehaviour
 {
     // Lists of value names are used to configure the value collection from within Unity.
     // for each name specified, an ObservableValue is instantiated and added to the
@@ -29,34 +29,34 @@ public class ObservableValueCollection : MonoBehaviour
     /// Dictionary of observable ints. Use ObservableInts[name] to get a value. Don't
     /// forget to handle exceptions when getting.
     /// </summary>
-    private Dictionary<string,ObservableValue<int>> _observableInts;
+    private Dictionary<string,observable_value<int>> _observableInts;
     /// <summary>
     /// Dictionary of observable floats. Use ObservableFloats[name] to get a value. Don't
     /// forget to handle exceptions when getting.
     /// </summary>
-    private Dictionary<string,ObservableValue<float>> _observableFloats;
+    private Dictionary<string,observable_value<float>> _observableFloats;
     /// <summary>
     /// Dictionary of observable bools. Use ObservableBools[name] to get a value. Don't
     /// forget to handle exceptions when getting.
     /// </summary>
-    private Dictionary<string,ObservableValue<bool>> _observableBools;
+    private Dictionary<string,observable_value<bool>> _observableBools;
     /// <summary>
     /// Dictionary of observable Vector2s. Use ObservableVector2s[name] to get a value. Don't
     /// forget to handle exceptions when getting.
     /// </summary>
-    private Dictionary<string,ObservableValue<Vector2>> _observableVector2s;
+    private Dictionary<string,observable_value<Vector2>> _observableVector2s;
     /// <summary>
     /// NOT TYPE SAFE, can be used to store ObservableValues without specifying type
     /// and relying on usafe casts. Should be avoided in most cases.
     /// </summary>
-    private Dictionary<string,ObservableValue<object>> _observableObjects;
+    private Dictionary<string,observable_value<object>> _observableObjects;
     // Delegates
     //----------------------------------------------------------------------------
-    public delegate void DelegateObservableIntAdded(ObservableValue<int> observableInt);
-    public delegate void DelegateObservableFloatAdded(ObservableValue<float> observableFloat);
-    public delegate void DelegateObservableBoolAdded(ObservableValue<bool> observableBool);
-    public delegate void DelegateObservableVector2Added(ObservableValue<Vector2> observableVector2);
-    public delegate void DelegateObservableObjectAdded(ObservableValue<object> observableObject);
+    public delegate void DelegateObservableIntAdded(observable_value<int> observableInt);
+    public delegate void DelegateObservableFloatAdded(observable_value<float> observableFloat);
+    public delegate void DelegateObservableBoolAdded(observable_value<bool> observableBool);
+    public delegate void DelegateObservableVector2Added(observable_value<Vector2> observableVector2);
+    public delegate void DelegateObservableObjectAdded(observable_value<object> observableObject);
     //----------------------------------------------------------------------------
     
     //Events
@@ -86,13 +86,13 @@ public class ObservableValueCollection : MonoBehaviour
     /// <summary>
     /// Instantiates instance fields. Initilization takes place in Awake().
     /// </summary>
-    public ObservableValueCollection()
+    public observable_value_collection()
     {
-        _observableInts = new Dictionary<string,ObservableValue<int>>();
-        _observableFloats = new Dictionary<string,ObservableValue<float>>();
-        _observableBools = new Dictionary<string,ObservableValue<bool>>();
-        _observableVector2s = new Dictionary<string,ObservableValue<Vector2>>();
-        _observableObjects = new Dictionary<string, ObservableValue<object>>();
+        _observableInts = new Dictionary<string,observable_value<int>>();
+        _observableFloats = new Dictionary<string,observable_value<float>>();
+        _observableBools = new Dictionary<string,observable_value<bool>>();
+        _observableVector2s = new Dictionary<string,observable_value<Vector2>>();
+        _observableObjects = new Dictionary<string, observable_value<object>>();
         _names = new List<string>();
         ObservableIntAddedEvent = default;
         ObservableFloatAddedEvent = default;
@@ -126,7 +126,7 @@ public class ObservableValueCollection : MonoBehaviour
                 uniqueNamesCopy.Remove(s);
                 if(!_observableInts.ContainsKey(s))
                 {
-                    _observableInts.Add(s,new ObservableValue<int>(s));
+                    _observableInts.Add(s,new observable_value<int>(s));
                 }
                 
             }
@@ -138,7 +138,7 @@ public class ObservableValueCollection : MonoBehaviour
                 uniqueNamesCopy.Remove(s);
                 if(!_observableFloats.ContainsKey(s))
                 {
-                    _observableFloats.Add(s,new ObservableValue<float>(s));
+                    _observableFloats.Add(s,new observable_value<float>(s));
                 }
             }
         }
@@ -149,7 +149,7 @@ public class ObservableValueCollection : MonoBehaviour
                 uniqueNamesCopy.Remove(s);
                 if(!_observableBools.ContainsKey(s))
                 {
-                    _observableBools.Add(s,new ObservableValue<bool>(s));
+                    _observableBools.Add(s,new observable_value<bool>(s));
                 }
                 
             }
@@ -161,7 +161,7 @@ public class ObservableValueCollection : MonoBehaviour
                 uniqueNamesCopy.Remove(s);
                 if(!_observableVector2s.ContainsKey(s))
                 {
-                    _observableVector2s.Add(s,new ObservableValue<Vector2>(s));
+                    _observableVector2s.Add(s,new observable_value<Vector2>(s));
                 }
             }
         }
@@ -174,7 +174,7 @@ public class ObservableValueCollection : MonoBehaviour
     {
         if(!_names.Contains(name))
         {
-            ObservableValue<int> observableValue = new ObservableValue<int>(name);
+            observable_value<int> observableValue = new observable_value<int>(name);
             UniqueAdd(_names,name);
             _observableInts.Add(name, observableValue);
             if(ObservableIntAddedEvent != null)
@@ -191,7 +191,7 @@ public class ObservableValueCollection : MonoBehaviour
     {
         if(!_names.Contains(name))
         {
-            ObservableValue<float> observableValue = new ObservableValue<float>(name);
+            observable_value<float> observableValue = new observable_value<float>(name);
             UniqueAdd(_names,name);
             _observableFloats.Add(name, observableValue);
             ObservableFloatAddedEvent?.Invoke(observableValue);
@@ -205,7 +205,7 @@ public class ObservableValueCollection : MonoBehaviour
     {
         if(!_names.Contains(name))
         {
-            ObservableValue<bool> observableValue = new ObservableValue<bool>(name);
+            observable_value<bool> observableValue = new observable_value<bool>(name);
             UniqueAdd(_names,name);
             _observableBools.Add(name, observableValue);
             ObservableBoolAddedEvent?.Invoke(observableValue);
@@ -220,7 +220,7 @@ public class ObservableValueCollection : MonoBehaviour
         if(!_names.Contains(name))
         {
             UniqueAdd(_names,name);
-            ObservableValue<Vector2> observableValue = new ObservableValue<Vector2>(name);
+            observable_value<Vector2> observableValue = new observable_value<Vector2>(name);
             _observableVector2s.Add(name, observableValue);
             ObservableVector2AddedEvent?.Invoke(observableValue);
         }
@@ -235,7 +235,7 @@ public class ObservableValueCollection : MonoBehaviour
         if(!_names.Contains(name))
         {
             UniqueAdd(_names,name);
-            ObservableValue<object> observableValue = new ObservableValue<object>(name);
+            observable_value<object> observableValue = new observable_value<object>(name);
             _observableObjects.Add(name,observableValue);
             ObservableObjectAddedEvent?.Invoke(observableValue);
         }
@@ -245,31 +245,31 @@ public class ObservableValueCollection : MonoBehaviour
     /// </summary>
     /// <param name="name">Name of the observable int.</param>
     /// <returns>Instance of the observable int mathing the provided name if it exists in the observable value collection.</returns>
-    public ObservableValue<int> GetObservableInt(string name){try{return _observableInts[name];}catch(Exception){throw;}}
+    public observable_value<int> GetObservableInt(string name){try{return _observableInts[name];}catch(Exception){throw;}}
     /// <summary>
     /// Getter for observable floats. Throws KeyNotFoundException if not found.
     /// </summary>
     /// <param name="name">Name of the observable float.</param>
     /// <returns>Instance of the observable float mathing the provided name if it exists in the observable value collection.</returns>
-    public ObservableValue<float> GetObservableFloat(string name){try{return _observableFloats[name];}catch(Exception){throw;}}
+    public observable_value<float> GetObservableFloat(string name){try{return _observableFloats[name];}catch(Exception){throw;}}
     /// <summary>
     /// Getter for observable bools. Throws KeyNotFoundException if not found.
     /// </summary>
     /// <param name="name">Name of the observable bool.</param>
     /// <returns>Instance of the observable bool mathing the provided name if it exists in the observable value collection.</returns>
-    public ObservableValue<bool> GetObservableBool(string name){try{return _observableBools[name];}catch(Exception){throw;}}
+    public observable_value<bool> GetObservableBool(string name){try{return _observableBools[name];}catch(Exception){throw;}}
     /// <summary>
     /// Getter for observable Vector2s. Throws KeyNotFoundException if not found.
     /// </summary>
     /// <param name="name">Name of the observable Vector2.</param>
     /// <returns>Instance of the observable Vector2 mathing the provided name if it exists in the observable value collection.</returns>
-    public ObservableValue<Vector2> GetObservableVector2(string name){try{return _observableVector2s[name];}catch(Exception){throw;}}
+    public observable_value<Vector2> GetObservableVector2(string name){try{return _observableVector2s[name];}catch(Exception){throw;}}
     /// <summary>
     /// NOT TYPE SAFE. Use with care, casting objects is not guaranteed to work. Getter for observable objects. Throws KeyNotFoundException. 
     /// </summary>
     /// <param name="name">Name of the observable object.</param>
     /// <returns>Instance of the observable object mathing the provided name if it exists in the observable value collection.</returns>
-    public ObservableValue<object> GetObservableObject(string name){try{return _observableObjects[name];}catch(Exception){throw;}}
+    public observable_value<object> GetObservableObject(string name){try{return _observableObjects[name];}catch(Exception){throw;}}
     /// <summary>
     /// Helper method for adding only if the item does not already exist in a list.
     /// </summary>
@@ -326,27 +326,27 @@ public class ObservableValueCollection : MonoBehaviour
     /// Get by copy.
     /// </summary>
     /// <returns>All observable ints in the collection.</returns>
-    public ObservableValue<int>[] GetObservableIntArray(){return _observableInts.Values.ToArray();}
+    public observable_value<int>[] GetObservableIntArray(){return _observableInts.Values.ToArray();}
     /// <summary>
     /// Get by copy.
     /// </summary>
     /// <returns>All observable floats in the collection.</returns>
-    public ObservableValue<float>[] GetObservableFloatArray(){return _observableFloats.Values.ToArray();}
+    public observable_value<float>[] GetObservableFloatArray(){return _observableFloats.Values.ToArray();}
     /// <summary>
     /// Get by copy.
     /// </summary>
     /// <returns>All observable bools in the collection.</returns>
-    public ObservableValue<bool>[] GetObservableBoolArray(){return _observableBools.Values.ToArray();}
+    public observable_value<bool>[] GetObservableBoolArray(){return _observableBools.Values.ToArray();}
     /// <summary>
     /// Get by copy.
     /// </summary>
     /// <returns>All observable Vector2s in the collection.</returns>
-    public ObservableValue<Vector2>[] GetObservableVector2Array(){return _observableVector2s.Values.ToArray();}
+    public observable_value<Vector2>[] GetObservableVector2Array(){return _observableVector2s.Values.ToArray();}
     /// <summary>
     /// NOT TYPE SAFE. Use with care, casting objects is not guaranteed to work. Get by copy.
     /// </summary>
     /// <returns>All observable objects in the collection.</returns>
-    public ObservableValue<object>[] GetObservableObjectsArray(){return _observableObjects.Values.ToArray();}
+    public observable_value<object>[] GetObservableObjectsArray(){return _observableObjects.Values.ToArray();}
 
     /// <summary>
     /// Check if an observable value is present in the collection.

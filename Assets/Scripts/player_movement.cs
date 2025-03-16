@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 public class player_movement : MonoBehaviour
 {
-    [SerializeField] private ObservableValueCollection _obvc;
+    [SerializeField] private observable_value_collection _obvc;
     private readonly string _movespeedName = "moveSpeed";
     private Rigidbody rb;
     private Vector2 moveInput;

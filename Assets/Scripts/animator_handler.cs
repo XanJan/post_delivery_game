@@ -11,7 +11,7 @@ using UnityEngine;
 /// parameters are present in the animator, if so, attaches event handlers that
 /// pass those values to a set of animators. NOT THREAD SAFE.
 /// </summary>
-public class AnimatorHandler : MonoBehaviour
+public class animator_handler : MonoBehaviour
 {
     /// <summary>
     /// The Animator(s) to pass values to. Prints debug message if null. 
@@ -20,7 +20,7 @@ public class AnimatorHandler : MonoBehaviour
     /// <summary>
     /// The ObservableValueCollection to observe. Prints debug message if null.
     /// </summary>
-    [SerializeField] private ObservableValueCollection _observableValueCollection;
+    [SerializeField] private observable_value_collection _observableValueCollection;
     /// <summary>
     /// Using, the animator as key, get the associated parameters. Initialized in Start().
     /// </summary>
@@ -57,15 +57,15 @@ public class AnimatorHandler : MonoBehaviour
                 _parametersToListenToDictionary.Add(a,GatherParametersToListenTo(a));
             }
             //Init value update events.
-            foreach(ObservableValue<int> item in _observableValueCollection.GetObservableIntArray())
+            foreach(observable_value<int> item in _observableValueCollection.GetObservableIntArray())
             {
                 item.UpdateValue += HandleIntUpdateEvent;
             }
-            foreach(ObservableValue<float> item in _observableValueCollection.GetObservableFloatArray())
+            foreach(observable_value<float> item in _observableValueCollection.GetObservableFloatArray())
             {
                 item.UpdateValue += HandleFloatUpdateEvent;
             }
-            foreach(ObservableValue<bool> item in _observableValueCollection.GetObservableBoolArray())
+            foreach(observable_value<bool> item in _observableValueCollection.GetObservableBoolArray())
             {
                 item.UpdateValue += HandleBoolUpdateEvent;
             }
@@ -125,7 +125,7 @@ public class AnimatorHandler : MonoBehaviour
             }
         }
     }
-    private void HandleIntAddedEvent(ObservableValue<int> observableValue)
+    private void HandleIntAddedEvent(observable_value<int> observableValue)
     {
         foreach(Animator a in _animators)
         {
@@ -135,7 +135,7 @@ public class AnimatorHandler : MonoBehaviour
             }
         }
     }
-    private void HandleFloatAddedEvent(ObservableValue<float> observableValue)
+    private void HandleFloatAddedEvent(observable_value<float> observableValue)
     {
         foreach(Animator a in _animators)
         {
@@ -145,7 +145,7 @@ public class AnimatorHandler : MonoBehaviour
             }
         }
     }
-    private void HandleBoolAddedEvent(ObservableValue<bool> observableValue)
+    private void HandleBoolAddedEvent(observable_value<bool> observableValue)
     {
         foreach(Animator a in _animators)
         {

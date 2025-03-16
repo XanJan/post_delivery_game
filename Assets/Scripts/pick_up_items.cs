@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 public class pick_up_items : MonoBehaviour
 {
     
-    [SerializeField] private ObservableValueCollection _obvc;
+    [SerializeField] private observable_value_collection _obvc;
     private readonly string _holdingPackageValueName = "holdingPackage";
     private float throwForce = 2f;
 
