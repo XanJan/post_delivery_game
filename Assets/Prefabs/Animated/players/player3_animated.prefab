@@ -570,6 +570,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6147a0741f2157c4d87010f08f03ba1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _obvc: {fileID: 675003948274067448}
   playerSpeed: 5
   rotationSpeed: 700
 --- !u!114 &6117595668027425725
