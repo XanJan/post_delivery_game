@@ -1,4 +1,5 @@
 //using Unity.VisualScripting;
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 //using static UnityEditor.Progress;
@@ -6,6 +7,9 @@ using UnityEngine.InputSystem;
 
 public class pick_up_items : MonoBehaviour
 {
+    
+    [SerializeField] private ObservableValueCollection _obvc;
+    private readonly string _holdingPackageValueName = "holdingPackage";
     private float throwForce = 2f;
 
     private PlayerInput playerInput;
@@ -16,11 +20,13 @@ public class pick_up_items : MonoBehaviour
 
     private bool wantsToPickup = false; 
     private bool inRange = false;
+    
 
     private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
         playerRb = GetComponent<Rigidbody>();
+        if(_obvc != null){_obvc.AddObservableBool(_holdingPackageValueName);}
         
 
         Transform[] children = transform.GetComponentsInChildren<Transform>();
@@ -93,7 +99,8 @@ public class pick_up_items : MonoBehaviour
     private void PickupItem(GameObject item)
     {
         heldItem = item;
-
+        if(_obvc != null){_obvc.InvokeBool(_holdingPackageValueName,true);}
+        
         // Parent to hands and disable physics
         heldItem.transform.parent = playerHands.transform;
         heldItem.transform.localPosition = Vector3.zero;
@@ -113,9 +120,11 @@ public class pick_up_items : MonoBehaviour
     {
         if (heldItem != null)
         {
+            if(_obvc != null){_obvc.InvokeBool(_holdingPackageValueName,false);}
+
             // Unparent and re-enable physics
             heldItem.transform.parent = null;
-
+            
             if (heldItem.TryGetComponent<Rigidbody>(out var itemRb))
             {
                 itemRb.isKinematic = false;
