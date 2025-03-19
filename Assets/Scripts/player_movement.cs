@@ -5,10 +5,14 @@ using UnityEngine.InputSystem;
 public class player_movement : MonoBehaviour
 {
     //private InputSystem_Actions action;
-    private Rigidbody rb;
-    private Vector2 moveInput;
+
+    public float baseSpeed = 10f;
+    private float currentSpeed;
     private float playerSpeed = 10f;
     public float rotationSpeed = 700f;
+
+    private Vector2 moveInput;
+    private Rigidbody rb;
     private PlayerInput playerInput;
 
     private LayerMask groundLayer;
@@ -21,6 +25,7 @@ public class player_movement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         playerInput = GetComponent<PlayerInput>();
         groundLayer = LayerMask.GetMask("Ground");
+        currentSpeed = baseSpeed;
     }
     private void OnEnable()
     {
@@ -66,7 +71,7 @@ public class player_movement : MonoBehaviour
                 moveDirection.Normalize();
             }
     
-            var moveVelocity = moveDirection * playerSpeed;
+            var moveVelocity = moveDirection * currentSpeed;
     
             // Move the player using Rigidbody
             rb.MovePosition(rb.position + moveVelocity * Time.fixedDeltaTime);
@@ -88,6 +93,11 @@ public class player_movement : MonoBehaviour
     {
         // Check if the player is touching the ground using a raycast or overlap
         isGrounded = Physics.Raycast(transform.position, Vector3.down, 1.5f, groundLayer);
+    }
+
+    public void SetSpeedMultiplier(float multiplier)
+    {
+        currentSpeed = baseSpeed * multiplier;
     }
 }
 

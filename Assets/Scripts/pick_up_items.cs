@@ -17,10 +17,13 @@ public class pick_up_items : MonoBehaviour
     private bool wantsToPickup = false; 
     private bool inRange = false;
 
+    private player_movement playerMovement;
+
     private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
         playerRb = GetComponent<Rigidbody>();
+        playerMovement = GetComponent<player_movement>();
         
 
         Transform[] children = transform.GetComponentsInChildren<Transform>();
@@ -107,6 +110,16 @@ public class pick_up_items : MonoBehaviour
         {
             collider.enabled = false;
         }
+
+        if (heldItem.TryGetComponent<Package>(out var package))
+        {
+            if (package.packageType == PackageType.Heavy)
+            {
+                playerMovement.SetSpeedMultiplier(0.2f);
+            }
+   
+        }
+
     }
 
     private void DropItem()
@@ -131,6 +144,8 @@ public class pick_up_items : MonoBehaviour
             }
 
             heldItem = null;
+
+            playerMovement.SetSpeedMultiplier(1f);
         }
     }
 }
