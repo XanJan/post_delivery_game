@@ -1,4 +1,5 @@
 //using Unity.VisualScripting;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 //using static UnityEditor.Progress;
@@ -16,7 +17,8 @@ public class pick_up_items : MonoBehaviour
 
     private bool wantsToPickup = false; 
     private bool inRange = false;
-    private wagon_storage nearbyWagon;
+    private wagon_storage nearbyWagonStorage;
+    private wagon_controller nearbyWagonFront;
 
     private void Awake()
     {
@@ -58,7 +60,8 @@ public class pick_up_items : MonoBehaviour
         }
         else if(other.CompareTag("Wagon"))
         {
-            nearbyWagon = other.GetComponent<wagon_storage>();
+            nearbyWagonStorage = other.GetComponent<wagon_storage>();
+            nearbyWagonFront = other.GetComponent<wagon_controller>();
         }
     }
 
@@ -77,7 +80,7 @@ public class pick_up_items : MonoBehaviour
         wantsToPickup = false; 
         if (other.CompareTag("Wagon"))
         {
-            nearbyWagon = null;
+            nearbyWagonStorage = null;
         }
     }
 
@@ -89,11 +92,14 @@ public class pick_up_items : MonoBehaviour
         else if(inRange){
             wantsToPickup = !wantsToPickup;
         }
-        else if(nearbyWagon != null && !nearbyWagon.IsEmpty()){
-            GameObject package = nearbyWagon.RemovePackage();
+        else if(nearbyWagonStorage != null && !nearbyWagonStorage.IsEmpty()){
+            GameObject package = nearbyWagonStorage.RemovePackage();
             if(package != null){
                 PickupItem(package);
             }
+        }
+        else if(nearbyWagonFront != null){
+            nearbyWagonFront.Interact();
         }
     }
 
