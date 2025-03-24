@@ -25,7 +25,8 @@ public class wagon_storage : MonoBehaviour{
     public void AddPackage(GameObject package){
         if (storedPackages.Count < maxCapacity){
             package.transform.SetParent(storagePoint); // parent it to the wagon
-            package.transform.localPosition = new Vector3(0, storedPackages.Count * 0.5f, 0); 
+
+            package.transform.localPosition = new Vector3(0, storedPackages.Count * 0.5f, 0);
             package.SetActive(true);
             storedPackages.Push(package);
             Rigidbody rb = package.GetComponent<Rigidbody>();

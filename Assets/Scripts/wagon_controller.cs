@@ -34,17 +34,12 @@ public class wagon_controller : MonoBehaviour{
         }
     }
 
-    public void Interact(){
-        if(playersInside.Count == 0){ 
-        return;
-        }
-
-        GameObject player = playersInside[0];
-        if(!playerInputs.ContainsKey(player)){
-            EnterWagon(player);
+    public void Interact(GameObject player){
+        if(playerInputs.ContainsKey(player)){
+            ExitWagon(player);
         }
         else{
-            ExitWagon(player);
+            EnterWagon(player);
         }
     }
 

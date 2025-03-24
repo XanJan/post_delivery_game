@@ -99,7 +99,7 @@ public class pick_up_items : MonoBehaviour
             }
         }
         else if(nearbyWagonFront != null){
-            nearbyWagonFront.Interact();
+            nearbyWagonFront.Interact(gameObject);
         }
     }
 
