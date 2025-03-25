@@ -16,6 +16,7 @@ public class pick_up_items : MonoBehaviour
 
     private bool wantsToPickup = false; 
     private bool inRange = false;
+    private bool wantsToDrop = false;
 
     private void Awake()
     {
@@ -52,7 +53,7 @@ public class pick_up_items : MonoBehaviour
     {
         inRange = true;
         // If player wants to pickup and we're not holding anything, pickup item when it enters range
-        if (wantsToPickup && heldItem == null && other.CompareTag("Package"))
+        if (wantsToDrop && heldItem == null && other.CompareTag("Package"))
         {
             PickupItem(other.gameObject);
         }
@@ -62,7 +63,7 @@ public class pick_up_items : MonoBehaviour
     {
 
         // If player wants to pickup and we're not holding anything, pickup item while in range
-        if (wantsToPickup && heldItem == null && other.CompareTag("Package"))
+        if (wantsToDrop && heldItem == null && other.CompareTag("Package"))
         {
             PickupItem(other.gameObject);
         }
@@ -72,19 +73,21 @@ public class pick_up_items : MonoBehaviour
     {
         inRange = false;
         wantsToPickup = false;
+        wantsToDrop = false;
     }
 
     private void OnInteractPerformed(InputAction.CallbackContext context)
     { 
         if(inRange)
         {
-            wantsToPickup = !wantsToPickup;
+            wantsToPickup = false;
+            wantsToDrop = true;
         }
         
         
 
         // If we're holding an item and player toggles pickup off, drop it
-        if (!wantsToPickup && heldItem != null)
+        if (wantsToDrop && heldItem != null)
         {
             DropItem();
         }
@@ -131,6 +134,7 @@ public class pick_up_items : MonoBehaviour
             }
 
             heldItem = null;
+            wantsToDrop = false;
         }
     }
 }
