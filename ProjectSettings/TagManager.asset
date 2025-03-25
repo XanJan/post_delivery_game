@@ -8,6 +8,8 @@ TagManager:
   - PlayerHands
   - Item
   - Wagon
+  - WagonFront
+  - WagonBack
   layers:
   - Default
   - TransparentFX

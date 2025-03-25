@@ -58,9 +58,12 @@ public class pick_up_items : MonoBehaviour
         {
             inRange = true;
         }
+        else if(other.CompareTag("WagonBack"))
+        {
+        nearbyWagonStorage = other.GetComponentInParent<wagon_storage>();
+        }
         else if(other.CompareTag("Wagon"))
         {
-            nearbyWagonStorage = other.GetComponent<wagon_storage>();
             nearbyWagonFront = other.GetComponent<wagon_controller>();
         }
     }
@@ -78,9 +81,13 @@ public class pick_up_items : MonoBehaviour
     {
         inRange = false;
         wantsToPickup = false; 
-        if (other.CompareTag("Wagon"))
+        if (other.CompareTag("WagonBack"))
         {
             nearbyWagonStorage = null;
+        }
+        if (other.CompareTag("Wagon"))
+        {
+            nearbyWagonFront = null;
         }
     }
 

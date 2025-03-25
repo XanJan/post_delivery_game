@@ -364,6 +364,59 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!1 &510136520
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 510136521}
+  - component: {fileID: 510136522}
+  m_Layer: 0
+  m_Name: wagonBack
+  m_TagString: WagonBack
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &510136521
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 510136520}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.5, z: 3.7}
+  m_LocalScale: {x: 3, y: 1, z: 2.5}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7906890296355252089}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &510136522
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 510136520}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &827350868
 GameObject:
   m_ObjectHideFlags: 0
@@ -720,6 +773,59 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1 &1715193735
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1715193736}
+  - component: {fileID: 1715193737}
+  m_Layer: 0
+  m_Name: wagonFront
+  m_TagString: WagonFront
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1715193736
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1715193735}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.5, z: -2}
+  m_LocalScale: {x: 3, y: 1.5, z: 4}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7906890296355252089}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1715193737
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1715193735}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1799541995
 GameObject:
   m_ObjectHideFlags: 0
@@ -975,8 +1081,12 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3003197861230304431, guid: e5aa3f6978f0f494f82c593d531349a4, type: 3}
+      propertyPath: wagonBack
+      value: 
+      objectReference: {fileID: 510136520}
+    - target: {fileID: 3003197861230304431, guid: e5aa3f6978f0f494f82c593d531349a4, type: 3}
       propertyPath: maxCapacity
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7710631472294853121, guid: e5aa3f6978f0f494f82c593d531349a4, type: 3}
       propertyPath: m_Name
@@ -1028,6 +1138,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8265378485265545744, guid: e5aa3f6978f0f494f82c593d531349a4, type: 3}
       insertIndex: -1
       addedObject: {fileID: 913732688}
+    - targetCorrespondingSourceObject: {fileID: 8265378485265545744, guid: e5aa3f6978f0f494f82c593d531349a4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1715193736}
+    - targetCorrespondingSourceObject: {fileID: 8265378485265545744, guid: e5aa3f6978f0f494f82c593d531349a4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 510136521}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 7710631472294853121, guid: e5aa3f6978f0f494f82c593d531349a4, type: 3}
       insertIndex: -1
