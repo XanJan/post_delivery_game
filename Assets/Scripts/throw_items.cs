@@ -5,7 +5,7 @@ public class throw_items : MonoBehaviour
 {
     private PlayerInput playerInput;
     private player_movement playerMovement;
-    private Vector2 mousePosition;
+    private Vector2 targetPosition;
     private bool looking;
     private Camera cam;
     private float rotationSpeed = 700f;
@@ -49,7 +49,8 @@ public class throw_items : MonoBehaviour
     {
         if (looking)
         {
-            mousePosition = context.ReadValue<Vector2>();
+            targetPosition = context.ReadValue<Vector2>();
+            
             
         }
     }
@@ -58,16 +59,12 @@ public class throw_items : MonoBehaviour
     {
         if (looking)
         {
-            Debug.Log(mousePosition);
-            Vector3 mouseToWorld = cam.ScreenToWorldPoint(mousePosition);
+            Debug.Log(targetPosition);
+            Vector3 moveDirection = new Vector3(targetPosition.x, 0f, targetPosition.y);
 
-            mouseToWorld.z = transform.position.z;
-            Vector3 direction = mouseToWorld - transform.position;
+            Quaternion toRotation = Quaternion.LookRotation(moveDirection, Vector3.up);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotationSpeed * Time.fixedDeltaTime);
 
-            direction.y = 0;
-            Quaternion targetRotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
-            //transform.LookAt(new Vector3(mousePosition.x, this.transform.position.y, mousePosition.y), Vector3.up);
         }
 
     }
