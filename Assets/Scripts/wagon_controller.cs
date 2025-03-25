@@ -111,6 +111,12 @@ public class wagon_controller : MonoBehaviour{
             return;
         }
 
+        int playerCount = playerInputs.Count;
+        float speedMultiplier = Mathf.Clamp(playerCount / 2f, 0.5f, 1f);
+
+        float adjustedMaxSpeed = maxSpeed * speedMultiplier;
+        float adjustedAcceleration = acceleration * speedMultiplier;
+
         Vector2 combinedInput = Vector2.zero;
         foreach(var input in playerInputs.Values){
             combinedInput += input;
@@ -121,8 +127,8 @@ public class wagon_controller : MonoBehaviour{
         float turnInput = combinedInput.x;
         
         // apply acceleration or deceleration
-        Vector3 forwardForce = transform.forward * -forwardInput * maxSpeed;
-        rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, forwardForce, Time.fixedDeltaTime * acceleration);
+        Vector3 forwardForce = transform.forward * -forwardInput * adjustedMaxSpeed;
+        rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, forwardForce, Time.fixedDeltaTime * adjustedAcceleration);
         
         // apply turning
         if(Mathf.Abs(turnInput) > 0.1f){
