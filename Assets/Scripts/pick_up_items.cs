@@ -54,10 +54,11 @@ public class pick_up_items : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        inRange = true;
         // If player wants to pickup and we're not holding anything, pickup item when it enters range
         if (wantsToDrop && heldItem == null && other.CompareTag("Package"))
         {
-            inRange = true;
+           PickupItem(other.gameObject); 
         }
         else if(other.CompareTag("WagonBack"))
         {
@@ -80,9 +81,11 @@ public class pick_up_items : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        inRange = false;
-        wantsToPickup = false; 
-        wantsToDrop = false;
+        if(other.CompareTag("Package")){
+            inRange = false;
+            wantsToPickup = false; 
+            wantsToDrop = false;
+        }
         if (other.CompareTag("WagonBack"))
         {
             nearbyWagonStorage = null;
@@ -100,14 +103,13 @@ public class pick_up_items : MonoBehaviour
             wantsToPickup = false;
             wantsToDrop = true;
         }
-        
-        
 
         // If we're holding an item and player toggles pickup off, drop it
         if (wantsToDrop && heldItem != null)
         {
             DropItem();
         }
+
         else if(nearbyWagonStorage != null && !nearbyWagonStorage.IsEmpty()){
             GameObject package = nearbyWagonStorage.RemovePackage();
             if(package != null){
