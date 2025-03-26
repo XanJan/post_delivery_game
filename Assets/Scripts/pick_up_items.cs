@@ -17,6 +17,7 @@ public class pick_up_items : MonoBehaviour
 
     private bool wantsToPickup = false; 
     private bool inRange = false;
+    private bool wantsToDrop = false;
     private wagon_storage nearbyWagonStorage;
     private wagon_controller nearbyWagonFront;
 
@@ -54,7 +55,7 @@ public class pick_up_items : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         // If player wants to pickup and we're not holding anything, pickup item when it enters range
-        if (other.CompareTag("Package"))
+        if (wantsToDrop && heldItem == null && other.CompareTag("Package"))
         {
             inRange = true;
         }
@@ -71,7 +72,7 @@ public class pick_up_items : MonoBehaviour
     private void OnTriggerStay(Collider other)
     {
         // If player wants to pickup and we're not holding anything, pickup item while in range
-        if (wantsToPickup && heldItem == null && other.CompareTag("Package"))
+        if (wantsToDrop && heldItem == null && other.CompareTag("Package"))
         {
             PickupItem(other.gameObject);
         }
@@ -81,6 +82,7 @@ public class pick_up_items : MonoBehaviour
     {
         inRange = false;
         wantsToPickup = false; 
+        wantsToDrop = false;
         if (other.CompareTag("WagonBack"))
         {
             nearbyWagonStorage = null;
@@ -93,11 +95,18 @@ public class pick_up_items : MonoBehaviour
 
     private void OnInteractPerformed(InputAction.CallbackContext context)
     { 
-        if(heldItem != null){
-            DropItem();
+        if(inRange)
+        {
+            wantsToPickup = false;
+            wantsToDrop = true;
         }
-        else if(inRange){
-            wantsToPickup = !wantsToPickup;
+        
+        
+
+        // If we're holding an item and player toggles pickup off, drop it
+        if (wantsToDrop && heldItem != null)
+        {
+            DropItem();
         }
         else if(nearbyWagonStorage != null && !nearbyWagonStorage.IsEmpty()){
             GameObject package = nearbyWagonStorage.RemovePackage();
@@ -151,6 +160,7 @@ public class pick_up_items : MonoBehaviour
             }
 
             heldItem = null;
+            wantsToDrop = false;
         }
     }
 }
