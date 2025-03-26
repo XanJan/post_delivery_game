@@ -34,6 +34,7 @@ public class wagon_controller : MonoBehaviour{
         }
     }
 
+    // handle an interact call from a player
     public void Interact(GameObject player){
         if(playerInputs.ContainsKey(player)){
             ExitWagon(player);
@@ -43,6 +44,7 @@ public class wagon_controller : MonoBehaviour{
         }
     }
 
+    // put a player in the wagon and pause its physics
     private void EnterWagon(GameObject player){
         player_movement playerMovement = player.GetComponent<player_movement>();
         if(playerMovement != null){ 
@@ -59,7 +61,8 @@ public class wagon_controller : MonoBehaviour{
         Physics.IgnoreCollision(playerCollider, wagonCollider, true);
 
         player.transform.SetParent(transform);
-        player.transform.position = seatPosition.position;
+        int seatOffset = playersInside.Count - 1;
+        player.transform.position = seatPosition.position - transform.forward * seatOffset;
         player.transform.rotation = seatPosition.rotation;
 
         playerInputs[player] = Vector2.zero;
@@ -70,6 +73,7 @@ public class wagon_controller : MonoBehaviour{
         }
     }
 
+    // remove a player from the wagon and reinstate its physics
     private void ExitWagon(GameObject player){
         if(!playerInputs.ContainsKey(player)){
             return;
@@ -90,11 +94,12 @@ public class wagon_controller : MonoBehaviour{
         Physics.IgnoreCollision(playerCollider, wagonCollider, false);
 
         player.transform.SetParent(null);
-        player.transform.position = transform.position + transform.forward * 2f;
+        player.transform.position = transform.position - transform.forward * 2f;
 
         playerInputs.Remove(player);
     }
 
+    // update the current input vector for each player
     private void UpdateInput(GameObject player, Vector2 input){
         if(playerInputs.ContainsKey(player)){
             if(input.magnitude < 0.1f){
@@ -111,12 +116,20 @@ public class wagon_controller : MonoBehaviour{
             return;
         }
 
-        int playerCount = playerInputs.Count;
+        // how many players are providing wagon input
+        int activePlayerCount = 0;
+        foreach(var input in playerInputs.Values){
+            if(input.magnitude > 0.1f) activePlayerCount++;
+        }
+        int playerCount = Mathf.Max(1, activePlayerCount); // ensure at least 1
+
+        // regulate wagon speed scaling by how many players are moving it
         float speedMultiplier = Mathf.Clamp(playerCount / 2f, 0.5f, 1f);
 
         float adjustedMaxSpeed = maxSpeed * speedMultiplier;
         float adjustedAcceleration = acceleration * speedMultiplier;
 
+        // calculate mean movement-input from all players
         Vector2 combinedInput = Vector2.zero;
         foreach(var input in playerInputs.Values){
             combinedInput += input;
@@ -127,12 +140,19 @@ public class wagon_controller : MonoBehaviour{
         float turnInput = combinedInput.x;
         
         // apply acceleration or deceleration
-        Vector3 forwardForce = transform.forward * -forwardInput * adjustedMaxSpeed;
+        Vector3 movementDirection = transform.forward * forwardInput;
+        Vector3 forwardForce = movementDirection * -adjustedMaxSpeed;
         rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, forwardForce, Time.fixedDeltaTime * adjustedAcceleration);
-        
+        if (forwardInput == 0) {
+            rb.linearVelocity *= 0.95f; 
+        }
+
         // apply turning
         if(Mathf.Abs(turnInput) > 0.1f){
-            rb.angularVelocity = new Vector3(0, turnInput * turnSpeed * Mathf.Deg2Rad, 0);
+        rb.angularVelocity = new Vector3(0, turnInput * turnSpeed * Mathf.Deg2Rad, 0);
+        }
+        else{
+            rb.angularVelocity = Vector3.zero;
         }
 
         // limit maxspeed
