@@ -114,11 +114,9 @@ public class observable_value_collection : MonoBehaviour
     {
         // Init names list to the Union of all serialized name lists. (throws away duplicate names)
         _names = _names.Union(_intNames).Union(_floatNames).Union(_boolNames).Union(_vector2Names).ToList();
-        foreach(string name in _names){Debug.Log("Name : " + name);}
         // Keeps track of unique names so no duplicates are added
         List<string> uniqueNamesCopy = new List<string>(_names); 
         // Add new observable value for each name in each name list.
-        //_observableFloats.Add("moveSpeed",new ObservableValue<float>("moveSpeed"));
         foreach(string s in _intNames.Distinct()) 
         {
             if(uniqueNamesCopy.Contains(s))
@@ -154,7 +152,7 @@ public class observable_value_collection : MonoBehaviour
                 
             }
         }
-        foreach(string s in _boolNames.Distinct())
+        foreach(string s in _vector2Names.Distinct())
         {
             if(uniqueNamesCopy.Contains(s))
             {
