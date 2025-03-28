@@ -96,6 +96,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1920625268374785468}
   - component: {fileID: 1267521980278569007}
+  - component: {fileID: 1497503846816148353}
   m_Layer: 0
   m_Name: feet
   m_TagString: Untagged
@@ -135,6 +136,28 @@ MonoBehaviour:
   _observableValueCollection: {fileID: 675003948274067448}
   _toRotate: {fileID: 1920625268374785468}
   _vector2Name: feetDirection
+--- !u!95 &1497503846816148353
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3646503546077761045}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ab4d033582209b043af1a7cf59cb3bc2, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &3923174590394487893
 GameObject:
   m_ObjectHideFlags: 0
@@ -639,7 +662,11 @@ MonoBehaviour:
   - moveSpeed
   _boolNames:
   - holdingPackage
-  _vector2Names: []
+  - throwPackageHold
+  - throwPackageAction
+  - holdingWagon
+  _vector2Names:
+  - feetDirection
 --- !u!114 &6117595668027425725
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -980,6 +1007,7 @@ MonoBehaviour:
   _animators:
   - {fileID: 1590008753147134269}
   - {fileID: 8942660976597157572}
+  - {fileID: 1497503846816148353}
   _observableValueCollection: {fileID: 675003948274067448}
 --- !u!1 &7939441511554283885
 GameObject:
