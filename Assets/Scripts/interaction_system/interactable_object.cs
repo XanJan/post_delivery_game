@@ -35,7 +35,7 @@ public class interactable_object : MonoBehaviour
     /// <summary>
     /// Active interactors.
     /// </summary>
-    private List<interactor> _activeInteractors = new List<interactor>();
+    protected List<interactor> _activeInteractors = new List<interactor>();
     /// <summary>
     /// Invoke onBeginInteraction if not full. If the interactable is at max active interactors, the 
     /// interaction is canceled via the interactor. If istrigger, does not update the active 
