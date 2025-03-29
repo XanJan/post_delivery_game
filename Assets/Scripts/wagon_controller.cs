@@ -112,64 +112,56 @@ public class wagon_controller : MonoBehaviour{
     }
 
     private void FixedUpdate(){
+        // if no inputs, slow down
         if(playerInputs.Count == 0){
+            rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, Vector3.zero, Time.fixedDeltaTime * deceleration);
+            UpdatePlayerPositions();
             return;
         }
 
-        // how many players are providing wagon input
-        int activePlayerCount = 0;
-        foreach(var input in playerInputs.Values){
-            if(input.magnitude > 0.1f) activePlayerCount++;
-        }
-        int playerCount = Mathf.Max(1, activePlayerCount); // ensure at least 1
-
-        // regulate wagon speed scaling by how many players are moving it
-        float speedMultiplier = Mathf.Clamp(playerCount / 2f, 0.5f, 1f);
-
-        float adjustedMaxSpeed = maxSpeed * speedMultiplier;
-        float adjustedAcceleration = acceleration * speedMultiplier;
-
-        // calculate mean movement-input from all players
         Vector2 combinedInput = Vector2.zero;
         foreach(var input in playerInputs.Values){
-            combinedInput += input;
-        }
-        combinedInput /= playerInputs.Count;
-
-        float forwardInput = combinedInput.y;
-        float turnInput = combinedInput.x;
-        
-        // apply acceleration or deceleration
-        Vector3 movementDirection = transform.forward * forwardInput;
-        Vector3 forwardForce = movementDirection * -adjustedMaxSpeed;
-        rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, forwardForce, Time.fixedDeltaTime * adjustedAcceleration);
-        if (forwardInput == 0) {
-            rb.linearVelocity *= 0.95f; 
-        }
-
-        // apply turning
-        if(Mathf.Abs(turnInput) > 0.1f){
-        rb.angularVelocity = new Vector3(0, turnInput * turnSpeed * Mathf.Deg2Rad, 0);
-        }
-        else{
-            rb.angularVelocity = Vector3.zero;
-        }
-
-        // limit maxspeed
-        rb.linearVelocity = Vector3.ClampMagnitude(rb.linearVelocity, maxSpeed);
-
-        // slow down if no input
-        if (Mathf.Abs(forwardInput) < 0.1f){
-            rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, Vector3.zero, Time.fixedDeltaTime * deceleration);
-        }
-
-        // move players with wagon
-        foreach (GameObject player in playerInputs.Keys){
-            if (player != null){
-                player.transform.position = seatPosition.position; 
-                player.transform.rotation = seatPosition.rotation; 
+            if(input.magnitude > 0.1f){
+                combinedInput += input;
             }
         }
+        
+        combinedInput = -combinedInput;
 
+        if(combinedInput.magnitude < 0.1f){
+            rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, Vector3.zero, Time.fixedDeltaTime * deceleration);
+            UpdatePlayerPositions();
+            return;
+        }
+
+        float inputMagnitude = combinedInput.magnitude;
+        combinedInput = Vector2.ClampMagnitude(combinedInput, 1f);
+
+        Vector3 desiredDirection = new Vector3(combinedInput.x, 0, combinedInput.y).normalized;
+
+        float angleDifference = Vector3.SignedAngle(transform.forward, desiredDirection, Vector3.up);
+
+        float maxTurnAngle = turnSpeed * Time.fixedDeltaTime;
+        float clampedTurnAngle = Mathf.Clamp(angleDifference, -maxTurnAngle, maxTurnAngle);
+        transform.Rotate(0, clampedTurnAngle, 0);
+
+        angleDifference = Vector3.SignedAngle(transform.forward, desiredDirection, Vector3.up);
+
+        float alignmentFactor = Mathf.Clamp01(1f - Mathf.Abs(angleDifference) / 90f);
+
+        Vector3 targetVelocity = alignmentFactor * inputMagnitude * maxSpeed * -transform.forward;
+
+        rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, targetVelocity, Time.fixedDeltaTime * acceleration);
+
+        UpdatePlayerPositions();
     } 
+
+    private void UpdatePlayerPositions(){
+        foreach (GameObject player in playerInputs.Keys){
+            if(player != null){
+                player.transform.position = seatPosition.position;
+                player.transform.rotation = seatPosition.rotation;
+            }
+        }
+    }
 }

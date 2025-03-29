@@ -935,6 +935,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2935486126145213470, guid: 9ba028434a8204842a3cad5261c0b85e, type: 3}
+      propertyPath: maxSpeed
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 8030178369490046315, guid: 9ba028434a8204842a3cad5261c0b85e, type: 3}
       propertyPath: m_Name
       value: package_wagon
