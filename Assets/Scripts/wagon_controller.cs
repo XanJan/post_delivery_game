@@ -9,23 +9,24 @@ public class wagon_controller : MonoBehaviour{
     private Dictionary<GameObject, Vector2> playerInputs = new Dictionary<GameObject, Vector2>();
 
     private Rigidbody rb;
-    public float acceleration = 5f;
-    public float maxSpeed = 10f;
-    public float turnSpeed = 100f;
-    public float deceleration = 3f;
+    public float acceleration = 5f; // wagon acceleration
+    public float maxSpeed = 10f;    // wagon max speed
+    public float turnSpeed = 100f;  // wagon turnspeed
+    public float deceleration = 3f; // wagon deceleration when no input
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
     }
 
-
+    // add palyer to list when entering trigger
     private void OnTriggerEnter(Collider other){
        if(other.CompareTag("Player") && !playersInside.Contains(other.gameObject)){
         playersInside.Add(other.gameObject);
        } 
     }
 
+    // when player leaves trigger, remove from list as well as their input
     private void OnTriggerExit(Collider other)
     {
         if(other.CompareTag("Player")){
@@ -34,7 +35,7 @@ public class wagon_controller : MonoBehaviour{
         }
     }
 
-    // handle an interact call from a player
+    // handle an interact call from a player, toggles either exit/ enter
     public void Interact(GameObject player){
         if(playerInputs.ContainsKey(player)){
             ExitWagon(player);
@@ -111,6 +112,7 @@ public class wagon_controller : MonoBehaviour{
         }
     }
 
+    // handles physics updates for the wagon movement
     private void FixedUpdate(){
         // if no inputs, slow down
         if(playerInputs.Count == 0){
@@ -119,6 +121,7 @@ public class wagon_controller : MonoBehaviour{
             return;
         }
 
+        // sum active player inputs
         Vector2 combinedInput = Vector2.zero;
         foreach(var input in playerInputs.Values){
             if(input.magnitude > 0.1f){
@@ -126,8 +129,10 @@ public class wagon_controller : MonoBehaviour{
             }
         }
         
+        // invert input since it was inverted (((((((?????????)))))))
         combinedInput = -combinedInput;
 
+        // if resulting input is negligible, decelerate
         if(combinedInput.magnitude < 0.1f){
             rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, Vector3.zero, Time.fixedDeltaTime * deceleration);
             UpdatePlayerPositions();
@@ -137,25 +142,32 @@ public class wagon_controller : MonoBehaviour{
         float inputMagnitude = combinedInput.magnitude;
         combinedInput = Vector2.ClampMagnitude(combinedInput, 1f);
 
+        // convert 2D input into normalized world-space direction
         Vector3 desiredDirection = new Vector3(combinedInput.x, 0, combinedInput.y).normalized;
 
+        // calculate angle between wagons facing direction and desired moving-direction
         float angleDifference = Vector3.SignedAngle(transform.forward, desiredDirection, Vector3.up);
 
+        // calculate rotation posible and ensure smoothness
         float maxTurnAngle = turnSpeed * Time.fixedDeltaTime;
         float clampedTurnAngle = Mathf.Clamp(angleDifference, -maxTurnAngle, maxTurnAngle);
         transform.Rotate(0, clampedTurnAngle, 0);
 
+        // recalculate angle difference after rotation
         angleDifference = Vector3.SignedAngle(transform.forward, desiredDirection, Vector3.up);
 
+        // calculate alignment factor (how far of from desired direction is wagon facing)
         float alignmentFactor = Mathf.Clamp01(1f - Mathf.Abs(angleDifference) / 90f);
 
         Vector3 targetVelocity = alignmentFactor * inputMagnitude * maxSpeed * -transform.forward;
 
+        // smoothly interpolate current velocity towards target velocity
         rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, targetVelocity, Time.fixedDeltaTime * acceleration);
 
         UpdatePlayerPositions();
     } 
 
+    // ensure that player models stays in the correct position during wagon movement
     private void UpdatePlayerPositions(){
         foreach (GameObject player in playerInputs.Keys){
             if(player != null){
