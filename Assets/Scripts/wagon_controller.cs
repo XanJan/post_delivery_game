@@ -55,6 +55,7 @@ public class wagon_controller : MonoBehaviour{
         Rigidbody playerRb = player.GetComponent<Rigidbody>();
         if(playerRb != null){
             playerRb.useGravity = false;
+            playerRb.constraints |= RigidbodyConstraints.FreezePositionY;
         }
 
         Collider wagonCollider = GetComponent<Collider>();
@@ -88,6 +89,7 @@ public class wagon_controller : MonoBehaviour{
         Rigidbody playerRb = player.GetComponent<Rigidbody>();
         if(playerRb != null){
             playerRb.useGravity = true;
+            playerRb.constraints &= ~RigidbodyConstraints.FreezePositionY;
         }
 
         Collider wagonCollider = GetComponent<Collider>();
