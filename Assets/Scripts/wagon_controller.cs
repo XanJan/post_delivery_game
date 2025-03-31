@@ -164,7 +164,16 @@ public class wagon_controller : MonoBehaviour{
         Vector3 targetVelocity = alignmentFactor * inputMagnitude * maxSpeed * -transform.forward;
 
         // smoothly interpolate current velocity towards target velocity
-        rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, targetVelocity, Time.fixedDeltaTime * acceleration);
+        //rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, targetVelocity, Time.fixedDeltaTime * acceleration);
+
+        Vector3 newVelocity = Vector3.Lerp(rb.linearVelocity, targetVelocity, Time.fixedDeltaTime * acceleration);
+        newVelocity += rb.linearVelocity * 0.1f;
+
+        if (newVelocity.magnitude > maxSpeed){
+                newVelocity = newVelocity.normalized * maxSpeed;
+            }
+
+        rb.linearVelocity = newVelocity;
 
         UpdatePlayerPositions();
     } 
