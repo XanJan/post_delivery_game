@@ -56,14 +56,15 @@ public class pickup_interactable : interactable_object
             collider.enabled = false;
         }
         // Invoke player holding package bool to true;
-        ObservableValueCollection obvc = context.GetPlayerObservableValueCollection();
+        observable_value_collection obvc = context.GetPlayerObservableValueCollection();
         obvc.InvokeBool("holdingPackage",true);
     }
+
 
     private void Drop(interactor context)
     {
         gameObject.layer = LayerMask.NameToLayer("Default");
-        ObservableValueCollection obvc = context.GetPlayerObservableValueCollection();
+        observable_value_collection obvc = context.GetPlayerObservableValueCollection();
         
         GameObject player = context.gameObject;
         // Unparent and re-enable physics
