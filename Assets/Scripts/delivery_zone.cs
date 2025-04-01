@@ -8,17 +8,26 @@ public class delivery_zone : MonoBehaviour
     private Renderer areaRenderer;
     public Color red = Color.red;
     public Color green = Color.green;
+    public int maxPackages = 5;
 
     void Start(){
-     areaRenderer = GetComponent<Renderer>();
-     areaRenderer.material.color = red;   
+        areaRenderer = GetComponent<Renderer>();
+        areaRenderer.material.color = red;   
     }
 
     void OnTriggerEnter(Collider other){
         if(other.CompareTag("Package") && !detectedPackages.Contains(other.gameObject)){
+            if (detectedPackages.Count >= maxPackages){
+                return;
+            }
+
             detectedPackages.Add(other.gameObject);
             score_manager.Instance.AddScore();
-            areaRenderer.material.color = green;
+
+            if(detectedPackages.Count >= maxPackages){
+                areaRenderer.material.color = green;
+            }
+
             StartCoroutine(DisappearEffect(other.gameObject));
         }
     }
@@ -48,7 +57,10 @@ public class delivery_zone : MonoBehaviour
 
         detectedPackages.Remove(package); 
         if (package != null) Destroy(package); 
-        areaRenderer.material.color = red;
+        
+        if(detectedPackages.Count < maxPackages){
+            areaRenderer.material.color = red;
+        }
     }
 
 }
