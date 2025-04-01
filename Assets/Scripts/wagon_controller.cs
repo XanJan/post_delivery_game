@@ -102,6 +102,10 @@ public class wagon_controller : MonoBehaviour{
         playerInputs.Remove(player);
     }
 
+    public bool IsPlayerInWagon(GameObject player){
+        return playersInside.Contains(player);
+    }
+
     // update the current input vector for each player
     private void UpdateInput(GameObject player, Vector2 input){
         if(playerInputs.ContainsKey(player)){
@@ -170,7 +174,7 @@ public class wagon_controller : MonoBehaviour{
         newVelocity += rb.linearVelocity * 0.1f;
 
         if (newVelocity.magnitude > maxSpeed){
-                newVelocity = newVelocity.normalized * maxSpeed;
+                            newVelocity = newVelocity.normalized * maxSpeed;
             }
 
         rb.linearVelocity = newVelocity;
