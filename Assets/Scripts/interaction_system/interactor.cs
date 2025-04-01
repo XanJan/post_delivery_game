@@ -83,14 +83,21 @@ public abstract class interactor : MonoBehaviour
 
     /// <returns>active interactions count.</returns>
     public int ActiveInteractionsCount(){return _activeInteractions.Count;}
-    public interactable_object PeekLastInteraction()
+    /// <summary>
+    /// Pop the topmost interaction and peek the one underneath. Use in non trigger
+    /// interactable objects to peek the last interaction. In trigger interactions,
+    /// use TryPeek() directly instead.
+    /// </summary>
+    /// <returns>True if peek succeeded, false if not.</returns>
+    public bool TryPeekLastInteraction(out interactable_object interaction)
     {
         if(_activeInteractions.TryPop(out var top)&&
         _activeInteractions.TryPeek(out var res))
         {
+            interaction = res;
             _activeInteractions.Push(top);
-            return res;
-        } else return null;
+            return true;
+        } else {interaction = null ; return false;}
     }
     /// <summary>
     /// Getter.
@@ -102,7 +109,7 @@ public abstract class interactor : MonoBehaviour
     /// </summary>
     /// <param name="result">Popped interactable object.</param>
     /// <returns>true on success, false on fail.</returns>
-    public bool TryPop( out interactable_object result )
+    public bool TryPopInteraction( out interactable_object result )
     {
         bool success = _activeInteractions.TryPop(out var res);
         result = res;
@@ -112,8 +119,19 @@ public abstract class interactor : MonoBehaviour
     /// Push interactable object onto active interactions stack.
     /// </summary>
     /// <param name="interactable">Interactable object to push.</param>
-    public void Push(interactable_object interactable)
+    public void PushInteraction(interactable_object interactable)
     {
         _activeInteractions.Push(interactable);
+    }
+    /// <summary>
+    /// Ends all active interactions in order.
+    /// </summary>
+    public void EndAllPreviousInteractions()
+    {
+        if(_activeInteractions.TryPop(out var temp))
+        {
+            for(int i= 0 ; i < _activeInteractions.Count ; i++){TryEndInteraction();}
+            _activeInteractions.Push(temp);
+        }
     }
 }

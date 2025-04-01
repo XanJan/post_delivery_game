@@ -13,13 +13,8 @@ public class wagon_front_interactable : interactable_object
         {
             collider.enabled = false;
         }
-        
-        if(context.ActiveInteractionsCount() > 0)
-        {
-            context.TryPop(out var temp);
-            context.TryEndInteraction();
-            context.Push(temp);
-        }
+        // End all interactions before entering wagon.
+        context.EndAllPreviousInteractions();
         // Update holdingWagon
         observable_value_collection obvc = context.GetPlayerObservableValueCollection();
         if(obvc!=null){obvc.InvokeBool(_holdingWagonString, true);}

@@ -17,10 +17,10 @@ public class wagon_storage_interactable : interactable_object
     public void HandleInteractTrigger(interactor context)
     {
         _interactionText = _ogInteractionText;
-        bool success = context.TryPop(out var activeInteractable);
+        bool success = context.TryPopInteraction(out var activeInteractable);
         if(success)// Attempt drop off
         {
-            context.Push(activeInteractable);
+            context.PushInteraction(activeInteractable);
             if(!_wagon.IsFull())
             {
                 DropOffText = _dropOffText;
