@@ -53,6 +53,8 @@ public class player_interactor : interactor
             {
                 _textMeshPro.transform.SetParent(null);
                 _textMeshPro.gameObject.SetActive(true);
+                _textMeshPro.gameObject.transform.position = interactable.gameObject.transform.position + Vector3.up;
+                _textMeshPro.transform.LookAt(Camera.main.transform); // Rotate text toward camera
                 //Update the interaction text.
                 switch(interactable)
                 {
@@ -62,16 +64,18 @@ public class player_interactor : interactor
                         _textMeshPro.text = wagonInteractable.DropOffText;
                         break;
                     } else {goto default;}
+                    case wagon_front_interactable wagonFrontInteractable :
+                    _textMeshPro.gameObject.transform.position = wagonFrontInteractable.GetInteractionTextPosition().position;
+                    _textMeshPro.text = interactable.GetInteractionText(); 
+                    break;
                     case pickup_interactable:
                     if(_activeInteractions.Count>0){ _textMeshPro.text = ""; } else{goto default;}
                     break;
+                    
                     default:
                     _textMeshPro.text = interactable.GetInteractionText(); 
                     break;
                 }
-                
-                _textMeshPro.gameObject.transform.position = interactable.gameObject.transform.position + Vector3.up;
-                _textMeshPro.transform.LookAt(Camera.main.transform); // Rotate text toward camera
             }
             else { _textMeshPro.gameObject.SetActive(false); _textMeshPro.text = ""; }
         }

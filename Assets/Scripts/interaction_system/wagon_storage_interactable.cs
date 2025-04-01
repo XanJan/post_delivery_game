@@ -20,17 +20,16 @@ public class wagon_storage_interactable : interactable_object
         bool success = context.TryPop(out var activeInteractable);
         if(success)// Attempt drop off
         {
-            
+            context.Push(activeInteractable);
             if(!_wagon.IsFull())
             {
                 DropOffText = _dropOffText;
-                activeInteractable.RemoveActiveInteractor(context);
+                context.TryEndInteraction();
                 _wagon.AddPackage(activeInteractable.gameObject);
             } 
             else
             {
                 DropOffText = _wagonFullText;
-                context.Push(activeInteractable);
             }
             activeInteractable.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");            
         } 
