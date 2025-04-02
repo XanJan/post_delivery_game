@@ -384,6 +384,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   seatPosition: {fileID: 8174256607375336453}
   acceleration: 5
-  maxSpeed: 4
+  maxSpeed: 5
   turnSpeed: 100
   deceleration: 3

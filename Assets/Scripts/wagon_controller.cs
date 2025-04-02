@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -165,7 +166,12 @@ public class wagon_controller : MonoBehaviour{
         // calculate alignment factor (how far of from desired direction is wagon facing)
         float alignmentFactor = Mathf.Clamp01(1f - Mathf.Abs(angleDifference) / 90f);
 
-        Vector3 targetVelocity = alignmentFactor * inputMagnitude * maxSpeed * -transform.forward;
+        int activePlayers = playerInputs.Values.Count(input => input.sqrMagnitude > 0); 
+
+        float playerCountFactor = Mathf.Lerp(0.5f, 1f, (activePlayers - 1) / 3f);
+        playerCountFactor = Mathf.Clamp(playerCountFactor, 0.5f, 1f);
+        
+        Vector3 targetVelocity = alignmentFactor * inputMagnitude * maxSpeed * playerCountFactor * -transform.forward;
 
         // smoothly interpolate current velocity towards target velocity
         //rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, targetVelocity, Time.fixedDeltaTime * acceleration);
