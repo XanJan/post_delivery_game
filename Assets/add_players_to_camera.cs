@@ -34,9 +34,24 @@ public class add_players_to_camera : MonoBehaviour
     public void AddPlayersToTargetGroup(GameObject player)
     {
         //foreach (GameObject player in players){
+        if (IsPlayerInTargetGroup(player))
+        {
             target.AddMember(player.transform, 1, 2);
+        }
+            
         //}
     }
+    bool IsPlayerInTargetGroup(GameObject player)
+    {
+        // Iterate through the targets in the target group
+        for (int targetItem = 0; targetItem <= target.Targets.Count; targetItem++)
+        {
+            if (target.Targets[targetItem] == player)
+            {
+                return true; // Player is already in the target group
+            }
+        }
+        return false; // Player is not in the target group
 
-
+    }
 }
