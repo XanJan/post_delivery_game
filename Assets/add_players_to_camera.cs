@@ -16,7 +16,7 @@ public class add_players_to_camera : MonoBehaviour
     void Start()
     {
         FindPlayers();
-        //AddPlayersToTargetGroup();
+
     }
 
 
@@ -29,29 +29,30 @@ public class add_players_to_camera : MonoBehaviour
     private void FindPlayers()
     {
         players = GameObject.FindGameObjectsWithTag("Player");
+        AddPlayersToTargetGroup();
     }
 
-    public void AddPlayersToTargetGroup(GameObject player)
+    public void AddPlayersToTargetGroup()
     {
-        //foreach (GameObject player in players){
-        if (IsPlayerInTargetGroup(player))
-        {
-            target.AddMember(player.transform, 1, 2);
-        }
+        //For all the players in the game, see if at is already added to the target group, if not, add it to the group
+        foreach (GameObject player in players){
             
-        //}
+            if (!IsPlayerInTargetGroup(player))
+            {
+                target.AddMember(player.transform, 1, 2);
+            }
+            
+        }
     }
     bool IsPlayerInTargetGroup(GameObject player)
     {
-        // Iterate through the targets in the target group
-        for (int targetItem = 0; targetItem <= target.Targets.Count; targetItem++)
-        {
-            if (target.Targets[targetItem] == player)
+            if(target.FindMember(player.transform) == -1)
             {
-                return true; // Player is already in the target group
+                return false; // Player is not in the target group
+
             }
-        }
-        return false; // Player is not in the target group
+
+        return true; // Player is in the target group
 
     }
 }
