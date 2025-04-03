@@ -22,7 +22,7 @@ public abstract class interactor : MonoBehaviour
     /// An observable value collection is attached to the interactor
     /// so that interactables can interact with it.
     /// </summary>
-    [SerializeField]private observable_value_collection _obvc;
+    [SerializeField]protected observable_value_collection _obvc;
     /// <summary>
     /// The interactor can begin and end interactions. All active interactions
     /// are stored in this stack. Pop the top to get the top active interaction.
