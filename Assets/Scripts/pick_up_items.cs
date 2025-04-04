@@ -17,6 +17,8 @@ public class pick_up_items : MonoBehaviour
     private bool wantsToPickup = false; 
     private bool inRange = false;
     private bool wantsToDrop = false;
+    private wagon_storage nearbyWagonStorage;
+    private wagon_controller nearbyWagonFront;
 
     private void Awake()
     {
@@ -55,25 +57,42 @@ public class pick_up_items : MonoBehaviour
         // If player wants to pickup and we're not holding anything, pickup item when it enters range
         if (wantsToDrop && heldItem == null && other.CompareTag("Package"))
         {
-            PickupItem(other.gameObject);
+           PickupItem(other.gameObject); 
+        }
+        else if(other.CompareTag("WagonBack"))
+        {
+        nearbyWagonStorage = other.GetComponentInParent<wagon_storage>();
+        }
+        else if(other.CompareTag("Wagon"))
+        {
+            nearbyWagonFront = other.GetComponent<wagon_controller>();
         }
     }
 
     private void OnTriggerStay(Collider other)
     {
-
         // If player wants to pickup and we're not holding anything, pickup item while in range
         if (wantsToDrop && heldItem == null && other.CompareTag("Package"))
         {
             PickupItem(other.gameObject);
         }
-    }
+     }
 
     private void OnTriggerExit(Collider other)
     {
-        inRange = false;
-        wantsToPickup = false;
-        wantsToDrop = false;
+        if(other.CompareTag("Package")){
+            inRange = false;
+            wantsToPickup = false; 
+            wantsToDrop = false;
+        }
+        if (other.CompareTag("WagonBack"))
+        {
+            nearbyWagonStorage = null;
+        }
+        if (other.CompareTag("Wagon"))
+        {
+            nearbyWagonFront = null;
+        }
     }
 
     private void OnInteractPerformed(InputAction.CallbackContext context)
@@ -83,13 +102,21 @@ public class pick_up_items : MonoBehaviour
             wantsToPickup = false;
             wantsToDrop = true;
         }
-        
-        
 
         // If we're holding an item and player toggles pickup off, drop it
         if (wantsToDrop && heldItem != null)
         {
             DropItem();
+        }
+
+        else if(nearbyWagonStorage != null && !nearbyWagonStorage.IsEmpty()){
+            GameObject package = nearbyWagonStorage.RemovePackage();
+            if(package != null){
+                PickupItem(package);
+            }
+        }
+        else if(nearbyWagonFront != null){
+            nearbyWagonFront.Interact(gameObject);
         }
     }
 
