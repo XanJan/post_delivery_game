@@ -19,4 +19,13 @@ public class game_events : MonoBehaviour
             onEndLevelEnter();
         }
     }
+
+    public event Action onPackageTrigger;
+    public void PackageComplete()
+    {
+        if(onPackageTrigger != null)
+        {
+            onPackageTrigger();
+        }
+    }
 }

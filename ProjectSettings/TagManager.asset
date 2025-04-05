@@ -11,6 +11,8 @@ TagManager:
   - WagonFront
   - WagonBack
   - PlayerMangare
+  - EndTrigger
+  - StageColliders
   layers:
   - Default
   - TransparentFX

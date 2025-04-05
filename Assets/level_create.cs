@@ -16,15 +16,11 @@ public class level_create : MonoBehaviour
 
     private void CreateNewNeighborhood()
     {
-        RemoveNeighborhoodFromLevel(instantiateNeighborhoods[neighborhoodOrder]);
+
+        Debug.Log(instantiateNeighborhoods.Count);
         AddNeighborhoodToLevel();
+        RemoveNeighborhoodFromLevel(instantiateNeighborhoods[0]);
 
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
 
@@ -39,6 +35,10 @@ public class level_create : MonoBehaviour
 
     private void RemoveNeighborhoodFromLevel(GameObject stage)
     { 
-        stage.gameObject.SetActive(false);
+        if(instantiateNeighborhoods.Count >= 3)
+        {
+            stage.gameObject.SetActive(false);
+            instantiateNeighborhoods.RemoveAt(0);
+        }
     }
 }
