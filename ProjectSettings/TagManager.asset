@@ -7,12 +7,14 @@ TagManager:
   - Package
   - PlayerHands
   - Item
+  - PlayerManager
   - Wagon
   - WagonFront
   - WagonBack
   - PlayerMangare
   - EndTrigger
   - StageColliders
+
   layers:
   - Default
   - TransparentFX
