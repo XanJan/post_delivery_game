@@ -2308,6 +2308,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   red: {r: 1, g: 0, b: 0, a: 1}
   green: {r: 0, g: 1, b: 0, a: 1}
+  maxPackages: 5
+  textDisplay: {fileID: 0}
 --- !u!1 &2722406173147556175
 GameObject:
   m_ObjectHideFlags: 0
@@ -4251,6 +4253,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   red: {r: 1, g: 0, b: 0, a: 1}
   green: {r: 0, g: 1, b: 0, a: 1}
+  maxPackages: 5
+  textDisplay: {fileID: 0}
 --- !u!1 &5774027571447313293
 GameObject:
   m_ObjectHideFlags: 0
@@ -4506,6 +4510,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   red: {r: 1, g: 0, b: 0, a: 1}
   green: {r: 0, g: 1, b: 0, a: 1}
+  maxPackages: 5
+  textDisplay: {fileID: 0}
 --- !u!1 &6132512517589852812
 GameObject:
   m_ObjectHideFlags: 0
@@ -5279,7 +5285,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7464986471638712263
 Transform:
   m_ObjectHideFlags: 0
@@ -6522,6 +6528,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   red: {r: 1, g: 0, b: 0, a: 1}
   green: {r: 0, g: 1, b: 0, a: 1}
+  maxPackages: 5
+  textDisplay: {fileID: 0}
 --- !u!1 &8150079100481249170
 GameObject:
   m_ObjectHideFlags: 0
