@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class delivery_zone : MonoBehaviour
 {
@@ -8,47 +9,46 @@ public class delivery_zone : MonoBehaviour
     private Renderer areaRenderer;
     public Color red = Color.red;
     public Color green = Color.green;
-
+    public int maxPackages = 5;
+    public TextMeshPro textDisplay;
     void Start(){
-     areaRenderer = GetComponent<Renderer>();
-     areaRenderer.material.color = red;   
+        areaRenderer = GetComponent<Renderer>();
+        areaRenderer.material.color = red;   
+        UpdateText();
     }
 
+    //when a package enters, count it and remove it from the word, turn green and stop when "full"
     void OnTriggerEnter(Collider other){
         if(other.CompareTag("Package") && !detectedPackages.Contains(other.gameObject)){
+            if (detectedPackages.Count >= maxPackages){
+                return;
+            }
+
             detectedPackages.Add(other.gameObject);
             score_manager.Instance.AddScore();
-            areaRenderer.material.color = green;
-            StartCoroutine(DisappearEffect(other.gameObject));
-        }
-    }
+            UpdateText();
 
-    IEnumerator DisappearEffect(GameObject package){
-        Renderer packageRenderer = package.GetComponent<Renderer>();
-
-        if (packageRenderer != null)
-        {
-            float fadeDuration = 0.5f; 
-            float elapsedTime = 0f;
-
-            while (elapsedTime < fadeDuration)
-            {
-                if (package == null || packageRenderer == null)
-                    yield break; 
-                elapsedTime += Time.deltaTime;
-                float alpha = Mathf.Lerp(1, 0, elapsedTime / fadeDuration);
-
-                Color newColor = packageRenderer.material.color;
-                newColor.a = alpha;
-                packageRenderer.material.color = newColor;
-
-                yield return null;
+            if(detectedPackages.Count >= maxPackages){
+                areaRenderer.material.color = green;
             }
-        }
 
-        detectedPackages.Remove(package); 
-        if (package != null) Destroy(package); 
-        areaRenderer.material.color = red;
+            if (other.gameObject != null) Destroy(other.gameObject); 
+        }
     }
 
+    void UpdateText(){
+        if(textDisplay != null){
+            textDisplay.text = $"{detectedPackages.Count}/{maxPackages}";
+        }
+    }
+
+    //way to sum total score in a gamehandler (add way of counting scores for different types of packages)
+    public int FinalZoneScore(){
+        if(detectedPackages.Count >= maxPackages){
+            return detectedPackages.Count;
+        }
+        else{ 
+            return 0;
+        }
+    }
 }
