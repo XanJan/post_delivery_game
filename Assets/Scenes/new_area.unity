@@ -264,6 +264,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 28
       objectReference: {fileID: 0}
+    - target: {fileID: 6612072803919069390, guid: e8bcfbd838e1a7f429175ade066afd00, type: 3}
+      propertyPath: remainingTime
+      value: 500
+      objectReference: {fileID: 0}
     - target: {fileID: 6807871705896592024, guid: e8bcfbd838e1a7f429175ade066afd00, type: 3}
       propertyPath: m_fontSize
       value: 25
@@ -1356,14 +1360,43 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4690564259529879894, guid: 62fce1eca27c7c94497b8444d87e8510, type: 3}
+      propertyPath: maxPackages
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5005131794947634226, guid: 62fce1eca27c7c94497b8444d87e8510, type: 3}
       propertyPath: m_Name
       value: Neighborhood
       objectReference: {fileID: 0}
+    - target: {fileID: 5126946313896188763, guid: 62fce1eca27c7c94497b8444d87e8510, type: 3}
+      propertyPath: maxPackages
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8263478232511536994, guid: 62fce1eca27c7c94497b8444d87e8510, type: 3}
+      propertyPath: maxPackages
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8885252299630205921, guid: 62fce1eca27c7c94497b8444d87e8510, type: 3}
+      propertyPath: maxPackages
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 169847964245674014, guid: 62fce1eca27c7c94497b8444d87e8510, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2014978627572998043, guid: 62fce1eca27c7c94497b8444d87e8510, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 2423040875295388972, guid: 62fce1eca27c7c94497b8444d87e8510, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 1303123771847449368, guid: 62fce1eca27c7c94497b8444d87e8510, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 2854990806108315425, guid: 62fce1eca27c7c94497b8444d87e8510, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 62fce1eca27c7c94497b8444d87e8510, type: 3}
 --- !u!1001 &8007434151376601802
 PrefabInstance:
@@ -1376,6 +1409,10 @@ PrefabInstance:
     - target: {fileID: 3923015741184507435, guid: a6428ad72173eac4cb30d0701621932a, type: 3}
       propertyPath: m_Name
       value: interactable_wagon
+      objectReference: {fileID: 0}
+    - target: {fileID: 3993538855618010057, guid: a6428ad72173eac4cb30d0701621932a, type: 3}
+      propertyPath: maxCapacity
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8838821214776784029, guid: a6428ad72173eac4cb30d0701621932a, type: 3}
       propertyPath: m_LocalPosition.x

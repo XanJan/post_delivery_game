@@ -7,19 +7,28 @@ public class level_create : MonoBehaviour
     private GameObject[] neighborhoods;
     private int neighborhoodOrder = 1;
     private List<GameObject> instantiateNeighborhoods = new List<GameObject>();
+    private bool isNeighborhoodFinished = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         AddNeighborhoodToLevel();
         game_events.current.onEndLevelEnter += CreateNewNeighborhood;
+        game_events.current.onNeighborhoodFinished += NeighborhoodFinished;
     }
 
+    private void NeighborhoodFinished()
+    {
+        isNeighborhoodFinished = true;
+    }
     private void CreateNewNeighborhood()
     {
-
-        Debug.Log(instantiateNeighborhoods.Count);
-        AddNeighborhoodToLevel();
-        RemoveNeighborhoodFromLevel(instantiateNeighborhoods[0]);
+        if(isNeighborhoodFinished)
+        {
+            //Debug.Log(instantiateNeighborhoods.Count);
+            AddNeighborhoodToLevel();
+            RemoveNeighborhoodFromLevel(instantiateNeighborhoods[0]);
+            isNeighborhoodFinished = false;
+        }
 
     }
 

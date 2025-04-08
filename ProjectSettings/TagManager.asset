@@ -14,7 +14,8 @@ TagManager:
   - PlayerMangare
   - EndTrigger
   - StageColliders
-
+  - Hedge
+  - DeliveryZones
   layers:
   - Default
   - TransparentFX
@@ -22,7 +23,7 @@ TagManager:
   - 
   - Water
   - UI
-  - Ground
+  - 
   - 
   - 
   - 

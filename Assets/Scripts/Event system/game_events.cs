@@ -28,4 +28,13 @@ public class game_events : MonoBehaviour
             onPackageTrigger();
         }
     }
+
+    public event Action onNeighborhoodFinished;
+    public void NeighborhoodFinished()
+    {
+        if (onNeighborhoodFinished != null)
+        {
+            onNeighborhoodFinished();
+        }
+    }
 }
