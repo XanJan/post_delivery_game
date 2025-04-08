@@ -11,7 +11,7 @@ public class interactable_object : MonoBehaviour
     /// <summary>
     /// Text that describes the interaction.
     /// </summary>
-    [SerializeField] protected string _interactionText = "Press E to interact";
+    [SerializeField] protected string _defaultInteractionText = "Press %interactButton% to interact";
     /// <summary>
     /// Triggered by interactor when it starts an interaction with this interactable.
     /// </summary>
@@ -36,6 +36,15 @@ public class interactable_object : MonoBehaviour
     /// Active interactors.
     /// </summary>
     protected List<interactor> _activeInteractors = new List<interactor>();
+    /// <summary>
+    /// The interaction text used in game, this can be modified to deviate from the original 
+    /// interaction text depending on the situation. Accessible through public getter.
+    /// </summary>
+    protected string interactionText;
+    void Awake()
+    {
+        interactionText = _defaultInteractionText;
+    }
     /// <summary>
     /// Invoke onBeginInteraction if not full. If the interactable is at max active interactors, the 
     /// interaction is canceled via the interactor. If istrigger, does not update the active 
@@ -63,7 +72,17 @@ public class interactable_object : MonoBehaviour
     /// Getter.
     /// </summary>
     /// <returns>Text that describes the interaction.</returns>
-    public string GetInteractionText(){return _interactionText;}
+    public string GetInteractionText(interactor interactor)
+    {
+        if(interactionText.Contains("%interactButton%"))
+        {
+            string ret = interactionText.Replace("%interactButton%",
+                                        interactor.GetPlayerObservableValueCollection().GetObservableString("interactButton").Value);
+            return ret;
+        } else {
+            return interactionText;
+        }
+    }
     /// <summary>
     /// Getter.
     /// </summary>

@@ -12,8 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13b91b13c9373d641b35cdd939d16635, type: 3}
   m_Name: player
   m_EditorClassIdentifier: 
-  _intNames: []
-  _floatNames: []
-  _boolNames: []
-  _vector2Names: []
-  _stringNames: []
+  _intNames:
+  - playerId
+  _floatNames:
+  - moveSpeed
+  - moveSpeedMultiplierPickup
+  - moveSpeedMultiplierEnvironment
+  - moveSpeedMultiplierOther
+  _boolNames:
+  - holdingPackage
+  - throwPackageHold
+  - throwPackageAction
+  - holdingWagon
+  _vector2Names:
+  - feetDirection
+  _stringNames:
+  - interactButton
+  - playerName

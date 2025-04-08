@@ -2,34 +2,33 @@ using UnityEngine;
 
 public class wagon_storage_interactable : interactable_object
 {
-    [SerializeField]private string _dropOffText = "Press E to drop off";
+    [SerializeField]private string _dropOffText = "Press %interactButton% to drop off";
+    [SerializeField] private string _pickupText = "Press %interactButton% to pick up";
     [SerializeField]private string _wagonFullText = "Wagon is full!";
     [SerializeField]private string _wagonEmptyText = "Wagon is empty!";
     [SerializeField]private wagon_storage _wagon;
-    public string DropOffText;
-    private string _ogInteractionText;
-    void Start()
+    public void PlayerIsHoldingPackage(bool b)
     {
-        _ogInteractionText = _interactionText;
-        DropOffText = _dropOffText;
+        if(b && !_wagon.IsFull() ){interactionText = _dropOffText;}
+        else if(!b && !_wagon.IsEmpty()){interactionText = _pickupText;}
     }
 
     public void HandleInteractTrigger(interactor context)
     {
-        _interactionText = _ogInteractionText;
+        interactionText = _defaultInteractionText;
         bool success = context.TryPopInteraction(out var activeInteractable);
         if(success)// Attempt drop off
         {
             context.PushInteraction(activeInteractable);
             if(!_wagon.IsFull())
             {
-                DropOffText = _dropOffText;
+                interactionText = _dropOffText;
                 context.TryEndInteraction();
                 _wagon.AddPackage(activeInteractable.gameObject);
             } 
             else
             {
-                DropOffText = _wagonFullText;
+                interactionText = _wagonFullText;
             }
             activeInteractable.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");            
         } 
@@ -38,14 +37,14 @@ public class wagon_storage_interactable : interactable_object
             GameObject package = _wagon.RemovePackage();
             if (package!=null)
             {
-                DropOffText = _dropOffText;
+                interactionText = _dropOffText;
                 package.layer = LayerMask.NameToLayer("Ignore Raycast");
                 if(package.TryGetComponent<interactable_object>(out var interactable))
                 {
                     context.BeginInteraction(interactable);
                 } else {Debug.Log("Warning : Tried to pick up a package that is not interactable. Attach an " +
                 typeof(interactable_object).ToString()+" component to the package gameobject '" + package.name +"'.");}
-            } else {_interactionText=_wagonEmptyText;}
+            } else {interactionText=_wagonEmptyText;}
         }
     }   
 }
