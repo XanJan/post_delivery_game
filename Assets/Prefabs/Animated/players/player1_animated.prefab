@@ -622,7 +622,6 @@ GameObject:
   - component: {fileID: 9051456166870169758}
   - component: {fileID: 7901286178603807775}
   - component: {fileID: 675003948274067448}
-  - component: {fileID: 459147860987707909}
   m_Layer: 0
   m_Name: player1_animated
   m_TagString: Player
@@ -724,6 +723,10 @@ MonoBehaviour:
   _playerInput: {fileID: 9051456166870169758}
   _interactRange: 2
   _textMeshPro: {fileID: 6968108586725471373}
+  _playerIdValueName: playerId
+  _nrOfInteractionsValueName: interactions
+  _nrOfWagonInteractionsValueName: steerWagonInteractions
+  _nrOfPackagesPickedUp: packagesPickedUp
 --- !u!114 &9051456166870169758
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -781,33 +784,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0db359481445997489767d60736902bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _intNames:
-  - playerId
-  _floatNames:
-  - moveSpeed
-  - moveSpeedMultiplierPickup
-  _boolNames:
-  - holdingPackage
-  - throwPackageHold
-  - throwPackageAction
-  - holdingWagon
-  _vector2Names:
-  - feetDirection
---- !u!114 &459147860987707909
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4891051678069208517}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c454899bb45027243b6a50c1c759d6ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _obvc: {fileID: 675003948274067448}
-  _playerIdValueName: playerId
-  _id: 1
+  _intNames: []
+  _floatNames: []
+  _boolNames: []
+  _vector2Names: []
+  _stringNames: []
+  _values_to_init_on_start:
+  - {fileID: 11400000, guid: 31d677b174660a3489b1aa57054acfc8, type: 2}
 --- !u!1 &5155380218449298551
 GameObject:
   m_ObjectHideFlags: 0

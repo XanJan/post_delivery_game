@@ -22,6 +22,8 @@ public class observable_value_collection : MonoBehaviour
     [SerializeField] private List<string> _floatNames;
     [SerializeField] private List<string> _boolNames;
     [SerializeField] private List<string> _vector2Names;
+    [SerializeField] private List<string> _stringNames;
+    [SerializeField] private List<value_names> _values_to_init_on_start;
 
     // List of all the names of the currently active observable values.
     private List<string> _names;
@@ -46,6 +48,11 @@ public class observable_value_collection : MonoBehaviour
     /// </summary>
     private Dictionary<string,observable_value<Vector2>> _observableVector2s;
     /// <summary>
+    /// Dictionary of observable strings. Use ObservableStringss[name] to get a value. Don't
+    /// forget to handle exceptions when getting.
+    /// </summary>
+    private Dictionary<string,observable_value<string>> _observableStrings;
+    /// <summary>
     /// NOT TYPE SAFE, can be used to store ObservableValues without specifying type
     /// and relying on usafe casts. Should be avoided in most cases.
     /// </summary>
@@ -56,6 +63,7 @@ public class observable_value_collection : MonoBehaviour
     public delegate void DelegateObservableFloatAdded(observable_value<float> observableFloat);
     public delegate void DelegateObservableBoolAdded(observable_value<bool> observableBool);
     public delegate void DelegateObservableVector2Added(observable_value<Vector2> observableVector2);
+    public delegate void DelegateObservableStringAdded(observable_value<string> observableString);
     public delegate void DelegateObservableObjectAdded(observable_value<object> observableObject);
     //----------------------------------------------------------------------------
     
@@ -78,6 +86,10 @@ public class observable_value_collection : MonoBehaviour
     /// </summary>
     public event DelegateObservableVector2Added ObservableVector2AddedEvent ;
     /// <summary>
+    /// Invoked when String is added to observable value collection.
+    /// </summary>
+    public event DelegateObservableStringAdded ObservableStringAddedEvent ;
+    /// <summary>
     /// Invoked when object is added to observable value collection.
     /// </summary>
     public event DelegateObservableObjectAdded ObservableObjectAddedEvent ;
@@ -92,12 +104,14 @@ public class observable_value_collection : MonoBehaviour
         _observableFloats = new Dictionary<string,observable_value<float>>();
         _observableBools = new Dictionary<string,observable_value<bool>>();
         _observableVector2s = new Dictionary<string,observable_value<Vector2>>();
+        _observableStrings = new Dictionary<string,observable_value<string>>();
         _observableObjects = new Dictionary<string, observable_value<object>>();
         _names = new List<string>();
         ObservableIntAddedEvent = default;
         ObservableFloatAddedEvent = default;
         ObservableBoolAddedEvent = default;
         ObservableVector2AddedEvent = default;
+        ObservableStringAddedEvent = default;
         ObservableObjectAddedEvent = default;
     }
     /// <summary>
@@ -112,8 +126,17 @@ public class observable_value_collection : MonoBehaviour
     /// </summary>
     void Awake()
     {
-        // Init names list to the Union of all serialized name lists. (throws away duplicate names)
-        _names = _names.Union(_intNames).Union(_floatNames).Union(_boolNames).Union(_vector2Names).ToList();
+        // Copy value names from scriptable object into value name lists. (Union operation makes sure each name is unique)
+        foreach(value_names vn in _values_to_init_on_start)
+        {
+            _intNames = _intNames.Union(vn.IntNames).ToList();
+            _floatNames = _floatNames.Union(vn.FloatNames).ToList();
+            _boolNames = _boolNames.Union(vn.BoolNames).ToList();
+            _vector2Names = _vector2Names.Union(vn.Vector2Names).ToList();
+            _stringNames = _stringNames.Union(vn.StringNames).ToList();
+        }
+        // Then take union of serialized names from the names lists.
+        _names = _names.Union(_intNames).Union(_floatNames).Union(_boolNames).Union(_vector2Names).Union(_stringNames).ToList();
         // Keeps track of unique names so no duplicates are added
         List<string> uniqueNamesCopy = new List<string>(_names); 
         // Add new observable value for each name in each name list.
@@ -160,6 +183,17 @@ public class observable_value_collection : MonoBehaviour
                 if(!_observableVector2s.ContainsKey(s))
                 {
                     _observableVector2s.Add(s,new observable_value<Vector2>(s));
+                }
+            }
+        }
+        foreach(string s in _stringNames.Distinct())
+        {
+            if(uniqueNamesCopy.Contains(s))
+            {
+                uniqueNamesCopy.Remove(s);
+                if(!_observableStrings.ContainsKey(s))
+                {
+                    _observableStrings.Add(s,new observable_value<string>(s));
                 }
             }
         }
@@ -224,6 +258,20 @@ public class observable_value_collection : MonoBehaviour
         }
     }
     /// <summary>
+    /// Add new ObservableValue<string> to the collection. If it already exists, does nothing.
+    /// </summary>
+    /// <param name="name">Name of the observable string to add.</param>
+    public void AddObservableString(string name)
+    {
+        if(!_names.Contains(name))
+        {
+            UniqueAdd(_names,name);
+            observable_value<string> observableValue = new observable_value<string>(name);
+            _observableStrings.Add(name, observableValue);
+            ObservableStringAddedEvent?.Invoke(observableValue);
+        }
+    }
+    /// <summary>
     /// NOT TYPE SAFE. Use with care, casting objects is not guaranteed to work. Add new ObservableValue<object> to 
     /// the collection. If it already exists, does nothing.
     /// </summary>
@@ -248,25 +296,31 @@ public class observable_value_collection : MonoBehaviour
     /// Getter for observable floats. Throws KeyNotFoundException if not found.
     /// </summary>
     /// <param name="name">Name of the observable float.</param>
-    /// <returns>Instance of the observable float mathing the provided name if it exists in the observable value collection.</returns>
+    /// <returns>Instance of the observable float matching the provided name if it exists in the observable value collection.</returns>
     public observable_value<float> GetObservableFloat(string name){try{return _observableFloats[name];}catch(Exception){throw;}}
     /// <summary>
     /// Getter for observable bools. Throws KeyNotFoundException if not found.
     /// </summary>
     /// <param name="name">Name of the observable bool.</param>
-    /// <returns>Instance of the observable bool mathing the provided name if it exists in the observable value collection.</returns>
+    /// <returns>Instance of the observable bool matching the provided name if it exists in the observable value collection.</returns>
     public observable_value<bool> GetObservableBool(string name){try{return _observableBools[name];}catch(Exception){throw;}}
     /// <summary>
     /// Getter for observable Vector2s. Throws KeyNotFoundException if not found.
     /// </summary>
     /// <param name="name">Name of the observable Vector2.</param>
-    /// <returns>Instance of the observable Vector2 mathing the provided name if it exists in the observable value collection.</returns>
+    /// <returns>Instance of the observable Vector2 mathcing the provided name if it exists in the observable value collection.</returns>
     public observable_value<Vector2> GetObservableVector2(string name){try{return _observableVector2s[name];}catch(Exception){throw;}}
+    /// <summary>
+    /// Getter for observable strings. Throws KeyNotFoundException if not found.
+    /// </summary>
+    /// <param name="name">Name of the observable string.</param>
+    /// <returns>Instance of the observable string matching the provided name if it exists in the observable value collection.</returns>
+    public observable_value<string> GetObservableString(string name){try{return _observableStrings[name];}catch(Exception){throw;}}
     /// <summary>
     /// NOT TYPE SAFE. Use with care, casting objects is not guaranteed to work. Getter for observable objects. Throws KeyNotFoundException. 
     /// </summary>
     /// <param name="name">Name of the observable object.</param>
-    /// <returns>Instance of the observable object mathing the provided name if it exists in the observable value collection.</returns>
+    /// <returns>Instance of the observable object matching the provided name if it exists in the observable value collection.</returns>
     public observable_value<object> GetObservableObject(string name){try{return _observableObjects[name];}catch(Exception){throw;}}
     /// <summary>
     /// Helper method for adding only if the item does not already exist in a list.
@@ -283,10 +337,12 @@ public class observable_value_collection : MonoBehaviour
         _floatNames.Remove(name);
         _boolNames.Remove(name);
         _vector2Names.Remove(name);
+        _stringNames.Remove(name);
         _observableInts.Remove(name);
         _observableFloats.Remove(name);
         _observableBools.Remove(name);
         _observableVector2s.Remove(name);
+        _observableStrings.Remove(name);
         _observableObjects.Remove(name);
     }
     /// <summary>
@@ -314,6 +370,12 @@ public class observable_value_collection : MonoBehaviour
     /// <param name="i">New value.</param>
     public void InvokeVector2(string name, Vector2 v2){GetObservableVector2(name).InvokeEvent(v2);}
     /// <summary>
+    /// Update in the collection. Invokes UpdateValue event on the ObservableValue.
+    /// </summary>
+    /// <param name="name">Name of the observable value to update.</param>
+    /// <param name="i">New value.</param>
+    public void InvokeString(string name, string s){GetObservableString(name).InvokeEvent(s);}
+    /// <summary>
     /// NOT TYPE SAFE. Use with care, casting objects is not guaranteed to work.
     /// Update in the collection. Invokes UpdateValue event on the ObservableValue.
     /// </summary>
@@ -340,6 +402,11 @@ public class observable_value_collection : MonoBehaviour
     /// </summary>
     /// <returns>All observable Vector2s in the collection.</returns>
     public observable_value<Vector2>[] GetObservableVector2Array(){return _observableVector2s.Values.ToArray();}
+    /// <summary>
+    /// Get by copy.
+    /// </summary>
+    /// <returns>All observable Vector2s in the collection.</returns>
+    public observable_value<string>[] GetObservableStringArray(){return _observableStrings.Values.ToArray();}
     /// <summary>
     /// NOT TYPE SAFE. Use with care, casting objects is not guaranteed to work. Get by copy.
     /// </summary>
