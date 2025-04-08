@@ -1464,7 +1464,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 837828357}
         m_TargetAssemblyTypeName: scene_switcher_interactable, Assembly-CSharp
-        m_MethodName: OnInteractHandle
+        m_MethodName: OnTriggerHandler
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1479,7 +1479,7 @@ MonoBehaviour:
       m_Calls: []
   _isTrigger: 1
   _maxNumberOfInteractors: 1
-  _sceneBuildIndex: 0
+  _sceneBuildIndex: 2
 --- !u!65 &837828358
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3037,6 +3037,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interactButtonValueName: interactButton
+  _playerIdValueName: playerId
   _interactButtonKeyboard: E
   _interactButtonGamepad: Y
 --- !u!1001 &2066801926

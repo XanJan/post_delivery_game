@@ -517,7 +517,6 @@ GameObject:
   - component: {fileID: 9051456166870169758}
   - component: {fileID: 4642382950457761784}
   - component: {fileID: 7901286178603807775}
-  - component: {fileID: 6117595668027425725}
   - component: {fileID: 675003948274067448}
   m_Layer: 0
   m_Name: player3_animated
@@ -669,18 +668,6 @@ MonoBehaviour:
   _obvc: {fileID: 675003948274067448}
   playerSpeed: 5
   rotationSpeed: 700
---- !u!114 &6117595668027425725
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4891051678069208517}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14f5b36808e947046926eed41c085348, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &675003948274067448
 MonoBehaviour:
   m_ObjectHideFlags: 0
