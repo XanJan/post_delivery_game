@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5769300519894952047}
   - component: {fileID: 8723625326511797880}
   - component: {fileID: 6572301296395799999}
+  - component: {fileID: 9012887409347736393}
   m_Layer: 0
   m_Name: interactable_regular_package
   m_TagString: Package
@@ -152,6 +153,18 @@ MonoBehaviour:
   _maxNumberOfInteractors: 1
   _throwForce: 4
   _pickupWeight: 0
+--- !u!114 &9012887409347736393
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7229160462547734405}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b7120a94a2717740b1f110b95798bd2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8957943979286810275
 GameObject:
   m_ObjectHideFlags: 0

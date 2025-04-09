@@ -37,4 +37,13 @@ public class game_events : MonoBehaviour
             onNeighborhoodFinished();
         }
     }
+
+    public event Action onPacketFall;
+    public void PacketCollide()
+    {
+        if (onPacketFall != null)
+        {
+            onPacketFall();
+        }
+    }
 }

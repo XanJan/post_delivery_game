@@ -8,17 +8,19 @@ public class sound_manager : MonoBehaviour
     public AudioSource sfxSource;
 
     [Header("___Audio Clips___")]
-    public AudioClip[] sfxClips;
+    public AudioClip dropBoxSound;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        game_events.current.onPacketFall += PlayDropBoxSound;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void PlayDropBoxSound()
     {
-        
+        Debug.Log("PlayDropBoxSound");
+        sfxSource.clip = dropBoxSound;
+        sfxSource.Play();
     }
+
 }
