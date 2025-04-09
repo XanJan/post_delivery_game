@@ -122,6 +122,11 @@ public class pick_up_items : MonoBehaviour
 
     private void PickupItem(GameObject item)
     {
+        //prevent picking up items if inside wagon
+        if(nearbyWagonFront != null && nearbyWagonFront.IsPlayerInWagon(gameObject)){
+            return;
+        }
+
         heldItem = item;
 
         // Parent to hands and disable physics

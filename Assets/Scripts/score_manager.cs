@@ -9,7 +9,7 @@ public class score_manager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject); 
+            DontDestroyOnLoad(this.gameObject); 
         }
         else
         {
@@ -19,7 +19,7 @@ public class score_manager : MonoBehaviour
 
     public void AddScore()
     {
-        totalPackageScore++;
+        this.totalPackageScore++;
         Debug.Log("Total Package Score: " + totalPackageScore);
     }
 }

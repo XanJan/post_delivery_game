@@ -323,5 +323,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   red: {r: 1, g: 0, b: 0, a: 1}
   green: {r: 0, g: 1, b: 0, a: 1}
-  maxPackages: 5
+  maxPackages: 2
   textDisplay: {fileID: 6110917574141038793}
