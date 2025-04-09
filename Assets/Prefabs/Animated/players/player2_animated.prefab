@@ -694,6 +694,7 @@ GameObject:
   - component: {fileID: 588415828336237354}
   - component: {fileID: 7901286178603807775}
   - component: {fileID: 675003948274067448}
+  - component: {fileID: 4680618843132286972}
   m_Layer: 0
   m_Name: player2_animated
   m_TagString: Player
@@ -852,7 +853,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0db359481445997489767d60736902bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _intNames: []
+  _intNames:
+  - playerId
   _floatNames:
   - moveSpeed
   - moveSpeedMultiplierPickup
@@ -863,6 +865,21 @@ MonoBehaviour:
   - holdingWagon
   _vector2Names:
   - feetDirection
+--- !u!114 &4680618843132286972
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4891051678069208517}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c454899bb45027243b6a50c1c759d6ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _obvc: {fileID: 675003948274067448}
+  _playerIdValueName: playerId
+  _id: 2
 --- !u!1 &5500858678457047716
 GameObject:
   m_ObjectHideFlags: 0

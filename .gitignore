@@ -8,6 +8,8 @@
 /[Bb]uild/
 /[Bb]uilds/
 /[Ll]ogs/
+/Assets/Stats/
+/Assets/Stats.meta
 /[Uu]ser[Ss]ettings/
 
 # MemoryCaptures can get excessive in size.

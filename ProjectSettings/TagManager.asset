@@ -7,9 +7,15 @@ TagManager:
   - Package
   - PlayerHands
   - Item
+  - PlayerManager
   - Wagon
   - WagonFront
   - WagonBack
+  - PlayerMangare
+  - EndTrigger
+  - StageColliders
+  - Hedge
+  - DeliveryZones
   layers:
   - Default
   - TransparentFX
@@ -17,7 +23,7 @@ TagManager:
   - 
   - Water
   - UI
-  - Ground
+  - 
   - 
   - 
   - 

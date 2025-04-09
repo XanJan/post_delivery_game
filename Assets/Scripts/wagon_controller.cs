@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -55,6 +56,7 @@ public class wagon_controller : MonoBehaviour{
         Rigidbody playerRb = player.GetComponent<Rigidbody>();
         if(playerRb != null){
             playerRb.useGravity = false;
+            playerRb.constraints |= RigidbodyConstraints.FreezePositionY;
         }
 
         Collider wagonCollider = GetComponent<Collider>();
@@ -88,6 +90,7 @@ public class wagon_controller : MonoBehaviour{
         Rigidbody playerRb = player.GetComponent<Rigidbody>();
         if(playerRb != null){
             playerRb.useGravity = true;
+            playerRb.constraints &= ~RigidbodyConstraints.FreezePositionY;
         }
 
         Collider wagonCollider = GetComponent<Collider>();
@@ -98,6 +101,10 @@ public class wagon_controller : MonoBehaviour{
         player.transform.position = transform.position - transform.forward * 2f;
 
         playerInputs.Remove(player);
+    }
+
+    public bool IsPlayerInWagon(GameObject player){
+        return playersInside.Contains(player);
     }
 
     // update the current input vector for each player
@@ -159,10 +166,24 @@ public class wagon_controller : MonoBehaviour{
         // calculate alignment factor (how far of from desired direction is wagon facing)
         float alignmentFactor = Mathf.Clamp01(1f - Mathf.Abs(angleDifference) / 90f);
 
-        Vector3 targetVelocity = alignmentFactor * inputMagnitude * maxSpeed * -transform.forward;
+        int activePlayers = playerInputs.Values.Count(input => input.sqrMagnitude > 0); 
+
+        float playerCountFactor = Mathf.Lerp(0.5f, 1f, (activePlayers - 1) / 3f);
+        playerCountFactor = Mathf.Clamp(playerCountFactor, 0.5f, 1f);
+        
+        Vector3 targetVelocity = alignmentFactor * inputMagnitude * maxSpeed * playerCountFactor * -transform.forward;
 
         // smoothly interpolate current velocity towards target velocity
-        rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, targetVelocity, Time.fixedDeltaTime * acceleration);
+        //rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, targetVelocity, Time.fixedDeltaTime * acceleration);
+
+        Vector3 newVelocity = Vector3.Lerp(rb.linearVelocity, targetVelocity, Time.fixedDeltaTime * acceleration);
+        newVelocity += rb.linearVelocity * 0.1f;
+
+        if (newVelocity.magnitude > maxSpeed){
+                            newVelocity = newVelocity.normalized * maxSpeed;
+            }
+
+        rb.linearVelocity = newVelocity;
 
         UpdatePlayerPositions();
     } 

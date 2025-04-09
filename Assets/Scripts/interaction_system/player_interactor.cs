@@ -10,6 +10,13 @@ public class player_interactor : interactor
     [SerializeField]private float _interactRange;
     [SerializeField]private TextMeshPro _textMeshPro;
 
+    
+    // Stats
+    [SerializeField] private string _playerIdValueName= "playerId";
+    [SerializeField] private string _nrOfInteractionsValueName = "interactions";
+    [SerializeField] private string _nrOfWagonInteractionsValueName = "steerWagonInteractions";
+    [SerializeField] private string _nrOfPackagesPickedUp = "packagesPickedUp";
+
     void OnEnable()
     {
         _playerInput.actions["interact"].started += HandleInteract;
@@ -28,6 +35,16 @@ public class player_interactor : interactor
             if(hit.collider.TryGetComponent<interactable_object>(out var interactable))
             {
                 BeginInteraction(interactable);
+                stats_manager.Instance.IncIntStat("Player" + _obvc.GetObservableInt(_playerIdValueName).Value + " " + _nrOfInteractionsValueName,1);
+                switch(interactable)
+                {
+                    case wagon_front_interactable:
+                    stats_manager.Instance.IncIntStat("Player" + _obvc.GetObservableInt(_playerIdValueName).Value + " " +_nrOfWagonInteractionsValueName,1);
+                    break;
+                    case pickup_interactable:
+                    stats_manager.Instance.IncIntStat("Player" + _obvc.GetObservableInt(_playerIdValueName).Value + " " +_nrOfPackagesPickedUp,1);
+                    break;
+                }
             }
             else
             {
