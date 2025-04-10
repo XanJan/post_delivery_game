@@ -78,19 +78,24 @@ public class player_interactor : interactor
                     case wagon_storage_interactable wagonInteractable:
                     if(_activeInteractions.Count>0)//Holding package
                     {
-                        _textMeshPro.text = wagonInteractable.DropOffText;
+                        wagonInteractable.PlayerIsHoldingPackage(true);
+                        _textMeshPro.text = wagonInteractable.GetInteractionText(this);
                         break;
-                    } else {goto default;}
+                    } else 
+                    {
+                        wagonInteractable.PlayerIsHoldingPackage(false);
+                        goto default;
+                    }
                     case wagon_front_interactable wagonFrontInteractable :
                     _textMeshPro.gameObject.transform.position = wagonFrontInteractable.GetInteractionTextPosition().position;
-                    _textMeshPro.text = interactable.GetInteractionText(); 
+                    _textMeshPro.text = interactable.GetInteractionText(this); 
                     break;
                     case pickup_interactable:
                     if(_activeInteractions.Count>0){ _textMeshPro.text = ""; } else{goto default;}
                     break;
                     
                     default:
-                    _textMeshPro.text = interactable.GetInteractionText(); 
+                    _textMeshPro.text = interactable.GetInteractionText(this); 
                     break;
                 }
             }
