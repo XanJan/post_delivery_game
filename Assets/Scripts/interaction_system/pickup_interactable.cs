@@ -110,4 +110,17 @@ public class pickup_interactable : interactable_object
             
         }
     }
+
+    public void Drop()
+    {
+        foreach(interactor inter in _activeInteractors)
+        {
+            inter.EndAllPreviousInteractions();
+        }
+    }
+
+    public int ActiveInteractorsCount()
+    {
+        return _activeInteractors.Count;
+    }
 }

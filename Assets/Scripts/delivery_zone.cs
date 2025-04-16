@@ -20,20 +20,36 @@ public class delivery_zone : MonoBehaviour
     //when a package enters, count it and remove it from the word, turn green and stop when "full"
     void OnTriggerEnter(Collider other){
         if(other.CompareTag("Package") && !detectedPackages.Contains(other.gameObject)){
-            if (detectedPackages.Count >= maxPackages){
-                return;
+            if(other.TryGetComponent<pickup_interactable>(out var res))
+            {
+                if(res.ActiveInteractorsCount() == 0)
+                {
+                    if (detectedPackages.Count >= maxPackages){
+                        return;
+                    }
+
+                    detectedPackages.Add(other.gameObject);
+                    score_manager.Instance.AddScore();
+                    stats_manager.Instance.IncIntStat("Total Score",1);
+                    UpdateText();
+                    
+
+                    if(detectedPackages.Count >= maxPackages){
+                        areaRenderer.material.color = green;
+                        game_events.current.PackageComplete();
+                    }
+                    
+                    if (other.gameObject != null) Destroy(other.gameObject); 
+                }
             }
-
-            detectedPackages.Add(other.gameObject);
-            score_manager.Instance.AddScore();
-            UpdateText();
-
-            if(detectedPackages.Count >= maxPackages){
-                areaRenderer.material.color = green;
-                game_events.current.PackageComplete();
+            
+        }
+        if(other.CompareTag("Player") && detectedPackages.Count < maxPackages)
+        {
+            if(other.TryGetComponent<player_interactor>(out var res))
+            {
+                res.TryEndInteraction();
             }
-
-            if (other.gameObject != null) Destroy(other.gameObject); 
         }
     }
 

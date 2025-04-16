@@ -173,7 +173,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seatPosition: {fileID: 2307839582954849251}
-  acceleration: 5
+  acceleration: 10
   maxSpeed: 4
   turnSpeed: 100
   deceleration: 3
@@ -319,7 +319,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32964b23e6148da4097059a09a0989ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _interactionText: Press E to steer wagon
+  _defaultInteractionText: Press %interactButton% to interact
   _onInteractStart:
     m_PersistentCalls:
       m_Calls:
@@ -354,6 +354,7 @@ MonoBehaviour:
   _maxNumberOfInteractors: 4
   _wagon: {fileID: 2836886664916548573}
   _interactionTextPosition: {fileID: 8177440227805030249}
+  _holdingWagonString: holdingWagon
 --- !u!65 &4389868339998209200
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -524,7 +525,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62c8990a7e3de1148a9d1aaabd654bf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _interactionText: Press E to interact
+  _defaultInteractionText: Press %interactButton% to interact
   _onInteractStart:
     m_PersistentCalls:
       m_Calls:
@@ -545,11 +546,11 @@ MonoBehaviour:
       m_Calls: []
   _isTrigger: 1
   _maxNumberOfInteractors: 1
-  _dropOffText: Press E to drop off
+  _dropOffText: Press %interactButton% to drop off
+  _pickupText: Press %interactButton% to pick up
   _wagonFullText: Wagon is full!
   _wagonEmptyText: Wagon is empty!
   _wagon: {fileID: 3993538855618010057}
-  DropOffText: 
 --- !u!65 &4696513454912026183
 BoxCollider:
   m_ObjectHideFlags: 0
