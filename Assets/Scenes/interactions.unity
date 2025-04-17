@@ -3239,6 +3239,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2836886664916548573, guid: a6428ad72173eac4cb30d0701621932a, type: 3}
+      propertyPath: acceleration
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 3923015741184507435, guid: a6428ad72173eac4cb30d0701621932a, type: 3}
       propertyPath: m_Name
       value: interactable_wagon

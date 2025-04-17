@@ -11,7 +11,7 @@ public class interactable_object : MonoBehaviour
     /// <summary>
     /// Text that describes the interaction.
     /// </summary>
-    [SerializeField] protected string _defaultInteractionText = "Press %interactButton% to interact";
+    [SerializeField] private string _defaultInteractionText = "Press %interactButton% to interact";
     /// <summary>
     /// Triggered by interactor when it starts an interaction with this interactable.
     /// </summary>
@@ -33,6 +33,11 @@ public class interactable_object : MonoBehaviour
     /// </summary>
     [SerializeField] private int _maxNumberOfInteractors = 1;
     /// <summary>
+    /// If false, interactors cannot interact with this object. Already active interactions
+    /// can still be ended.
+    /// </summary>
+    [SerializeField] public bool AllowInteractions = true;
+    /// <summary>
     /// Active interactors.
     /// </summary>
     protected List<interactor> _activeInteractors = new List<interactor>();
@@ -40,10 +45,14 @@ public class interactable_object : MonoBehaviour
     /// The interaction text used in game, this can be modified to deviate from the original 
     /// interaction text depending on the situation. Accessible through public getter.
     /// </summary>
-    protected string interactionText;
+    protected string InteractionText;
+    /// <summary>
+    /// Default interaction text. Not settable, for changing the text, use InteractionText;
+    /// </summary>
+    protected string DefaultInteractionText{get{return _defaultInteractionText;}}
     void Awake()
     {
-        interactionText = _defaultInteractionText;
+        InteractionText = _defaultInteractionText;
     }
     /// <summary>
     /// Invoke onBeginInteraction if not full. If the interactable is at max active interactors, the 
@@ -51,36 +60,49 @@ public class interactable_object : MonoBehaviour
     /// interactors stack.
     /// </summary>
     /// <param name="interactor">The interactor attempting interaction with this interactable.</param>
-    public void BeginInteraction(interactor interactor)
+    public bool BeginInteraction(interactor interactor)
     {
-        if(_activeInteractors.Count < _maxNumberOfInteractors && _activeInteractors.Contains(interactor) == false)
+        // Istrigger simply trigger events...
+        if(_isTrigger && AllowInteractions)
         {
-            if(!_isTrigger){_activeInteractors.Add(interactor);}
             _onInteractStart?.Invoke(interactor);
-        } else{interactor.CancelInteraction(this);}
+            _onInteractEnd?.Invoke(interactor);
+            return true;
+        }
+        // If not trigger, check if interaction is possible...
+        else if(_activeInteractors.Count < _maxNumberOfInteractors && _activeInteractors.Contains(interactor) == false && AllowInteractions)
+        {
+            _activeInteractors.Add(interactor);
+            _onInteractStart?.Invoke(interactor);
+            return true;
+        } 
+        else
+        {
+            return false;
+        }
     }
     /// <summary>
-    /// Invoke onEndInteraction
+    /// Invoke onEndInteraction.
     /// </summary>
-    /// <param name="interactor"></param>
+    /// <param name="interactor">The interactor to end the interaction with.</param>
     public void EndInteraction(interactor interactor)
     {
-        if(!_isTrigger){RemoveActiveInteractor(interactor);}
+        if(!_isTrigger){RemoveActiveInteractor(interactor);} // Cannot end interactions with onTrigger
         _onInteractEnd?.Invoke(interactor);
     }
     /// <summary>
-    /// Getter.
+    /// Getter.Processes the input string to replace special substrings with strings depending on the interactor.
     /// </summary>
     /// <returns>Text that describes the interaction.</returns>
     public string GetInteractionText(interactor interactor)
     {
-        if(interactionText.Contains("%interactButton%"))
+        if(InteractionText.Contains("%interactButton%"))
         {
-            string ret = interactionText.Replace("%interactButton%",
+            string ret = InteractionText.Replace("%interactButton%",
                                         interactor.GetPlayerObservableValueCollection().GetObservableString("interactButton").Value);
             return ret;
         } else {
-            return interactionText;
+            return InteractionText;
         }
     }
     /// <summary>

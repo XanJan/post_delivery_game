@@ -9,26 +9,26 @@ public class wagon_storage_interactable : interactable_object
     [SerializeField]private wagon_storage _wagon;
     public void PlayerIsHoldingPackage(bool b)
     {
-        if(b && !_wagon.IsFull() ){interactionText = _dropOffText;}
-        else if(!b && !_wagon.IsEmpty()){interactionText = _pickupText;}
+        if(b && !_wagon.IsFull() ){InteractionText = _dropOffText;}
+        else if(!b && !_wagon.IsEmpty()){InteractionText = _pickupText;}
     }
 
     public void HandleInteractTrigger(interactor context)
     {
-        interactionText = _defaultInteractionText;
+        InteractionText = _defaultInteractionText;
         bool success = context.TryPopInteraction(out var activeInteractable);
         if(success)// Attempt drop off
         {
             context.PushInteraction(activeInteractable);
             if(!_wagon.IsFull())
             {
-                interactionText = _dropOffText;
+                InteractionText = _dropOffText;
                 context.TryEndInteraction();
                 _wagon.AddPackage(activeInteractable.gameObject);
             } 
             else
             {
-                interactionText = _wagonFullText;
+                InteractionText = _wagonFullText;
             }
             activeInteractable.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");            
         } 
@@ -37,14 +37,14 @@ public class wagon_storage_interactable : interactable_object
             GameObject package = _wagon.RemovePackage();
             if (package!=null)
             {
-                interactionText = _dropOffText;
+                InteractionText = _dropOffText;
                 package.layer = LayerMask.NameToLayer("Ignore Raycast");
                 if(package.TryGetComponent<interactable_object>(out var interactable))
                 {
                     context.BeginInteraction(interactable);
                 } else {Debug.Log("Warning : Tried to pick up a package that is not interactable. Attach an " +
                 typeof(interactable_object).ToString()+" component to the package gameobject '" + package.name +"'.");}
-            } else {interactionText=_wagonEmptyText;}
+            } else {InteractionText=_wagonEmptyText;}
         }
     }   
 }
