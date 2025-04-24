@@ -14,20 +14,34 @@ public class player_movement : MonoBehaviour
     private Boolean isGrounded;
     private float jumpForce = 7f;
 
+    private float _moveSpeedMultiplierPickup = 1f;
+    private float _moveSpeedMultiplierEnvironment = 1f;
+    private float _moveSpeedMultiplierOther = 1f;
+
     private void Awake()
     {
         // Makes sure observable float movespeed is obvc.
-        if (_obvc != null) { _obvc.AddObservableFloat(_movespeedName); }
+        if (_obvc != null) { _obvc.AddObservableFloat(_movespeedName);}
 
         
         rb = GetComponent<Rigidbody>();
         playerInput = GetComponent<PlayerInput>();
         groundLayer = LayerMask.GetMask("Ground");
     }
-    
-    private void OnEnable()
+
+    public void OnUpdateMoveSpeedMultiplierPickup(string s,float f){_moveSpeedMultiplierPickup = f;}
+    public void OnUpdateMoveSpeedMultiplierEnvironment(string s,float f){_moveSpeedMultiplierEnvironment = f;}
+    public void OnUpdateMoveSpeedMultiplierOther(string s,float f){_moveSpeedMultiplierOther = f;}
+
+
+    private void Start()
     {
-        
+        if (_obvc != null) 
+        { 
+            _obvc.GetObservableFloat("moveSpeedMultiplierPickup").UpdateValue += OnUpdateMoveSpeedMultiplierPickup;
+            _obvc.GetObservableFloat("moveSpeedMultiplierEnvironment").UpdateValue += OnUpdateMoveSpeedMultiplierEnvironment;
+            _obvc.GetObservableFloat("moveSpeedMultiplierOther").UpdateValue += OnUpdateMoveSpeedMultiplierOther;
+        }
         var controls = playerInput.actions;
     
         controls["Move"].performed += Move;
@@ -35,12 +49,16 @@ public class player_movement : MonoBehaviour
         controls["Jump"].started += Jump;
     }
 
-     // Capture the move input when it's pressed
+    // Capture the move input when it's pressed
     private void Move(InputAction.CallbackContext context)
     {
-        if(_obvc!=null){_obvc.InvokeFloat(_movespeedName,context.ReadValue<Vector2>().magnitude);}
+        if(_obvc!=null)
+        {
+            _obvc.InvokeFloat(_movespeedName,context.ReadValue<Vector2>().magnitude);
+                    
+        }
          
-         moveInput = context.ReadValue<Vector2>();
+        moveInput = context.ReadValue<Vector2>();
          
     }
 
@@ -71,7 +89,7 @@ public class player_movement : MonoBehaviour
             moveDirection.Normalize();
         }
 
-        var moveVelocity = moveDirection * playerSpeed;
+        var moveVelocity = moveDirection * playerSpeed * _moveSpeedMultiplierPickup * _moveSpeedMultiplierEnvironment * _moveSpeedMultiplierOther;
 
         // Move the player using Rigidbody
         rb.MovePosition(rb.position + moveVelocity * Time.fixedDeltaTime);
@@ -82,7 +100,6 @@ public class player_movement : MonoBehaviour
             Quaternion toRotation = Quaternion.LookRotation(moveVelocity, Vector3.up);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotationSpeed * Time.fixedDeltaTime);
         }
-
     }
 
     private void Jump()

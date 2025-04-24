@@ -42,17 +42,13 @@ public class interactable_object : MonoBehaviour
     /// </summary>
     protected List<interactor> _activeInteractors = new List<interactor>();
     /// <summary>
-    /// The interaction text used in game, this can be modified to deviate from the original 
-    /// interaction text depending on the situation. Accessible through public getter.
-    /// </summary>
-    protected string InteractionText;
-    /// <summary>
     /// Default interaction text. Not settable, for changing the text, use InteractionText;
     /// </summary>
     protected string DefaultInteractionText{get{return _defaultInteractionText;}}
     void Awake()
     {
-        InteractionText = _defaultInteractionText;
+        _onInteractStart.AddListener(OnInteractStart);
+        _onInteractEnd.AddListener(OnInteractEnd);
     }
     /// <summary>
     /// Invoke onBeginInteraction if not full. If the interactable is at max active interactors, the 
@@ -60,7 +56,7 @@ public class interactable_object : MonoBehaviour
     /// interactors stack.
     /// </summary>
     /// <param name="interactor">The interactor attempting interaction with this interactable.</param>
-    public bool BeginInteraction(interactor interactor)
+    public bool TryInteractStart(interactor interactor)
     {
         // Istrigger simply trigger events...
         if(_isTrigger && AllowInteractions)
@@ -85,39 +81,32 @@ public class interactable_object : MonoBehaviour
     /// Invoke onEndInteraction.
     /// </summary>
     /// <param name="interactor">The interactor to end the interaction with.</param>
-    public void EndInteraction(interactor interactor)
+    public void InteractEnd(interactor interactor)
     {
-        if(!_isTrigger){RemoveActiveInteractor(interactor);} // Cannot end interactions with onTrigger
+        if(!_isTrigger){_activeInteractors.Remove(interactor);} // Cannot end interactions with onTrigger
         _onInteractEnd?.Invoke(interactor);
     }
     /// <summary>
     /// Getter.Processes the input string to replace special substrings with strings depending on the interactor.
     /// </summary>
     /// <returns>Text that describes the interaction.</returns>
-    public string GetInteractionText(interactor interactor)
+    public string GetInteractionText(interactor context)
     {
-        if(InteractionText.Contains("%interactButton%"))
+        string s = GetInteractionTextOverride(context);
+        if(s.Contains("%interactButton%"))
         {
-            string ret = InteractionText.Replace("%interactButton%",
-                                        interactor.GetPlayerObservableValueCollection().GetObservableString("interactButton").Value);
+            string ret = s.Replace("%interactButton%", context.GetPlayerObservableValueCollection().GetObservableString("interactButton").Value);
             return ret;
         } else {
-            return InteractionText;
+            return s;
         }
-    }
+    }    
     /// <summary>
     /// Getter.
     /// </summary>
     /// <returns>Wether the interactable object has enabled is trigger or not.</returns>
     public bool IsTrigger(){return _isTrigger;}
-    /// <summary>
-    /// Removes active interactor from list. Use interactor.TryEndInteraction instead to end interactions.
-    /// </summary>
-    /// <param name="interactor">The interactor to remove from active interactors list.</param>
-    public void RemoveActiveInteractor(interactor interactor){_activeInteractors.Remove(interactor);}
-    /// <summary>
-    /// Add active interactor. Use interactor.BeginInteraction instead for beginning interactions.
-    /// </summary>
-    /// <param name="interactor"></param>
-    public void AddActiveInteractor(interactor interactor){_activeInteractors.Add(interactor);}
+    protected virtual void OnInteractStart(interactor context){}
+    protected virtual void OnInteractEnd(interactor context){}
+    protected virtual string GetInteractionTextOverride(interactor context){return _defaultInteractionText;}
 }

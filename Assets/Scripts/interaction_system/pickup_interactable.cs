@@ -5,19 +5,12 @@ public class pickup_interactable : interactable_object
 {
     [SerializeField]private float _throwForce = 2f;
     [SerializeField]private float _pickupWeight;
-    public void HandleBegin(interactor context)
+    protected override void OnInteractStart(interactor context)
     {
-        if(context.ActiveInteractionsCount()==1)// No other active interactions in context
-        {
-            Pickup(context);
-        }else
-        {
-            context.CancelInteraction(this);
-            context.TryEndInteraction();
-        }
+        Pickup(context);
     }
 
-    public void HandleEnd(interactor context)
+    protected override void OnInteractEnd(interactor context)
     {
         Drop(context);
     }
@@ -55,9 +48,18 @@ public class pickup_interactable : interactable_object
         {
             collider.enabled = false;
         }
+        
         // Invoke player holding package bool to true;
         observable_value_collection obvc = context.GetPlayerObservableValueCollection();
-        obvc.InvokeBool("holdingPackage",true);
+        if(obvc!=null)
+        {
+            try
+            {
+                obvc.InvokeBool("holdingPackage",true);
+                obvc.InvokeFloat("moveSpeedMultiplierPickup",1/(_pickupWeight+1)); // Slow down player relative to weight
+            } catch(Exception){} // Do nothing on exception
+            
+        }
     }
 
 
@@ -86,14 +88,6 @@ public class pickup_interactable : interactable_object
                 
                 Vector3 throwVelocity = player.transform.forward * multiplier + (playerRb.linearVelocity*playerRb.linearVelocity.magnitude) + Vector3.up * 3;
                 itemRb.linearVelocity = throwVelocity;
-                if(obvc!=null)
-                {
-                    try
-                    {
-                        obvc.InvokeFloat("moveSpeedMultiplierPickup",1/(_pickupWeight+1)); // Slow down player relative to weight
-                    } catch(Exception){} // Do nothing on exception
-                    
-                }
             }
         }
         if (TryGetComponent<Collider>(out var collider))
@@ -109,5 +103,9 @@ public class pickup_interactable : interactable_object
             } catch (Exception) {} // Do nothing on exception
             
         }
+    }
+    private void ThrowStart(interactor context)
+    {
+
     }
 }

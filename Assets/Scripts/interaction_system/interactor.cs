@@ -23,7 +23,15 @@ public abstract class interactor : MonoBehaviour
     /// An observable value collection is attached to the interactor
     /// so that interactables can interact with it.
     /// </summary>
-    [SerializeField]protected observable_value_collection _obvc;
+    [SerializeField] protected observable_value_collection Obvc;
+    /// <summary>
+    /// Determines the maximum number of allowed active interactions.
+    /// </summary>
+    [SerializeField] protected int MaxInteractions = 1;
+    /// <summary>
+    /// Determines if the interactor can start new interactions.
+    /// </summary>
+    [SerializeField] protected bool CanInteract = true;
     /// <summary>
     /// The interactor can begin and end interactions. All active interactions
     /// are stored in this stack. Pop the top to get the top active interaction.
@@ -47,23 +55,26 @@ public abstract class interactor : MonoBehaviour
     /// call.
     /// </summary>
     /// <param name="interactable"></param>
-    public void BeginInteraction(interactable_object interactable)
+    public bool TryInteractStart(interactable_object interactable)
     {
-        if(interactable.BeginInteraction(this))
+        if(CanInteract && 
+            (_activeInteractions.Count < MaxInteractions && !interactable.IsTrigger() || interactable.IsTrigger()) && 
+                interactable.TryInteractStart(this))
         {
             if(!interactable.IsTrigger()){_activeInteractions.Push(interactable);}
-        }
+            return true;
+        } else return false;
     }
     /// <summary>
     /// Try to pop top of active interactions stack, returns true if the
     /// pop succeeded, false otherwise. 
     /// </summary>
     /// <returns>true on success, false on fail.</returns>
-    public bool TryEndInteraction()
+    public bool TryInteractEnd()
     {
         if(_activeInteractions.TryPop(out var topInteractable))
         {
-            topInteractable.EndInteraction(this);
+            topInteractable.InteractEnd(this);
             return true;
         }
         else 
@@ -77,11 +88,11 @@ public abstract class interactor : MonoBehaviour
     /// on success, null on fail.
     /// </summary>
     /// <returns>true on success, false on fail.</returns>
-    public bool TryEndInteraction(out interactable_object interactable)
+    public bool TryInteractEnd(out interactable_object interactable)
     {
         if(_activeInteractions.TryPop(out var topInteractable))
         {
-            topInteractable.EndInteraction(this);
+            topInteractable.InteractEnd(this);
             interactable = topInteractable;
             return true;
         }
@@ -91,27 +102,9 @@ public abstract class interactor : MonoBehaviour
             return false;
         }
     }
-    /// <summary>
-    /// Cancel interaction without invoking end interaction event.
-    /// Pops top of active interactions stack.
-    /// </summary>
-    /// <param name="interactable"></param>
-    public bool CancelInteraction(out interactable_object interactable)
-    {
-        if(_activeInteractions.TryPop(out var res))
-        {
-            res.RemoveActiveInteractor(this);
-            interactable = res;
-            return true;
-        } else
-        {
-            interactable = null;
-            return false;
-        }
-    }
 
     /// <returns>Active interactions count.</returns>
-    public int ActiveInteractionsCount(){return _activeInteractions.Count;}
+    public int ActiveInteractionsCount {get{return _activeInteractions.Count;}}
     /// <summary>
     /// Pop the topmost interaction and peek the one underneath. Use in non trigger
     /// interactable objects to peek the last interaction. In trigger interactions,
@@ -156,7 +149,7 @@ public abstract class interactor : MonoBehaviour
     /// Getter.
     /// </summary>
     /// <returns>Observable value collection attached to the interactor.</returns>
-    public observable_value_collection GetPlayerObservableValueCollection(){return _obvc;}
+    public observable_value_collection GetPlayerObservableValueCollection(){return Obvc;}
     /// <summary>
     /// Try to end all previous active interactions in order. Stops if an interaction is not allowed to end.
     /// </summary>
@@ -170,7 +163,7 @@ public abstract class interactor : MonoBehaviour
             bool stopped = false;
             while(_activeInteractions.Count > 0)
             {
-                if(TryEndInteraction(out var res)) interactables.Add(res); 
+                if(TryInteractEnd(out var res)) interactables.Add(res); 
                 else {stopped = true;break;}
             }
             _activeInteractions.Push(temp);
@@ -191,7 +184,7 @@ public abstract class interactor : MonoBehaviour
         bool stopped = false;
         while(_activeInteractions.Count > 0)
         {
-            if(TryEndInteraction(out var res)) interactables.Add(res); 
+            if(TryInteractEnd(out var res)) interactables.Add(res); 
             else {stopped = true;break;}
         }
         if(stopped) return false;
