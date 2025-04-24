@@ -8,6 +8,11 @@ public class player_instance_manager : singleton_persistent<player_instance_mana
 {
     [SerializeField] private string _interactButtonValueName = "interactButton";
     [SerializeField] private string _playerIdValueName = "playerId";
+    [SerializeField] private float _moveSpeedBase = 5;
+    [SerializeField] private string _playerMoveSpeedBaseValueName = "moveSpeedBase";
+    [SerializeField] private string _playerMoveSpeedMultiplierPickupValueName = "moveSpeedMultiplierPickup";
+    [SerializeField] private string _playerMoveSpeedMultiplierEnvironmentValueName = "moveSpeedMultiplierEnvironment";
+    [SerializeField] private string _playerMoveSpeedMultiplierOtherValueName = "moveSpeedMultiplierOther";
     [SerializeField] private string _interactButtonKeyboard = "E";
     [SerializeField] private string _interactButtonGamepad = "Y";
     private List<GameObject> _playerInstances= new List<GameObject>();
@@ -22,6 +27,10 @@ public class player_instance_manager : singleton_persistent<player_instance_mana
         {
             obvc.AddObservableString(_interactButtonValueName); // Ensure value is present
             obvc.AddObservableInt(_playerIdValueName);
+            obvc.AddObservableFloat(_playerMoveSpeedBaseValueName);
+            obvc.AddObservableFloat(_playerMoveSpeedMultiplierPickupValueName);
+            obvc.AddObservableFloat(_playerMoveSpeedMultiplierEnvironmentValueName);
+            obvc.AddObservableFloat(_playerMoveSpeedMultiplierOtherValueName);
             string s;
             switch(inp.currentControlScheme.ToString())
             {
@@ -31,6 +40,10 @@ public class player_instance_manager : singleton_persistent<player_instance_mana
                 break;
             }
             obvc.InvokeString(_interactButtonValueName, s);
+            obvc.InvokeFloat(_playerMoveSpeedBaseValueName,_moveSpeedBase);
+            obvc.InvokeFloat(_playerMoveSpeedMultiplierPickupValueName,1);
+            obvc.InvokeFloat(_playerMoveSpeedMultiplierEnvironmentValueName,1);
+            obvc.InvokeFloat(_playerMoveSpeedMultiplierOtherValueName,1);
             obvc.InvokeInt(_playerIdValueName, _playerInstances.Count);
         } 
 

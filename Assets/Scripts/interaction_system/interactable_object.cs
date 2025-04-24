@@ -15,11 +15,11 @@ public class interactable_object : MonoBehaviour
     /// <summary>
     /// Triggered by interactor when it starts an interaction with this interactable.
     /// </summary>
-    [SerializeField] private UnityEvent<interactor> _onInteractStart;
+    [SerializeField] private UnityEvent<interactor> _onInteractStart ;
     /// <summary>
     /// Triggered by interactor when it ends an interaction with this interactable.
     /// </summary>
-    [SerializeField] private UnityEvent<interactor> _onInteractEnd;
+    [SerializeField] private UnityEvent<interactor> _onInteractEnd ;
     /// <summary>
     /// IsTrigger interactable objects does not affect the active interactions stack
     /// nor the active interactors list and only triggers begin interaction and end
@@ -32,6 +32,7 @@ public class interactable_object : MonoBehaviour
     /// incoming interaction attempts.
     /// </summary>
     [SerializeField] private int _maxNumberOfInteractors = 1;
+    private UnityEvent<interactor, interactable_object> _onForceInteractEnd = new UnityEvent<interactor, interactable_object>();
     /// <summary>
     /// If false, interactors cannot interact with this object. Already active interactions
     /// can still be ended.
@@ -45,10 +46,12 @@ public class interactable_object : MonoBehaviour
     /// Default interaction text. Not settable, for changing the text, use InteractionText;
     /// </summary>
     protected string DefaultInteractionText{get{return _defaultInteractionText;}}
-    void Awake()
+    void Start()
     {
         _onInteractStart.AddListener(OnInteractStart);
         _onInteractEnd.AddListener(OnInteractEnd);
+        _onForceInteractEnd.AddListener(OnForceInteractEnd);
+        
     }
     /// <summary>
     /// Invoke onBeginInteraction if not full. If the interactable is at max active interactors, the 
@@ -82,9 +85,14 @@ public class interactable_object : MonoBehaviour
     /// </summary>
     /// <param name="interactor">The interactor to end the interaction with.</param>
     public void InteractEnd(interactor interactor)
-    {
+    { 
         if(!_isTrigger){_activeInteractors.Remove(interactor);} // Cannot end interactions with onTrigger
         _onInteractEnd?.Invoke(interactor);
+    }
+    public void ForceInteractEnd(interactor interactor, interactable_object source)
+    {
+        _onForceInteractEnd?.Invoke(interactor,source);
+        if(!_isTrigger){_activeInteractors.Remove(interactor);} // Cannot end interactions with onTrigger
     }
     /// <summary>
     /// Getter.Processes the input string to replace special substrings with strings depending on the interactor.
@@ -106,6 +114,7 @@ public class interactable_object : MonoBehaviour
     /// </summary>
     /// <returns>Wether the interactable object has enabled is trigger or not.</returns>
     public bool IsTrigger(){return _isTrigger;}
+    protected virtual void OnForceInteractEnd(interactor context, interactable_object source){}
     protected virtual void OnInteractStart(interactor context){}
     protected virtual void OnInteractEnd(interactor context){}
     protected virtual string GetInteractionTextOverride(interactor context){return _defaultInteractionText;}

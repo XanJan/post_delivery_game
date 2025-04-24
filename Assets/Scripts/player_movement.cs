@@ -7,16 +7,16 @@ public class player_movement : MonoBehaviour
     private readonly string _movespeedName = "moveSpeed";
     private Rigidbody rb;
     private Vector2 moveInput;
-    [SerializeField] private float playerSpeed = 10f;
     public float rotationSpeed = 700f;
     private PlayerInput playerInput;
     private LayerMask groundLayer;
     private Boolean isGrounded;
     private float jumpForce = 7f;
 
-    private float _moveSpeedMultiplierPickup = 1f;
-    private float _moveSpeedMultiplierEnvironment = 1f;
-    private float _moveSpeedMultiplierOther = 1f;
+    private float _moveSpeedBase;
+    private float _moveSpeedMultiplierPickup;
+    private float _moveSpeedMultiplierEnvironment;
+    private float _moveSpeedMultiplierOther;
 
     private void Awake()
     {
@@ -28,7 +28,7 @@ public class player_movement : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
         groundLayer = LayerMask.GetMask("Ground");
     }
-
+    public void OnUpdateMoveSpeedBase(string s,float f){_moveSpeedBase = f; }
     public void OnUpdateMoveSpeedMultiplierPickup(string s,float f){_moveSpeedMultiplierPickup = f;}
     public void OnUpdateMoveSpeedMultiplierEnvironment(string s,float f){_moveSpeedMultiplierEnvironment = f;}
     public void OnUpdateMoveSpeedMultiplierOther(string s,float f){_moveSpeedMultiplierOther = f;}
@@ -38,12 +38,17 @@ public class player_movement : MonoBehaviour
     {
         if (_obvc != null) 
         { 
+            _moveSpeedBase = _obvc.GetObservableFloat("moveSpeedBase").Value;
+            _moveSpeedMultiplierPickup = _obvc.GetObservableFloat("moveSpeedMultiplierPickup").Value;
+            _moveSpeedMultiplierEnvironment = _obvc.GetObservableFloat("moveSpeedMultiplierEnvironment").Value;
+            _moveSpeedMultiplierOther = _obvc.GetObservableFloat("moveSpeedMultiplierOther").Value;
+            _obvc.GetObservableFloat("moveSpeedBase").UpdateValue += OnUpdateMoveSpeedBase;
             _obvc.GetObservableFloat("moveSpeedMultiplierPickup").UpdateValue += OnUpdateMoveSpeedMultiplierPickup;
             _obvc.GetObservableFloat("moveSpeedMultiplierEnvironment").UpdateValue += OnUpdateMoveSpeedMultiplierEnvironment;
             _obvc.GetObservableFloat("moveSpeedMultiplierOther").UpdateValue += OnUpdateMoveSpeedMultiplierOther;
         }
         var controls = playerInput.actions;
-    
+
         controls["Move"].performed += Move;
         controls["Move"].canceled += MoveCanceled;
         controls["Jump"].started += Jump;
@@ -89,8 +94,7 @@ public class player_movement : MonoBehaviour
             moveDirection.Normalize();
         }
 
-        var moveVelocity = moveDirection * playerSpeed * _moveSpeedMultiplierPickup * _moveSpeedMultiplierEnvironment * _moveSpeedMultiplierOther;
-
+        var moveVelocity = moveDirection * _moveSpeedBase * _moveSpeedMultiplierPickup * _moveSpeedMultiplierEnvironment * _moveSpeedMultiplierOther;
         // Move the player using Rigidbody
         rb.MovePosition(rb.position + moveVelocity * Time.fixedDeltaTime);
 

@@ -102,6 +102,20 @@ public abstract class interactor : MonoBehaviour
             return false;
         }
     }
+    public bool TryForceInteractEnd(interactable_object source,out interactable_object interactable)
+    {
+        if(_activeInteractions.TryPop(out var topInteractable))
+        {
+            topInteractable.ForceInteractEnd(this,source);
+            interactable = topInteractable;
+            return true;
+        }
+        else 
+        {
+            interactable = null;
+            return false;
+        }
+    }
 
     /// <returns>Active interactions count.</returns>
     public int ActiveInteractionsCount {get{return _activeInteractions.Count;}}

@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 2836886664916548573}
   - component: {fileID: 4779568704340746617}
   - component: {fileID: 282050715136815698}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: interactable_wagon
   m_TagString: Wagon
   m_Icon: {fileID: 0}
@@ -116,8 +116,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.69, y: 0.77, z: 3.83}
-  m_Center: {x: 0, y: 0.36, z: 1.47}
+  m_Size: {x: 1.69, y: 0.66, z: 3.83}
+  m_Center: {x: 0, y: 0.28, z: 1.47}
 --- !u!54 &5538258173663167983
 Rigidbody:
   m_ObjectHideFlags: 0

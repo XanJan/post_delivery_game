@@ -16,6 +16,7 @@ MonoBehaviour:
   - playerId
   _floatNames:
   - moveSpeed
+  - moveSpeedBase
   - moveSpeedMultiplierPickup
   - moveSpeedMultiplierEnvironment
   - moveSpeedMultiplierOther

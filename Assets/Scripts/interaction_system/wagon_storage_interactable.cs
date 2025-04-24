@@ -33,7 +33,7 @@ public class wagon_storage_interactable : interactable_object
             {
                 switch(top){
                     case pickup_interactable:
-                    if(context.TryInteractEnd(out interactable_object res))
+                    if(context.TryForceInteractEnd(this,out interactable_object res))
                     {
                         _wagon.AddPackage(res.gameObject);
                     }

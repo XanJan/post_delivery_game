@@ -2,23 +2,22 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
+[RequireComponent(typeof(Collider))]
+[RequireComponent(typeof(Rigidbody))]
 public class big_package_interactable : interactable_object
 {
     [SerializeField] private Transform _point1;
     [SerializeField] private Transform _point2;
-    [SerializeField]private float _pickupWeight;
+    [SerializeField] private Transform _point3;
+    [SerializeField] private Transform _point4; 
+    [SerializeField] private float _pickupWeight = 0;
     [SerializeField] private Collider _collider;
     [SerializeField] private Rigidbody _rb;
-
-    private Vector2 _movement;
-
     private Dictionary<GameObject,Vector2> _playerMovementInputs = new Dictionary<GameObject, Vector2>();
-
     protected override void OnInteractStart(interactor context)
     {
-        
         _playerMovementInputs.Add(context.gameObject,Vector2.zero);
+
         Transform playerHands = null;
         foreach (Transform child in context.transform)
         {
@@ -29,7 +28,6 @@ public class big_package_interactable : interactable_object
             }
         }
         
-
         // First player, packet to player
         if(_activeInteractors.Count == 1)
         {
@@ -44,16 +42,32 @@ public class big_package_interactable : interactable_object
             if(playerHands!=null){context.transform.position = transform.position + (_point2.position - transform.position) - (playerHands.position-context.transform.position);}
             else{context.transform.position = transform.position;}
         }
+         else if(_activeInteractors.Count == 4)
+        {
+            // Third  player, player to  packet
+            context.transform.eulerAngles = transform.eulerAngles + 90f * Vector3.up;
+            if(playerHands!=null){context.transform.position = transform.position + (_point3.position - transform.position) - (playerHands.position-context.transform.position);}
+            else{context.transform.position = transform.position;}
+        }
+        else if(_activeInteractors.Count == 3)
+        {
+            // Third  player, player to  packet
+            context.transform.eulerAngles = transform.eulerAngles - 90f * Vector3.up;
+            if(playerHands!=null){context.transform.position = transform.position + (_point4.position - transform.position) - (playerHands.position-context.transform.position);}
+            else{context.transform.position = transform.position;}
+        } 
+        // Set parent to player
         context.transform.parent = transform;
 
+        // Set package stuff (unchanged if already picked up)
         _rb.isKinematic = true;
         _collider.enabled = false;
+
+        // Set player kinematic.
         if(context.TryGetComponent<Rigidbody>(out var rb))
         {
             rb.isKinematic = true;
         }
-        
-            //Physics.IgnoreCollision(collider,_collider, true);
         
         // Invoke player holding package bool to true;
         observable_value_collection obvc = context.GetPlayerObservableValueCollection();
@@ -66,15 +80,15 @@ public class big_package_interactable : interactable_object
             } catch{} // Do nothing on exception
             
         }
-
+        // Disable player movement
         player_movement playerMovement = context.GetComponent<player_movement>();
         if(playerMovement != null){ 
             playerMovement.enabled = false;
         }
 
+        // Enable package movement
         if(context.TryGetComponent<PlayerInput>(out var res))
         {
-            
             res.actions["move"].performed += cxt => HandleMovementPerformed(context.gameObject,cxt.ReadValue<Vector2>());
             res.actions["move"].canceled += cxt => HandleMovementCancled(context.gameObject);
         }
@@ -83,7 +97,7 @@ public class big_package_interactable : interactable_object
 
     protected override void OnInteractEnd(interactor context)
     {
-        gameObject.layer = LayerMask.NameToLayer("Default");
+        // Update 
         _playerMovementInputs.Remove(context.gameObject);
         context.transform.SetParent(null);
         DontDestroyOnLoad(context);
@@ -113,34 +127,29 @@ public class big_package_interactable : interactable_object
         if(playerMovement != null){ 
             playerMovement.enabled = true;
         }
-
-        /* if(context.TryGetComponent<PlayerInput>(out var res))
-        {
-            res.actions["move"].performed -= cxt => HandleMovementPerformed(context.gameObject,cxt.ReadValue<Vector2>());
-            res.actions["move"].canceled -= cxt => _playerMovementInputs[context.gameObject] = Vector2.zero;
-        } */
     }
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void FixedUpdate()
     {
-        Debug.Log(_playerMovementInputs.Count);
-        if(_activeInteractors.Count>0)
+        if(_playerMovementInputs.Count>0)
         {
             Vector2 acc = Vector2.zero;
             foreach(KeyValuePair<GameObject,Vector2> kvp in _playerMovementInputs)
             {
-                acc += kvp.Value;
+                
+                if(kvp.Key.TryGetComponent<observable_value_collection>(out var res))
+                {
+                    try{
+                        acc += kvp.Value * res.GetObservableFloat("moveSpeedBase").Value * 
+                            res.GetObservableFloat("moveSpeedMultiplierPickup").Value * 
+                                res.GetObservableFloat("moveSpeedMultiplierEnvironment").Value * 
+                                    res.GetObservableFloat("moveSpeedMultiplierOther").Value;
+                    }catch{acc += kvp.Value;}
+                    
+                } else acc += kvp.Value; 
             }
             Vector3 mov = new Vector3(acc.x,0,acc.y);
-            _rb.MovePosition(_rb.position + mov * Time.fixedDeltaTime);
-            Debug.Log(mov.x + " , " + mov.z);
+            _rb.MovePosition(_rb.position + (mov * Time.fixedDeltaTime));
         }
-        
     }
 
     public void HandleMovementPerformed(GameObject player, Vector2 movement)
