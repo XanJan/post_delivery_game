@@ -13,6 +13,7 @@ public class big_package_interactable : interactable_object
     [SerializeField] private float _pickupWeight = 0;
     [SerializeField] private Collider _collider;
     [SerializeField] private Rigidbody _rb;
+    private GameObject[] _spots = new GameObject[4];
     private Dictionary<GameObject,Vector2> _playerMovementInputs = new Dictionary<GameObject, Vector2>();
     protected override void OnInteractStart(interactor context)
     {
@@ -34,27 +35,39 @@ public class big_package_interactable : interactable_object
             transform.rotation = context.transform.rotation;
             if(playerHands!=null){transform.position = playerHands.position - (_point1.position - transform.position);}
             else{transform.position = context.transform.position;}
+            _spots[0] = context.gameObject;
         }
-        else if(_activeInteractors.Count == 2)
+        else if(_spots[0]==null)
+        {
+            // Second  player, player to  packet
+            context.transform.eulerAngles = transform.eulerAngles;
+            if(playerHands!=null){context.transform.position = transform.position + (_point1.position - transform.position) - (playerHands.position-context.transform.position);}
+            else{context.transform.position = transform.position;}
+            _spots[0] = context.gameObject;
+        }
+        else if(_spots[1]==null)
         {
             // Second  player, player to  packet
             context.transform.eulerAngles = transform.eulerAngles + 180f * Vector3.up;
             if(playerHands!=null){context.transform.position = transform.position + (_point2.position - transform.position) - (playerHands.position-context.transform.position);}
             else{context.transform.position = transform.position;}
+            _spots[1] = context.gameObject;
         }
-         else if(_activeInteractors.Count == 4)
+         else if(_spots[2]==null)
         {
             // Third  player, player to  packet
             context.transform.eulerAngles = transform.eulerAngles + 90f * Vector3.up;
             if(playerHands!=null){context.transform.position = transform.position + (_point3.position - transform.position) - (playerHands.position-context.transform.position);}
             else{context.transform.position = transform.position;}
+            _spots[2] = context.gameObject;
         }
-        else if(_activeInteractors.Count == 3)
+        else if(_spots[3]==null)
         {
             // Third  player, player to  packet
             context.transform.eulerAngles = transform.eulerAngles - 90f * Vector3.up;
             if(playerHands!=null){context.transform.position = transform.position + (_point4.position - transform.position) - (playerHands.position-context.transform.position);}
             else{context.transform.position = transform.position;}
+            _spots[3] = context.gameObject;
         } 
         // Set parent to player
         context.transform.parent = transform;
@@ -126,6 +139,10 @@ public class big_package_interactable : interactable_object
         player_movement playerMovement = context.GetComponent<player_movement>();
         if(playerMovement != null){ 
             playerMovement.enabled = true;
+        }
+        for(int i = 0 ; i < 4 ; i++)
+        {
+            if(_spots[i]==context.gameObject){_spots[i]=null;}
         }
     }
     void FixedUpdate()

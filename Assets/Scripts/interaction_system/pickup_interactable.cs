@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,15 +11,17 @@ public class pickup_interactable : interactable_object
     private float _throwForce;
     private bool _inThrowSequence=false;
     private float _throwTimer;
+    private float _resetTimer;
     private List<interactor> _activeThrowingInteractors = new List<interactor>();
+    private List<interactor> _waitingToBeCanceled = new List<interactor>();
     void Awake()
     {
         _throwForce = _baseThrowForce;
     }
     protected override void OnInteractStart(interactor context)
     {
-        context.GetPlayerObservableValueCollection().InvokeBool("throwPackageAction",false);
-        context.GetPlayerObservableValueCollection().InvokeBool("throwPackageHold",false);
+        
+        
         Pickup(context);
     }
 
@@ -29,10 +32,8 @@ public class pickup_interactable : interactable_object
         // Start timer
         _inThrowSequence = true;
         // Add Release E callback that triggers OnRelease
-        Debug.Log("WWW");
         if(context.TryGetComponent<PlayerInput>(out var res))
         {
-            Debug.Log("QQQ");
             res.actions["interact"].canceled += HandleInteractCancel;
         }
         // OnRelease: If timer >= 0.5seconds, multiply throw force by 4.(And trigger animation) ; Drop
@@ -46,9 +47,11 @@ public class pickup_interactable : interactable_object
 
     public void HandleInteractCancel(InputAction.CallbackContext callback)
     {
+
+
         if(_throwTimer >= 0.25)
         {
-            _throwForce = _baseThrowForce * 4;
+            _throwForce = _baseThrowForce * 3f;
             foreach(interactor context in _activeThrowingInteractors)
             {
                 context.GetPlayerObservableValueCollection().InvokeBool("throwPackageAction",true);
@@ -59,12 +62,14 @@ public class pickup_interactable : interactable_object
             Drop(context);
             if(context.TryGetComponent<PlayerInput>(out var res))
             {
-                res.actions["interact"].canceled += HandleInteractCancel;
+                res.actions["interact"].canceled -= HandleInteractCancel;
             }
         }
-        _activeThrowingInteractors.Clear();
+        _waitingToBeCanceled = new List<interactor>(_activeThrowingInteractors);
+        _activeThrowingInteractors = new List<interactor>();
         _throwTimer = 0;
         _inThrowSequence = false;
+        
     }
 
     void FixedUpdate()
@@ -83,6 +88,26 @@ public class pickup_interactable : interactable_object
             _throwTimer+=Time.fixedDeltaTime;
 
         } 
+        else
+        {
+            if(_waitingToBeCanceled.Count>0)
+            {
+                if(_throwTimer <= 0.2)
+                {
+                    _throwTimer+=Time.fixedDeltaTime;
+                } else
+                {
+                    foreach(interactor context in _waitingToBeCanceled)
+                    {
+                        context.GetPlayerObservableValueCollection().InvokeBool("throwPackageAction",false);
+                        context.GetPlayerObservableValueCollection().InvokeBool("throwPackageHold",false);
+                    }
+                    _waitingToBeCanceled.Clear();
+                    _throwTimer = 0;
+                }
+            }
+            
+        }
     }
 
     private void Pickup(interactor context)

@@ -127,8 +127,8 @@ MonoBehaviour:
   _isTrigger: 0
   _maxNumberOfInteractors: 1
   AllowInteractions: 1
-  _throwForce: 4
-  _pickupWeight: 1
+  _baseThrowForce: 2
+  _pickupWeight: 0.4
 --- !u!1 &8957943979286810275
 GameObject:
   m_ObjectHideFlags: 0
