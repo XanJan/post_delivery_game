@@ -24,7 +24,6 @@ public class gate : MonoBehaviour
     // Update is called once per frame
     void SetAndCheck(button_interactable bi, bool b)
     {
-        Debug.Log("SETANDCHECK");
         _d[bi] = b;
         bool res = true;
         foreach(KeyValuePair<button_interactable,bool> kvp in _d)
@@ -47,7 +46,6 @@ public class gate : MonoBehaviour
         {
             if(_timer <= 5)
             {
-                Debug.Log("OPENING");
 
                 stick1.transform.eulerAngles = Vector3.Lerp(stick1.transform.eulerAngles, 75f * Vector3.forward, 1 * Time.deltaTime);
                 stick2.transform.eulerAngles = Vector3.Lerp(stick2.transform.eulerAngles, Vector3.zero, 1 * Time.deltaTime);

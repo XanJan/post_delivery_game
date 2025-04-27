@@ -14,7 +14,7 @@ public class player_instance_manager : singleton_persistent<player_instance_mana
     [SerializeField] private string _playerMoveSpeedMultiplierEnvironmentValueName = "moveSpeedMultiplierEnvironment";
     [SerializeField] private string _playerMoveSpeedMultiplierOtherValueName = "moveSpeedMultiplierOther";
     [SerializeField] private string _interactButtonKeyboard = "E";
-    [SerializeField] private string _interactButtonGamepad = "Y";
+    [SerializeField] private string _interactButtonGamepad = "X";
     private List<GameObject> _playerInstances= new List<GameObject>();
     private Vector3 _nextSpawnPoint = new Vector3(0,0,0);
     private player_instance_manager(){}
