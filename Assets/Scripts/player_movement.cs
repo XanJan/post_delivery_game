@@ -19,11 +19,7 @@ public class player_movement : MonoBehaviour
     private float _moveSpeedMultiplierOther;
 
     private void Awake()
-    {
-        // Makes sure observable float movespeed is obvc.
-        if (_obvc != null) { _obvc.AddObservableFloat(_movespeedName);}
-
-        
+    {   
         rb = GetComponent<Rigidbody>();
         playerInput = GetComponent<PlayerInput>();
         groundLayer = LayerMask.GetMask("Ground");
@@ -38,14 +34,16 @@ public class player_movement : MonoBehaviour
     {
         if (_obvc != null) 
         { 
-            _moveSpeedBase = _obvc.GetObservableFloat("moveSpeedBase").Value;
-            _moveSpeedMultiplierPickup = _obvc.GetObservableFloat("moveSpeedMultiplierPickup").Value;
-            _moveSpeedMultiplierEnvironment = _obvc.GetObservableFloat("moveSpeedMultiplierEnvironment").Value;
-            _moveSpeedMultiplierOther = _obvc.GetObservableFloat("moveSpeedMultiplierOther").Value;
+            _moveSpeedBase = _obvc.GetObservableFloat("moveSpeedBase").Value == 0 ? 5 : _obvc.GetObservableFloat("moveSpeedBase").Value;
+            _moveSpeedMultiplierPickup = _obvc.GetObservableFloat("moveSpeedMultiplierPickup").Value == 0 ? 1 : _obvc.GetObservableFloat("moveSpeedMultiplierPickup").Value;
+            _moveSpeedMultiplierEnvironment = _obvc.GetObservableFloat("moveSpeedMultiplierEnvironment").Value == 0 ? 1 : _obvc.GetObservableFloat("moveSpeedMultiplierEnvironment").Value;
+            _moveSpeedMultiplierOther = _obvc.GetObservableFloat("moveSpeedMultiplierOther").Value == 0 ? 1 : _obvc.GetObservableFloat("moveSpeedMultiplierOther").Value;
+            try{
             _obvc.GetObservableFloat("moveSpeedBase").UpdateValue += OnUpdateMoveSpeedBase;
             _obvc.GetObservableFloat("moveSpeedMultiplierPickup").UpdateValue += OnUpdateMoveSpeedMultiplierPickup;
             _obvc.GetObservableFloat("moveSpeedMultiplierEnvironment").UpdateValue += OnUpdateMoveSpeedMultiplierEnvironment;
             _obvc.GetObservableFloat("moveSpeedMultiplierOther").UpdateValue += OnUpdateMoveSpeedMultiplierOther;
+            } catch(Exception e){Debug.Log("Error in getting observable values in player_movement, there may be missing values in the player's observable value collection.");}
         }
         var controls = playerInput.actions;
 
