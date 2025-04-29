@@ -30,6 +30,7 @@ public class delivery_zone : MonoBehaviour
 
             if(detectedPackages.Count >= maxPackages){
                 areaRenderer.material.color = green;
+                game_events.current.PackageComplete();
             }
 
             if (other.gameObject != null) Destroy(other.gameObject); 

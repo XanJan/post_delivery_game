@@ -117,41 +117,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40261612249d6914eb53fb1c124c016f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _interactionText: Press E to pick up
+  _defaultInteractionText: Press %interactButton% to interact
   _onInteractStart:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6572301296395799999}
-        m_TargetAssemblyTypeName: pickup_interactable, Assembly-CSharp
-        m_MethodName: HandleBegin
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   _onInteractEnd:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6572301296395799999}
-        m_TargetAssemblyTypeName: pickup_interactable, Assembly-CSharp
-        m_MethodName: HandleEnd
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   _isTrigger: 0
   _maxNumberOfInteractors: 1
-  _throwForce: 4
-  _pickupWeight: 0
+  AllowInteractions: 1
+  _baseThrowForce: 2
+  _pickupWeight: 0.4
 --- !u!1 &8957943979286810275
 GameObject:
   m_ObjectHideFlags: 0

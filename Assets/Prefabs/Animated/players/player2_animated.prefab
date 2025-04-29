@@ -1,5 +1,50 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &737741706925678433
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8025574416471415937}
+  - component: {fileID: 8722803661020374881}
+  m_Layer: 0
+  m_Name: hands_position
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8025574416471415937
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 737741706925678433}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 2, z: 1.2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3986646023905579362}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8722803661020374881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 737741706925678433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 990786e184a44894592d1218b11d94df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  other: {fileID: 2185656883457691537}
 --- !u!1 &3582900044176690316
 GameObject:
   m_ObjectHideFlags: 0
@@ -694,7 +739,6 @@ GameObject:
   - component: {fileID: 588415828336237354}
   - component: {fileID: 7901286178603807775}
   - component: {fileID: 675003948274067448}
-  - component: {fileID: 4680618843132286972}
   m_Layer: 0
   m_Name: player2_animated
   m_TagString: Player
@@ -821,11 +865,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 859dfa25ebab28841b3ee65bc5f0a1fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _obvc: {fileID: 675003948274067448}
+  Obvc: {fileID: 675003948274067448}
+  MaxInteractions: 1
+  CanInteract: 1
   _rayCastFrom: {fileID: 5626280801572798046}
   _playerInput: {fileID: 9051456166870169758}
   _interactRange: 2
   _textMeshPro: {fileID: 1438277809525815531}
+  _playerIdValueName: playerId
+  _nrOfInteractionsValueName: interactions
+  _nrOfWagonInteractionsValueName: steerWagonInteractions
+  _nrOfPackagesPickedUp: packagesPickedUp
 --- !u!114 &7901286178603807775
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -839,7 +889,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _obvc: {fileID: 675003948274067448}
-  playerSpeed: 5
   rotationSpeed: 700
 --- !u!114 &675003948274067448
 MonoBehaviour:
@@ -853,33 +902,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0db359481445997489767d60736902bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _intNames:
-  - playerId
-  _floatNames:
-  - moveSpeed
-  - moveSpeedMultiplierPickup
-  _boolNames:
-  - holdingPackage
-  - throwPackageHold
-  - throwPackageAction
-  - holdingWagon
-  _vector2Names:
-  - feetDirection
---- !u!114 &4680618843132286972
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4891051678069208517}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c454899bb45027243b6a50c1c759d6ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _obvc: {fileID: 675003948274067448}
-  _playerIdValueName: playerId
-  _id: 2
+  _intNames: []
+  _floatNames: []
+  _boolNames: []
+  _vector2Names: []
+  _stringNames: []
+  _values_to_init_on_start:
+  - {fileID: 11400000, guid: 31d677b174660a3489b1aa57054acfc8, type: 2}
 --- !u!1 &5500858678457047716
 GameObject:
   m_ObjectHideFlags: 0
@@ -1014,7 +1043,7 @@ Transform:
   m_GameObject: {fileID: 5650112403913352914}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.369, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1138,6 +1167,7 @@ Transform:
   m_Children:
   - {fileID: 1076188417110691390}
   - {fileID: 5456612166805292340}
+  - {fileID: 8025574416471415937}
   m_Father: {fileID: 8680306188041757424}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &8942660976597157572

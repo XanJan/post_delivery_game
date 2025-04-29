@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 2836886664916548573}
   - component: {fileID: 4779568704340746617}
   - component: {fileID: 282050715136815698}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: interactable_wagon
   m_TagString: Wagon
   m_Icon: {fileID: 0}
@@ -116,8 +116,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.69, y: 0.77, z: 3.83}
-  m_Center: {x: 0, y: 0.36, z: 1.47}
+  m_Size: {x: 1.69, y: 0.66, z: 3.83}
+  m_Center: {x: 0, y: 0.28, z: 1.47}
 --- !u!54 &5538258173663167983
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -143,7 +143,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 1
-  m_Constraints: 80
+  m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!114 &3993538855618010057
 MonoBehaviour:
@@ -173,7 +173,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seatPosition: {fileID: 2307839582954849251}
-  acceleration: 5
+  acceleration: 20
   maxSpeed: 4
   turnSpeed: 100
   deceleration: 3
@@ -196,8 +196,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.29, y: 0.48, z: 3.03}
-  m_Center: {x: -1, y: 0.72, z: -2.02}
+  m_Size: {x: 0.1, y: 0.48, z: 5.83}
+  m_Center: {x: -1, y: 0.72, z: -0.56}
 --- !u!65 &282050715136815698
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -217,8 +217,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.25, y: 0.35, z: 3.03}
-  m_Center: {x: 0.98, y: 0.83, z: -2.02}
+  m_Size: {x: 0.1, y: 0.35, z: 5.83}
+  m_Center: {x: 1, y: 0.83, z: -0.56}
 --- !u!1 &4780370607085339226
 GameObject:
   m_ObjectHideFlags: 0
@@ -319,41 +319,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32964b23e6148da4097059a09a0989ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _interactionText: Press E to steer wagon
+  _defaultInteractionText: Press %interactButton% to interact
   _onInteractStart:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3443761404062504458}
-        m_TargetAssemblyTypeName: wagon_front_interactable, Assembly-CSharp
-        m_MethodName: OnInteractStart
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   _onInteractEnd:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3443761404062504458}
-        m_TargetAssemblyTypeName: wagon_front_interactable, Assembly-CSharp
-        m_MethodName: OnInteractEnd
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   _isTrigger: 0
   _maxNumberOfInteractors: 4
+  AllowInteractions: 1
   _wagon: {fileID: 2836886664916548573}
   _interactionTextPosition: {fileID: 8177440227805030249}
+  _holdingWagonValueName: holdingWagon
 --- !u!65 &4389868339998209200
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -373,7 +351,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.41, y: 0.39, z: 0.01}
+  m_Size: {x: 0.6, y: 0.39, z: 0.01}
   m_Center: {x: 0, y: -0.07, z: 0.35}
 --- !u!65 &5941760599642176330
 BoxCollider:
@@ -524,7 +502,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62c8990a7e3de1148a9d1aaabd654bf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _interactionText: Press E to interact
+  _defaultInteractionText: Press %interactButton% to interact
   _onInteractStart:
     m_PersistentCalls:
       m_Calls:
@@ -545,11 +523,12 @@ MonoBehaviour:
       m_Calls: []
   _isTrigger: 1
   _maxNumberOfInteractors: 1
+  AllowInteractions: 1
   _dropOffText: Press E to drop off
+  _pickupText: Press %interactButton% to pick up
   _wagonFullText: Wagon is full!
   _wagonEmptyText: Wagon is empty!
   _wagon: {fileID: 3993538855618010057}
-  DropOffText: 
 --- !u!65 &4696513454912026183
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -569,5 +548,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.62, y: 1.54, z: 0.86}
-  m_Center: {x: 0, y: -0.55, z: 0.45}
+  m_Size: {x: 0.5, y: 1.54, z: 1.5}
+  m_Center: {x: 0, y: -0.55, z: 0.1}
