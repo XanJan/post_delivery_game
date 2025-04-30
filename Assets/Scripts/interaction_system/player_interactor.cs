@@ -60,7 +60,7 @@ public class player_interactor : interactor
         Ray ray = new Ray(_rayCastFrom.position, _rayCastFrom.forward);
         if (Physics.Raycast(ray, out RaycastHit hit, _interactRange))
         {
-            if(hit.collider.TryGetComponent<interactable_object>(out var interactable))
+            if(hit.collider.TryGetComponent<interactable_object>(out var interactable) && interactable.AllowInteractions)
             {
                 _textMeshPro.transform.SetParent(null);
                 _textMeshPro.gameObject.SetActive(true);
