@@ -44,7 +44,7 @@ public class level_create : MonoBehaviour
 
     private void RemoveNeighborhoodFromLevel(GameObject stage)
     { 
-        if(instantiateNeighborhoods.Count >= 3)
+        if(instantiateNeighborhoods.Count >= 4)
         {
             stage.gameObject.SetActive(false);
             instantiateNeighborhoods.RemoveAt(0);

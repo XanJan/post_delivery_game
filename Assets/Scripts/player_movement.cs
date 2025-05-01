@@ -7,40 +7,61 @@ public class player_movement : MonoBehaviour
     private readonly string _movespeedName = "moveSpeed";
     private Rigidbody rb;
     private Vector2 moveInput;
-    [SerializeField] private float playerSpeed = 10f;
     public float rotationSpeed = 700f;
     private PlayerInput playerInput;
     private LayerMask groundLayer;
     private Boolean isGrounded;
     private float jumpForce = 7f;
 
-    private void Awake()
-    {
-        // Makes sure observable float movespeed is obvc.
-        if (_obvc != null) { _obvc.AddObservableFloat(_movespeedName); }
+    private float _moveSpeedBase;
+    private float _moveSpeedMultiplierPickup;
+    private float _moveSpeedMultiplierEnvironment;
+    private float _moveSpeedMultiplierOther;
 
-        
+    private void Awake()
+    {   
         rb = GetComponent<Rigidbody>();
         playerInput = GetComponent<PlayerInput>();
         groundLayer = LayerMask.GetMask("Ground");
     }
-    
-    private void OnEnable()
+    public void OnUpdateMoveSpeedBase(string s,float f){_moveSpeedBase = f; }
+    public void OnUpdateMoveSpeedMultiplierPickup(string s,float f){_moveSpeedMultiplierPickup = f;}
+    public void OnUpdateMoveSpeedMultiplierEnvironment(string s,float f){_moveSpeedMultiplierEnvironment = f;}
+    public void OnUpdateMoveSpeedMultiplierOther(string s,float f){_moveSpeedMultiplierOther = f;}
+
+
+    private void Start()
     {
-        
+        if (_obvc != null) 
+        { 
+            _moveSpeedBase = _obvc.GetObservableFloat("moveSpeedBase").Value == 0 ? 5 : _obvc.GetObservableFloat("moveSpeedBase").Value;
+            _moveSpeedMultiplierPickup = _obvc.GetObservableFloat("moveSpeedMultiplierPickup").Value == 0 ? 1 : _obvc.GetObservableFloat("moveSpeedMultiplierPickup").Value;
+            _moveSpeedMultiplierEnvironment = _obvc.GetObservableFloat("moveSpeedMultiplierEnvironment").Value == 0 ? 1 : _obvc.GetObservableFloat("moveSpeedMultiplierEnvironment").Value;
+            _moveSpeedMultiplierOther = _obvc.GetObservableFloat("moveSpeedMultiplierOther").Value == 0 ? 1 : _obvc.GetObservableFloat("moveSpeedMultiplierOther").Value;
+            try{
+            _obvc.GetObservableFloat("moveSpeedBase").UpdateValue += OnUpdateMoveSpeedBase;
+            _obvc.GetObservableFloat("moveSpeedMultiplierPickup").UpdateValue += OnUpdateMoveSpeedMultiplierPickup;
+            _obvc.GetObservableFloat("moveSpeedMultiplierEnvironment").UpdateValue += OnUpdateMoveSpeedMultiplierEnvironment;
+            _obvc.GetObservableFloat("moveSpeedMultiplierOther").UpdateValue += OnUpdateMoveSpeedMultiplierOther;
+            } catch(Exception e){Debug.Log("Error in getting observable values in player_movement, there may be missing values in the player's observable value collection.");}
+        }
         var controls = playerInput.actions;
-    
+
         controls["Move"].performed += Move;
         controls["Move"].canceled += MoveCanceled;
         controls["Jump"].started += Jump;
     }
 
-     // Capture the move input when it's pressed
+    // Capture the move input when it's pressed
     private void Move(InputAction.CallbackContext context)
     {
-        if(_obvc!=null){_obvc.InvokeFloat(_movespeedName,context.ReadValue<Vector2>().magnitude);}
+        if(_obvc!=null)
+        {
+            _obvc.InvokeFloat(_movespeedName,context.ReadValue<Vector2>().magnitude);
+                    
+        }
          
-         moveInput = context.ReadValue<Vector2>();
+        moveInput = context.ReadValue<Vector2>();
          
     }
 
@@ -71,8 +92,7 @@ public class player_movement : MonoBehaviour
             moveDirection.Normalize();
         }
 
-        var moveVelocity = moveDirection * playerSpeed;
-
+        var moveVelocity = moveDirection * _moveSpeedBase * _moveSpeedMultiplierPickup * _moveSpeedMultiplierEnvironment * _moveSpeedMultiplierOther;
         // Move the player using Rigidbody
         rb.MovePosition(rb.position + moveVelocity * Time.fixedDeltaTime);
 
@@ -82,7 +102,6 @@ public class player_movement : MonoBehaviour
             Quaternion toRotation = Quaternion.LookRotation(moveVelocity, Vector3.up);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotationSpeed * Time.fixedDeltaTime);
         }
-
     }
 
     private void Jump()

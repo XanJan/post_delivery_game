@@ -34,27 +34,21 @@ public class player_interactor : interactor
         {
             if(hit.collider.TryGetComponent<interactable_object>(out var interactable))
             {
-                BeginInteraction(interactable);
-                stats_manager.Instance.IncIntStat("Player" + _obvc.GetObservableInt(_playerIdValueName).Value + " " + _nrOfInteractionsValueName,1);
-                switch(interactable)
+                if(TryInteractStart(interactable))
                 {
-                    case wagon_front_interactable:
-                    stats_manager.Instance.IncIntStat("Player" + _obvc.GetObservableInt(_playerIdValueName).Value + " " +_nrOfWagonInteractionsValueName,1);
-                    break;
-                    case pickup_interactable:
-                    stats_manager.Instance.IncIntStat("Player" + _obvc.GetObservableInt(_playerIdValueName).Value + " " +_nrOfPackagesPickedUp,1);
-                    break;
-                }
-            }
-            else
-            {
-                TryEndInteraction();
-            }
-        } 
-        else
-        {
-            TryEndInteraction();
-        }
+                    stats_manager.Instance.IncIntStat("Player" + Obvc.GetObservableInt(_playerIdValueName).Value + " " + _nrOfInteractionsValueName,1);
+                    switch(interactable)
+                    {
+                        case wagon_front_interactable:
+                        stats_manager.Instance.IncIntStat("Player" + Obvc.GetObservableInt(_playerIdValueName).Value + " " +_nrOfWagonInteractionsValueName,1);
+                        break;
+                        case pickup_interactable:
+                        stats_manager.Instance.IncIntStat("Player" + Obvc.GetObservableInt(_playerIdValueName).Value + " " +_nrOfPackagesPickedUp,1);
+                        break;
+                    }
+                } else TryInteractEnd();    
+            } else TryInteractEnd();
+        } else TryInteractEnd();
     }
 
     // Handle text display...
@@ -75,22 +69,15 @@ public class player_interactor : interactor
                 //Update the interaction text.
                 switch(interactable)
                 {
-                    case wagon_storage_interactable wagonInteractable:
-                    if(_activeInteractions.Count>0)//Holding package
-                    {
-                        _textMeshPro.text = wagonInteractable.DropOffText;
-                        break;
-                    } else {goto default;}
                     case wagon_front_interactable wagonFrontInteractable :
                     _textMeshPro.gameObject.transform.position = wagonFrontInteractable.GetInteractionTextPosition().position;
-                    _textMeshPro.text = interactable.GetInteractionText(); 
-                    break;
-                    case pickup_interactable:
-                    if(_activeInteractions.Count>0){ _textMeshPro.text = ""; } else{goto default;}
-                    break;
-                    
+                    goto default;
+
                     default:
-                    _textMeshPro.text = interactable.GetInteractionText(); 
+                    if(_activeInteractions.Count>=MaxInteractions && !interactable.IsTrigger())
+                    {
+                        _textMeshPro.text = "";
+                    } else _textMeshPro.text = interactable.GetInteractionText(this); 
                     break;
                 }
             }
