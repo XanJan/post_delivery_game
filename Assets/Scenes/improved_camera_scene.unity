@@ -2636,7 +2636,7 @@ MonoBehaviour:
   maxZoom: 30
   zoomLimiter: 45
   zoomTime: 3
-  smoothTime: 0.5
+  smoothTime: 0.1
   targets: []
   offset: {x: 0, y: 10, z: -10}
 --- !u!114 &1914922536
