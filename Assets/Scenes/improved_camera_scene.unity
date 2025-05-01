@@ -1797,9 +1797,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   minZoom: 5
-  maxZoom: 60
+  maxZoom: 45
   zoomLimiter: 50
   zoomTime: 3
+  xZoomLimit: 75
+  zZoomLimit: 50
   smoothTime: 0.1
   targets: []
   offset: {x: 0, y: 10, z: -10}

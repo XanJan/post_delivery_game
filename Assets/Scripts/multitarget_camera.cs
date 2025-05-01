@@ -15,6 +15,8 @@ public class multitarget_camera : MonoBehaviour
     public float maxZoom;
     public float zoomLimiter;
     public float zoomTime;
+    public float xZoomLimit;
+    public float zZoomLimit;
 
     public float smoothTime;
     public List<Transform> targets;
@@ -53,10 +55,24 @@ public class multitarget_camera : MonoBehaviour
 
     void ZoomCamera()
     {
-        float newZoom = Mathf.Lerp(minZoom, maxZoom, GetGreatestDistance() / zoomLimiter);
+        float newZoom;
 
-        offset.y = Mathf.Lerp(offset.y, newZoom, Time.deltaTime * zoomTime);
-        offset.z = Mathf.Lerp(offset.z, -newZoom, Time.deltaTime * zoomTime);
+        if (GetGreatestDistance().z > GetGreatestDistance().x)
+        {
+            zoomLimiter = Mathf.Lerp(zoomLimiter, zZoomLimit, Time.deltaTime);
+            newZoom = Mathf.Lerp(minZoom, maxZoom, GetGreatestDistance().z / zoomLimiter);
+            offset.y = Mathf.Lerp(offset.y, newZoom, Time.deltaTime * zoomTime);
+            offset.z = Mathf.Lerp(offset.z, -newZoom, Time.deltaTime * zoomTime);
+        }
+
+        else
+        {
+            zoomLimiter = Mathf.Lerp(zoomLimiter, xZoomLimit, Time.deltaTime);
+            newZoom = Mathf.Lerp(minZoom, maxZoom, GetGreatestDistance().x / zoomLimiter);
+            offset.y = Mathf.Lerp(offset.y, newZoom, Time.deltaTime * zoomTime);
+            offset.z = Mathf.Lerp(offset.z, -newZoom, Time.deltaTime * zoomTime);
+        }
+        
     }
 
     Vector3 GetCenterPoint()
@@ -81,14 +97,14 @@ public class multitarget_camera : MonoBehaviour
         AddPlayersToTargetGroup();
     }
 
-    float GetGreatestDistance()
+    Vector3 GetGreatestDistance()
     {
         var bounds = new Bounds(targets[0].position, Vector3.zero);
         for (int i = 0; i < targets.Count; i++)
         {
             bounds.Encapsulate(targets[i].position);
         }
-        return bounds.size.z;
+        return bounds.size;
     }
 
     public void AddPlayersToTargetGroup()
