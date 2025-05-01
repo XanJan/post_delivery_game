@@ -7,7 +7,7 @@ public class add_players_to_camera : MonoBehaviour
     GameObject[] players;
     CinemachineTargetGroup target;
     PlayerInputManager playerManager;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
     private void Awake()
     {
         target = gameObject.GetComponent<CinemachineTargetGroup>();
@@ -19,8 +19,6 @@ public class add_players_to_camera : MonoBehaviour
 
     }
 
-
-    // Update is called once per frame
     void Update()
     {
         FindPlayers();
