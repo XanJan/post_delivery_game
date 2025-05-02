@@ -26,7 +26,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2791522581471308306}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: -0}
+  m_LocalPosition: {x: 0, y: 0, z: -3.03}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -323,5 +323,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   red: {r: 1, g: 0, b: 0, a: 1}
   green: {r: 0, g: 1, b: 0, a: 1}
-  maxPackages: 2
+  maxPackages: 3
+  _randomize: 1
   textDisplay: {fileID: 6110917574141038793}
+  _dropOffPoints: []

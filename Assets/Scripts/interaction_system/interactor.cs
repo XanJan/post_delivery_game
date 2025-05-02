@@ -204,4 +204,19 @@ public abstract class interactor : MonoBehaviour
         if(stopped) return false;
         else return true;
     }
+    /// <summary>
+    /// Ends all active interactions in order. Stops if an interaction is not allowed to end.
+    /// </summary>
+    public bool TryForceEndAllInteractions(interactable_object source,out List<interactable_object> interactables)
+    {
+        interactables = new  List<interactable_object>();
+        bool stopped = false;
+        while(_activeInteractions.Count > 0)
+        {
+            if(TryForceInteractEnd(source ,out var res)) interactables.Add(res); 
+            else {stopped = true;break;}
+        }
+        if(stopped) return false;
+        else return true;
+    }
 }

@@ -16,12 +16,13 @@ public class player_instance_manager : singleton_persistent<player_instance_mana
     [SerializeField] private string _interactButtonKeyboard = "E";
     [SerializeField] private string _interactButtonGamepad = "X";
     private List<GameObject> _playerInstances= new List<GameObject>();
-    private Vector3 _nextSpawnPoint = new Vector3(0,0,0);
+    private Vector3 _nextSpawnPoint = new Vector3(0,1.5f,0);
     private player_instance_manager(){}
     public void AddPlayerInstance(PlayerInput inp)
     {
         // Keep track of players
         _playerInstances.Add(inp.gameObject);
+        inp.transform.position = inp.transform.position + (new Vector3(1f * _playerInstances.Count,0,0)); 
         // Set interact button if possible
         if(inp.TryGetComponent<observable_value_collection>(out var obvc))
         {
@@ -53,6 +54,7 @@ public class player_instance_manager : singleton_persistent<player_instance_mana
     void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoad;
+        SceneManager.activeSceneChanged += BeforeSceneLoad;
     }
 
     public void OnSceneLoad(Scene s, LoadSceneMode m)
@@ -63,8 +65,18 @@ public class player_instance_manager : singleton_persistent<player_instance_mana
             f+=0.8f;
             Vector3 mySpawnPoint = _nextSpawnPoint + new Vector3(f,0,0); // x offset relative to f so all players don't spawn in the same pos
             p.transform.position = mySpawnPoint;
+            
         }
     }
+
+    public void BeforeSceneLoad(Scene a, Scene b)
+    {
+        foreach(GameObject p in _playerInstances)
+        {
+            if(p.TryGetComponent<player_interactor>(out var res)){res.TryForceEndAllInteractions(null,out List<interactable_object> ended); res.TryEndAllInteractions(out _);}
+        }
+    }
+
     public void SetNextSpawnPoint(Vector3 v)
     {
         _nextSpawnPoint = v;

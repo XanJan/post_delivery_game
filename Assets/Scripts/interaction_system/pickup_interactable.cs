@@ -188,6 +188,9 @@ public class pickup_interactable : interactable_object
             } catch (Exception) {} // Do nothing on exception
             
         }
+        // Ugly fix for enabling destroyonload 
+        transform.parent = Instantiate(new GameObject("empty"),new Vector3(0,0,0), Quaternion.identity).transform;
+        transform.SetParent(null);
     }
     
 }

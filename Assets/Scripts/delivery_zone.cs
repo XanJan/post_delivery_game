@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
+
 using TMPro;
 using System;
 using Unity.Mathematics;
@@ -13,11 +15,19 @@ public class delivery_zone : MonoBehaviour
     public Color red = Color.red;
     public Color green = Color.green;
     public int maxPackages = 5;
+    [SerializeField] private bool _randomize = false;
     public TextMeshPro textDisplay;
     /// <summary>
     /// The points where the dropped off packages should appear. 
     /// </summary>
     [SerializeField] private List<Transform> _dropOffPoints;
+    void Awake()
+    {
+        if(_randomize)
+        {
+            maxPackages = (int)(Random.Range(1f,maxPackages+1));
+        }
+    }
     void Start(){
         areaRenderer = GetComponent<Renderer>();
         areaRenderer.material.color = red;   

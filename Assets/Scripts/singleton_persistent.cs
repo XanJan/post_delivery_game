@@ -22,7 +22,9 @@ public class singleton_persistent<T> : MonoBehaviour where T : Component
         if(_instance==null)
         {
             _instance = this as T;
+            Debug.Log("TRY");
             DontDestroyOnLoad(this);
+            Debug.Log("SUCCESS");
         } else { Destroy(this); }
     }
 }
