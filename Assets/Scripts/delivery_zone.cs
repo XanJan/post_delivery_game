@@ -42,10 +42,19 @@ public class delivery_zone : MonoBehaviour
     {
         if(other.TryGetComponent<player_interactor>(out var player))
         {
-            if(detectedPackages.Count < maxPackages && player.TryForceInteractEnd(null,out var top))
+            if(player.TryPeekInteraction(out var res))
             {
-                TryConsumePackage(top.gameObject);
+                switch(res)
+                {
+                    case pickup_interactable:
+                    if(detectedPackages.Count < maxPackages && player.TryForceInteractEnd(null,out var top))
+                    {
+                        TryConsumePackage(top.gameObject);
+                    }
+                    break;
+                }
             }
+            
         }
     }
     /// <summary>
