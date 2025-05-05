@@ -59,7 +59,7 @@ public class delivery_zone : MonoBehaviour
     }
     /// <summary>
     /// Helper method, tries to consumes a package. If zone is not full, 
-    /// update score and text and Destroy package. If the zone becomes 
+    /// update score and text and place package on zone. If the zone becomes 
     /// full, change color and notify current game event.
     /// </summary>
     /// <param name="go">GameObject to "consume" and Destroy.</param>
@@ -67,7 +67,7 @@ public class delivery_zone : MonoBehaviour
     {
         if(detectedPackages.Count < maxPackages && !detectedPackages.Contains(go))
         {
-            Vector3 lastpos = detectedPackages.Count > 0 ? detectedPackages.Last().transform.position : transform.position;
+            float lastYPos = detectedPackages.Count > 0 ? (detectedPackages.Last().transform.localPosition.y + (detectedPackages.Last().TryGetComponent<BoxCollider>(out var collider2) ? collider2.size.y : 1) ) : 0;
             detectedPackages.Add(go);
             score_manager.Instance.AddScore();
             UpdateText();
@@ -78,10 +78,11 @@ public class delivery_zone : MonoBehaviour
             }
             if (go != null) 
             {
-                go.transform.rotation = transform.rotation;
-                go.transform.position = (_dropOffPoints!=null && _dropOffPoints.Count>0) ? 
-                    _dropOffPoints[detectedPackages.Count-1 % _dropOffPoints.Count].position : 
-                        lastpos + (detectedPackages.Count == 1 ? Vector3.zero : (new Vector3(0.1f, go.TryGetComponent<BoxCollider>(out var collider) ? collider.size.y : 1 ,0.1f)));
+                go.transform.SetParent(transform);
+                go.transform.eulerAngles =new Vector3(0,new int[]{0,90,180,270}[detectedPackages.Count % 4],0);
+                go.transform.localPosition = (_dropOffPoints!=null && _dropOffPoints.Count>0) ? 
+                    _dropOffPoints[detectedPackages.Count-1 % _dropOffPoints.Count].localPosition : 
+                        new Vector3(new float[]{0.1f,0f,-0.1f,0f}[detectedPackages.Count%4], lastYPos ,new float[]{0f,0.1f,0f,-0.1f}[detectedPackages.Count%4]);
                 if(go.TryGetComponent<interactable_object>(out var interactable))
                 {
                     interactable.AllowInteractions = false;
