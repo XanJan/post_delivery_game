@@ -114,6 +114,7 @@ public class interactable_object : MonoBehaviour
     /// </summary>
     /// <returns>Wether the interactable object has enabled is trigger or not.</returns>
     public bool IsTrigger(){return _isTrigger;}
+    public interactor[] GetInteractors(){return _activeInteractors.ToArray();}
     protected virtual void OnForceInteractEnd(interactor context, interactable_object source){}
     protected virtual void OnInteractStart(interactor context){}
     protected virtual void OnInteractEnd(interactor context){}
