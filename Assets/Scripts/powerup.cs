@@ -6,10 +6,6 @@ public abstract class powerup : ScriptableObject
     public string description;
     public float duration;
 
-    public virtual void ApplyPower()
-    {
-
-    }
-
+    public abstract void ApplyPower();
 
 }
