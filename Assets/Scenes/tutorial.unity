@@ -1688,6 +1688,10 @@ PrefabInstance:
       propertyPath: _obvc
       value: 
       objectReference: {fileID: 1282359367}
+    - target: {fileID: 3993538855618010057, guid: a6428ad72173eac4cb30d0701621932a, type: 3}
+      propertyPath: maxCapacity
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 8838821214776784029, guid: a6428ad72173eac4cb30d0701621932a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.72
@@ -2223,8 +2227,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 5c108ac13dfe4054aa832915040a5713, type: 2}
-  m_sharedMaterial: {fileID: 4344241898654559105, guid: 5c108ac13dfe4054aa832915040a5713, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 51c314744bf53804389d0dcc004b0dcd, type: 2}
+  m_sharedMaterial: {fileID: 4344241898654559105, guid: 51c314744bf53804389d0dcc004b0dcd, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2318,7 +2322,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 4344241898654559105, guid: 5c108ac13dfe4054aa832915040a5713, type: 2}
+  - {fileID: 4344241898654559105, guid: 51c314744bf53804389d0dcc004b0dcd, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
