@@ -1,11 +1,11 @@
 using UnityEngine;
-[CreateAssetMenu(fileName = "NewPowerup", menuName = "Powerup/PowerupItem")]
+[CreateAssetMenu(fileName = "NewPowerup", menuName = "Powerup/Speed Powerup")]
 public class speed_powerup : powerup
 {
+    public float speedMultiplier;
     public override void ApplyPowerup(GameObject target)
     {
-        // Apply the speed boost to the player
-        //player.ApplySpeedBoost(5, duration);
-        Debug.Log("Hej");
+        target.GetComponent<player_movement>().OnUpdateMoveSpeedMultiplierPickup("", speedMultiplier);
+        
     }
 }

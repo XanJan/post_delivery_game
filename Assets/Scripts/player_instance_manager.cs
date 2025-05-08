@@ -69,4 +69,8 @@ public class player_instance_manager : singleton_persistent<player_instance_mana
     {
         _nextSpawnPoint = v;
     }
+    public void SetBaseSpeed(float speed)
+    {
+        _moveSpeedBase = speed;
+    }
 }
