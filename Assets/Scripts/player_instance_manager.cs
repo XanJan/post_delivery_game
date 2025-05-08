@@ -13,6 +13,7 @@ public class player_instance_manager : singleton_persistent<player_instance_mana
     [SerializeField] private string _playerMoveSpeedMultiplierPickupValueName = "moveSpeedMultiplierPickup";
     [SerializeField] private string _playerMoveSpeedMultiplierEnvironmentValueName = "moveSpeedMultiplierEnvironment";
     [SerializeField] private string _playerMoveSpeedMultiplierOtherValueName = "moveSpeedMultiplierOther";
+    [SerializeField] private string _playerNameValueName = "playerName";
     [SerializeField] private string _interactButtonKeyboard = "E";
     [SerializeField] private string _interactButtonGamepad = "X";
     [SerializeField] private observable_value_collection _obvc;
@@ -34,6 +35,7 @@ public class player_instance_manager : singleton_persistent<player_instance_mana
             obvc.AddObservableFloat(_playerMoveSpeedMultiplierPickupValueName);
             obvc.AddObservableFloat(_playerMoveSpeedMultiplierEnvironmentValueName);
             obvc.AddObservableFloat(_playerMoveSpeedMultiplierOtherValueName);
+            obvc.AddObservableString(_playerNameValueName);
             string s;
             switch(inp.currentControlScheme.ToString())
             {
@@ -48,6 +50,7 @@ public class player_instance_manager : singleton_persistent<player_instance_mana
             obvc.InvokeFloat(_playerMoveSpeedMultiplierEnvironmentValueName,1);
             obvc.InvokeFloat(_playerMoveSpeedMultiplierOtherValueName,1);
             obvc.InvokeInt(_playerIdValueName, _playerInstances.Count);
+            obvc.InvokeString(_playerNameValueName, "Paul");
         } 
 
         // Keep player between scenes
