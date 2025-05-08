@@ -1,9 +1,10 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using UnityEditor.SearchService;
 
 public class wagon_storage : MonoBehaviour{
     public int maxCapacity = 10; // amount of packages that can be stored
+    private int totalPackagedPackages = 0;
     private Stack<GameObject> storedPackages = new Stack<GameObject>();
     public Transform storagePoint;
     public GameObject packagePrefab;
@@ -14,12 +15,28 @@ public class wagon_storage : MonoBehaviour{
 
     void Start()
     {
-        if(_packagesToInit != null && _packagesToInit.Count > 0) FillWagonAtStart();
+        if (game_events.current != null){
+            game_events.current.onNeighborhoodGenerated += AddPackagesFromNewZones;
+        }
+        int packagesToSpawn = level_create.Instance.GetTotalPackagesToDeliver();
+        Debug.Log($"[Wagon] At Start, asking for {packagesToSpawn} packages");
+        for (int i = 0; i < packagesToSpawn && i < maxCapacity; i++){
+            GameObject package = Instantiate(packagePrefab);
+            AddPackage(package);
+        }
     }
     private void FillWagonAtStart(){
         for(int i = 0; i < _packagesToInit.Count && i < maxCapacity; i++){
             GameObject package = Instantiate(_packagesToInit[i]);
             AddPackage(package);
+        }
+    }
+
+    public void FillWagonNewZone(int packageAmount){
+        for(int i = 0; i < packageAmount; i++){
+            GameObject package = Instantiate(_packagesToInit[i + totalPackagedPackages]);
+            AddPackage(package);
+            totalPackagedPackages++;
         }
     }
 
@@ -64,5 +81,22 @@ public class wagon_storage : MonoBehaviour{
             return package;
         }
         return null;   
+    }
+
+    void OnDisable()
+    {
+        game_events.current.onNeighborhoodGenerated -= AddPackagesFromNewZones;       
+    }
+
+    private void AddPackagesFromNewZones(){
+
+        int totalNeeded = level_create.Instance.GetTotalPackagesToDeliver();
+        Debug.Log(totalNeeded);
+        int packagesToFill = Mathf.Min(totalNeeded - storedPackages.Count, maxCapacity - storedPackages.Count);
+        Debug.Log(packagesToFill);
+        for(int i = 0; i < packagesToFill; i++){
+            GameObject package = Instantiate(packagePrefab);
+            AddPackage(package);
+        }
     }
 }

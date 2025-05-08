@@ -11,6 +11,8 @@ public class neighborhood_manager : MonoBehaviour
         Debug.Log(deliveryZones);
 
         game_events.current.onPackageTrigger += CountFinishedDeliveryZones;
+        
+        game_events.current.RaiseNeighborhoodGenerated();
     }
 
     private void CountFinishedDeliveryZones()

@@ -346,9 +346,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 091af994b726cee4bba38c21cdf465b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxCapacity: 2
+  maxCapacity: 50
   storagePoint: {fileID: 6538663997774800622}
   packagePrefab: {fileID: 7229160462547734405, guid: ab6c0cadda82dc34b84a5df4a89fb7d7, type: 3}
+  _packagesToInit: []
 --- !u!65 &6038632487924456180
 BoxCollider:
   m_ObjectHideFlags: 0

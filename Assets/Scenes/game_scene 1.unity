@@ -3150,6 +3150,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d8b5050c100a41741adf40666337afe2, type: 3}
+--- !u!1 &988589047 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5005131794947634226, guid: 62fce1eca27c7c94497b8444d87e8510, type: 3}
+  m_PrefabInstance: {fileID: 1080673476}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &989285994 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: bce72ed8a9185a743a71afdf746c8f57, type: 3}
@@ -6370,6 +6375,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: LevelCreateManger
       objectReference: {fileID: 0}
+    - target: {fileID: 2519620828626869195, guid: 02f41d40607ec1441ae19f4ffe38a311, type: 3}
+      propertyPath: startingNeighborhood
+      value: 
+      objectReference: {fileID: 988589047}
     - target: {fileID: 6298366039430532214, guid: 02f41d40607ec1441ae19f4ffe38a311, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -6748,7 +6757,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3993538855618010057, guid: a6428ad72173eac4cb30d0701621932a, type: 3}
       propertyPath: maxCapacity
-      value: 10
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 8838821214776784029, guid: a6428ad72173eac4cb30d0701621932a, type: 3}
       propertyPath: m_LocalPosition.x
