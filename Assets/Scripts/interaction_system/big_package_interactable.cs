@@ -11,14 +11,18 @@ public class big_package_interactable : interactable_object
     [SerializeField] private Transform _point3;
     [SerializeField] private Transform _point4; 
     [SerializeField] private float _pickupWeight = 0;
-    [SerializeField] private Collider _collider;
+    [SerializeField] private BoxCollider _collider;
     [SerializeField] private Rigidbody _rb;
     private GameObject[] _spots = new GameObject[4];
+    [SerializeField]private Vector3[] _colliderSizes = new Vector3[] { new Vector3(1,1,1),new Vector3(1,2,2),new Vector3(1,2,3),new Vector3(2,2,3),new Vector3(3,2,3)};
+    [SerializeField]private Vector3[] _colliderOffsets = new Vector3[] {new Vector3(0,0,0),new Vector3(0,0,-0.5f),new Vector3(0,0,0),new Vector3(-0.5f,0,0),new Vector3(0,0,0)};
     private Dictionary<GameObject,Vector2> _playerMovementInputs = new Dictionary<GameObject, Vector2>();
     protected override void OnInteractStart(interactor context)
     {
+        // Add movement
         _playerMovementInputs.Add(context.gameObject,Vector2.zero);
 
+        // Find player hands
         Transform playerHands = null;
         foreach (Transform child in context.transform)
         {
@@ -28,7 +32,8 @@ public class big_package_interactable : interactable_object
                 break;  // Exit loop once we found our hands
             }
         }
-        
+        _collider.size = _colliderSizes[_activeInteractors.Count];
+        _collider.center =_colliderOffsets[_activeInteractors.Count];
         // First player, packet to player
         if(_activeInteractors.Count == 1)
         {
@@ -69,20 +74,27 @@ public class big_package_interactable : interactable_object
             else{context.transform.position = transform.position;}
             _spots[3] = context.gameObject;
         } 
+        // Set constraints
+        _rb.constraints = RigidbodyConstraints.FreezeRotation;
+
         // Set parent to player
         context.transform.parent = transform;
 
-        // Set package stuff (unchanged if already picked up)
-        _rb.isKinematic = true;
-        _collider.enabled = false;
-
-        // Set player kinematic.
-        if(context.TryGetComponent<Rigidbody>(out var rb))
+        // Set ignore collisions
+        Collider[] colls = context.GetComponents<Collider>();
+        if(colls!=null)
         {
-            rb.isKinematic = true;
+            foreach(Collider col in colls)
+            {
+                Physics.IgnoreCollision(col, _collider,true);
+            }
         }
-        
-        // Invoke player holding package bool to true;
+        // Set player rb to iskinematic
+        if(context.TryGetComponent<Rigidbody>(out var playerRb))
+        {
+            playerRb.isKinematic = true;
+        }
+        // Invoke player holding package bool to true, set movespeed.
         observable_value_collection obvc = context.GetPlayerObservableValueCollection();
         if(obvc!=null)
         {
@@ -91,40 +103,50 @@ public class big_package_interactable : interactable_object
                 obvc.InvokeBool("holdingPackage",true);
                 obvc.InvokeFloat("moveSpeedMultiplierPickup",1/(_pickupWeight+1)); // Slow down player relative to weight
             } catch{} // Do nothing on exception
-            
         }
         // Disable player movement
         player_movement playerMovement = context.GetComponent<player_movement>();
         if(playerMovement != null){ 
             playerMovement.enabled = false;
         }
-
         // Enable package movement
         if(context.TryGetComponent<PlayerInput>(out var res))
         {
             res.actions["move"].performed += cxt => HandleMovementPerformed(context.gameObject,cxt.ReadValue<Vector2>());
             res.actions["move"].canceled += cxt => HandleMovementCancled(context.gameObject);
         }
-
     }
 
     protected override void OnInteractEnd(interactor context)
     {
-        // Update 
+        // Update collider size
+        _collider.size = _colliderSizes[_activeInteractors.Count];
+        _collider.center =_colliderOffsets[_activeInteractors.Count];
+        // Remove input
         _playerMovementInputs.Remove(context.gameObject);
+        // Set player parent to null and enable DontDestroyOnLoad again
         context.transform.SetParent(null);
         DontDestroyOnLoad(context);
+        // Enable collisions
+        Collider[] colls = context.GetComponents<Collider>();
+        if(colls!=null)
+        {
+            foreach(Collider col in colls)
+            {
+                Physics.IgnoreCollision(_collider,col,false);
+            }
+        }
+        // Set player rb to not be kinematic anymore
+        if(context.TryGetComponent<Rigidbody>(out var playerRb))
+        {
+            playerRb.isKinematic = false;
+        }
+        // If it was the last player to exit, reset constraints.
         if(_activeInteractors.Count == 0)
         {
-            _rb.isKinematic = false;
-            _collider.enabled = true;
+            _rb.constraints = RigidbodyConstraints.None;  
         }
-        
-        
-        if(context.TryGetComponent<Rigidbody>(out var rb))
-        {
-            rb.isKinematic = false;
-        }
+        // Invoke player holding package bool to true, reset movespeed.
         observable_value_collection obvc = context.GetPlayerObservableValueCollection();
         if(obvc!=null)
         {
@@ -135,11 +157,12 @@ public class big_package_interactable : interactable_object
             } catch{} // Do nothing on exception
             
         }
-
+        // Enable player movement
         player_movement playerMovement = context.GetComponent<player_movement>();
         if(playerMovement != null){ 
             playerMovement.enabled = true;
         }
+        // Reset spot
         for(int i = 0 ; i < 4 ; i++)
         {
             if(_spots[i]==context.gameObject){_spots[i]=null;}
@@ -166,6 +189,15 @@ public class big_package_interactable : interactable_object
             }
             Vector3 mov = new Vector3(acc.x,0,acc.y);
             _rb.MovePosition(_rb.position + (mov * Time.fixedDeltaTime));
+            // Freeze position when not moving. (to prevent unwanted movement applied by mysterious forces)
+            if(_activeInteractors.Count>0 && mov.magnitude==0)
+            {
+                _rb.constraints = RigidbodyConstraints.FreezeAll & ~RigidbodyConstraints.FreezePositionY;
+            } 
+            else // Players are interacting, and moving
+            { 
+                _rb.constraints = RigidbodyConstraints.FreezeRotation;
+            }
         }
     }
 
