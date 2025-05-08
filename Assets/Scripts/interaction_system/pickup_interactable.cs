@@ -35,6 +35,7 @@ public class pickup_interactable : interactable_object
         if(context.TryGetComponent<PlayerInput>(out var res))
         {
             res.actions["interact"].canceled += HandleInteractCancel;
+            AllowInteractions=false;
         }
         // OnRelease: If timer >= 0.5seconds, multiply throw force by 4.(And trigger animation) ; Drop
         
@@ -68,6 +69,7 @@ public class pickup_interactable : interactable_object
         _waitingToBeCanceled = new List<interactor>(_activeThrowingInteractors);
         _activeThrowingInteractors = new List<interactor>();
         _throwTimer = 0;
+        AllowInteractions=true;
         _inThrowSequence = false;
         
     }
