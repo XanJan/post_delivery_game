@@ -15,13 +15,16 @@ public class player_instance_manager : singleton_persistent<player_instance_mana
     [SerializeField] private string _playerMoveSpeedMultiplierOtherValueName = "moveSpeedMultiplierOther";
     [SerializeField] private string _interactButtonKeyboard = "E";
     [SerializeField] private string _interactButtonGamepad = "X";
+    [SerializeField] private observable_value_collection _obvc;
     private List<GameObject> _playerInstances= new List<GameObject>();
-    private Vector3 _nextSpawnPoint = new Vector3(0,0,0);
     private player_instance_manager(){}
     public void AddPlayerInstance(PlayerInput inp)
     {
         // Keep track of players
         _playerInstances.Add(inp.gameObject);
+        _obvc.InvokeInt("numberOfPlayers",_playerInstances.Count);
+        if(GameObject.FindWithTag("Respawn")!=null){inp.transform.position = GameObject.FindWithTag("Respawn").transform.position + new Vector3(0.8f * _playerInstances.Count,0,0);}
+        else{inp.transform.position = new Vector3(0.8f * _playerInstances.Count,0,0);}
         // Set interact button if possible
         if(inp.TryGetComponent<observable_value_collection>(out var obvc))
         {
@@ -61,12 +64,7 @@ public class player_instance_manager : singleton_persistent<player_instance_mana
         foreach(GameObject p in _playerInstances)
         {
             f+=0.8f;
-            Vector3 mySpawnPoint = _nextSpawnPoint + new Vector3(f,0,0); // x offset relative to f so all players don't spawn in the same pos
-            p.transform.position = mySpawnPoint;
+            p.transform.position = GameObject.FindWithTag("Respawn").transform.position + new Vector3(f,0,0);
         }
-    }
-    public void SetNextSpawnPoint(Vector3 v)
-    {
-        _nextSpawnPoint = v;
     }
 }
