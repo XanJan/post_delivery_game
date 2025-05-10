@@ -10,8 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 5696738248629528394}
   - component: {fileID: 7488731907213917672}
+  - component: {fileID: 2121748859607035891}
+  - component: {fileID: 7099316620438376254}
   m_Layer: 0
-  m_Name: Controller
+  m_Name: Controller1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -62,3 +64,36 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &2121748859607035891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4084499211124809556}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5d51184740267948b4f8246bfcc3893, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerInput: {fileID: 7488731907213917672}
+  _playerPrefab: {fileID: 5228905890449259532, guid: ba5ae939410802849835cbffc4342cfc, type: 3}
+--- !u!114 &7099316620438376254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4084499211124809556}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0db359481445997489767d60736902bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _intNames: []
+  _floatNames: []
+  _boolNames: []
+  _vector2Names: []
+  _stringNames:
+  - playerName
+  _values_to_init_on_start: []
