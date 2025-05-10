@@ -10,7 +10,7 @@ public class spawn_powerup : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(SpawnPowerup(Random.Range(5f, 15f)));
+        StartCoroutine(SpawnPowerup(Random.Range(10f, 20f)));
     }
 
     private IEnumerator SpawnPowerup(float waitTime)

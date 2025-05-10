@@ -6,7 +6,10 @@ public class powerup_collide : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        pu.ApplyPowerup(other.gameObject);
-        Destroy(this.gameObject);
+        if(other.CompareTag("Player"))
+        {
+            pu.ApplyPowerup(other.gameObject);
+            Destroy(this.gameObject);
+        }
     }
 }
