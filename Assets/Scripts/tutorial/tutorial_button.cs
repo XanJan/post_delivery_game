@@ -17,20 +17,18 @@ public class tutorial_button : interactable_object
             _obvc.InvokeBool("isActive",true);
             _off.SetActive(false);
             _on.SetActive(true);
-            if(context.TryGetComponent<PlayerInput>(out var res))
-            {
-                res.actions["interact"].canceled += HandleCancel;
-            }
+            context.GetPlayerObservableValueCollection().GetObservableBool("InteractCancel").UpdateValue+=HandleCancel;
+            
         }
     }
 
-    public void HandleCancel(InputAction.CallbackContext context)
+    public void HandleCancel(observable_value<bool> context)
     {
         _garageDoor.StopMoving();
         _obvc.InvokeBool("isActive",false);
         _off.SetActive(true);
         _on.SetActive(false);
-        context.action.canceled-=HandleCancel;
+        context.UpdateValue-=HandleCancel;
     }
     void Start()
     {

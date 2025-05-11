@@ -32,11 +32,9 @@ public class pickup_interactable : interactable_object
         // Start timer
         _inThrowSequence = true;
         // Add Release E callback that triggers OnRelease
-        if(context.TryGetComponent<PlayerInput>(out var res))
-        {
-            res.actions["interact"].canceled += HandleInteractCancel;
-            AllowInteractions=false;
-        }
+        context.GetPlayerObservableValueCollection().GetObservableBool("InteractCanceled").UpdateValue+=HandleInteractCancel;
+        AllowInteractions=false;
+        
         // OnRelease: If timer >= 0.5seconds, multiply throw force by 4.(And trigger animation) ; Drop
         
     }
@@ -46,7 +44,7 @@ public class pickup_interactable : interactable_object
         Drop(context);
     }
 
-    public void HandleInteractCancel(InputAction.CallbackContext callback)
+    public void HandleInteractCancel(observable_value<bool> obv)
     {
 
 
@@ -61,10 +59,7 @@ public class pickup_interactable : interactable_object
         foreach(interactor context in _activeThrowingInteractors)
         {
             Drop(context);
-            if(context.TryGetComponent<PlayerInput>(out var res))
-            {
-                res.actions["interact"].canceled -= HandleInteractCancel;
-            }
+            obv.UpdateValue -= HandleInteractCancel;
         }
         _waitingToBeCanceled = new List<interactor>(_activeThrowingInteractors);
         _activeThrowingInteractors = new List<interactor>();

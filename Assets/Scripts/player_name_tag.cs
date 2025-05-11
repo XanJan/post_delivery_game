@@ -21,8 +21,8 @@ public class player_name_tag : MonoBehaviour
         _obvc.GetObservableString("playerName").UpdateValue-=HandleNameUpdate;
     }
 
-    public void HandleNameUpdate(string valueName, string name)
+    public void HandleNameUpdate(observable_value<string> context)
     {
-        _tmp.text = name;
+        _tmp.text = context.Value;
     }
 }

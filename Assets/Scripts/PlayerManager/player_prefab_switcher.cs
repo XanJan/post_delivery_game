@@ -1,6 +1,10 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+/// <summary>
+/// Handles the switching of player controller prefab each time a player joins.
+/// </summary>
 [RequireComponent(typeof(PlayerInputManager))]
 public class player_prefab_switcher : MonoBehaviour
 {
@@ -20,7 +24,8 @@ public class player_prefab_switcher : MonoBehaviour
             Debug.Log("Warning: Player prefab switcher is not initialized with any player prefabs to switch to. Players will join with the same prefab. On gameObject " + gameObject.name + ".");
         }
     }
-    public void NextPrefab()
+    
+    public void NextPrefab(PlayerInput playerInput)
     {
         if(_playerPrefabs.Count>0)
         {

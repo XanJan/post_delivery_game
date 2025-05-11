@@ -16,7 +16,7 @@ public class gate : MonoBehaviour
         foreach(button_interactable bi in _buttons)
         {
             _d.Add(bi,false);
-            bi.GetOBVC().GetObservableBool("isActive").UpdateValue += (name,b) => SetAndCheck(bi,b);
+            bi.GetOBVC().GetObservableBool("isActive").UpdateValue += cxt => SetAndCheck(bi,cxt.Value);
         }
         
     }

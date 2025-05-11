@@ -520,10 +520,10 @@ GameObject:
   - component: {fileID: 8607417997467479432}
   - component: {fileID: 5039714058677661449}
   - component: {fileID: 3431634817462232410}
-  - component: {fileID: 9051456166870169758}
-  - component: {fileID: 2337633991351450368}
+  - component: {fileID: 8717219278672803520}
   - component: {fileID: 7901286178603807775}
   - component: {fileID: 675003948274067448}
+  - component: {fileID: 259894391133689278}
   m_Layer: 0
   m_Name: player4_animated
   m_TagString: Player
@@ -609,37 +609,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!114 &9051456166870169758
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4891051678069208517}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  m_NotificationBehavior: 0
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents: []
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: Player
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
---- !u!114 &2337633991351450368
+--- !u!114 &8717219278672803520
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -655,7 +625,7 @@ MonoBehaviour:
   MaxInteractions: 1
   CanInteract: 1
   _rayCastFrom: {fileID: 7212090421212351475}
-  _playerInput: {fileID: 9051456166870169758}
+  _playerInput: {fileID: 0}
   _interactRange: 2
   _textMeshPro: {fileID: 8042376779363788422}
   _playerIdValueName: playerId
@@ -695,6 +665,21 @@ MonoBehaviour:
   _stringNames: []
   _values_to_init_on_start:
   - {fileID: 11400000, guid: 31d677b174660a3489b1aa57054acfc8, type: 2}
+--- !u!114 &259894391133689278
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4891051678069208517}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1426534de25c434295762817d5d2184, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _obvc: {fileID: 675003948274067448}
+  _moveSpeedBase: 5
+  PlayerName: Paul
 --- !u!1 &5268584452483073648
 GameObject:
   m_ObjectHideFlags: 0
@@ -755,7 +740,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  - {fileID: 4344241898654559105, guid: 5c108ac13dfe4054aa832915040a5713, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -799,8 +784,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Sample text
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5c108ac13dfe4054aa832915040a5713, type: 2}
+  m_sharedMaterial: {fileID: 4344241898654559105, guid: 5c108ac13dfe4054aa832915040a5713, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

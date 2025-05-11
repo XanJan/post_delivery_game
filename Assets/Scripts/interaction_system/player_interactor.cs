@@ -16,18 +16,23 @@ public class player_interactor : interactor
     [SerializeField] private string _nrOfInteractionsValueName = "interactions";
     [SerializeField] private string _nrOfWagonInteractionsValueName = "steerWagonInteractions";
     [SerializeField] private string _nrOfPackagesPickedUp = "packagesPickedUp";
-
+    private bool _firstEnable = true;
+    void Start()
+    {
+        Obvc.GetObservableBool("InteractStarted").UpdateValue+=HandleInteract;
+    }
     void OnEnable()
     {
-        _playerInput.actions["interact"].started += HandleInteract;
+        if(_firstEnable) _firstEnable=false;
+        else Obvc.GetObservableBool("InteractStarted").UpdateValue+=HandleInteract;
     }
 
     void OnDisable()
     {
-        _playerInput.actions["interact"].started -= HandleInteract;
+        Obvc.GetObservableBool("InteractStarted").UpdateValue-=HandleInteract;
     }
 
-    private void HandleInteract(InputAction.CallbackContext context)
+    private void HandleInteract(observable_value<bool> context)
     {
         Ray ray = new Ray(_rayCastFrom.position, _rayCastFrom.forward);
         if (Physics.Raycast(ray, out RaycastHit hit, _interactRange))

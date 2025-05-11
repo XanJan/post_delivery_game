@@ -98,9 +98,9 @@ public class tutorial_text : MonoBehaviour
         _queue.Add(s);
     }
 
-    public void HandleWagonFull(string name, bool b)
+    public void HandleWagonFull(observable_value<bool> context)
     {
-        if(b) 
+        if(context.Value) 
         {
             FastForward();
             if(_queue.Count!=0){OnQueueEmptyEvent+=ResetSpeed;OnQueueEmptyEvent+=DoWagonFullSequence;}
@@ -120,9 +120,9 @@ public class tutorial_text : MonoBehaviour
         OnQueueEmptyEvent += DisplayArrowButton;
         OnQueueEmptyEvent-=DoWagonFullSequence;
     }
-    public void HandleButtonActive(string name, bool b)
+    public void HandleButtonActive(observable_value<bool> context)
     {
-        if(b) 
+        if(context.Value) 
         {
             FastForward();
             if(_queue.Count>0){OnQueueEmptyEvent+=DoButtonActiveSequence;}
@@ -138,9 +138,9 @@ public class tutorial_text : MonoBehaviour
         OnQueueEmptyEvent-=DoButtonActiveSequence;
     }
 
-    public void HandlePlayerJoin(string name, int i)
+    public void HandlePlayerJoin(observable_value<int> context)
     {
-        if(i>0)
+        if(context.Value>0)
         {
             QueueString(_postEnter);
             QueueString(_missionDescription1);

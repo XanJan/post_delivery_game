@@ -18,19 +18,17 @@ public class computer_interactable : interactable_object
         submitEvent.AddListener(SubmitName);
         _field.onEndEdit = submitEvent;
         
-        if(context.TryGetComponent<PlayerInput>(out var playerInput))
-        {
-            playerInput.actions["interact"].canceled+=HandleInteractCancel;
-        }
+        
+        context.GetPlayerObservableValueCollection().GetObservableBool("InteractCanceled").UpdateValue+=HandleInteractCancel;
+
     }
-    public void HandleInteractCancel(InputAction.CallbackContext callbackContext)
+    public void HandleInteractCancel(observable_value<bool> context)
     {
-        if(_activeInteractors[0].TryGetComponent<PlayerInput>(out var playerInput))
-        {
-            playerInput.SwitchCurrentActionMap("UI");
-            playerInput.actions["interact"].canceled-=HandleInteractCancel;
-        }
+        controller_instance_manager.Instance.SwitchCurrentActionMap("UI");
+        context.UpdateValue-=HandleInteractCancel;
     }
+
+    
 
 
 
@@ -40,10 +38,7 @@ public class computer_interactable : interactable_object
         Time.timeScale=1;
         _panel.SetActive(false);
         _field.gameObject.SetActive(false);
-        if(_activeInteractors[0].TryGetComponent<PlayerInput>(out var playerInput))
-        {
-            playerInput.SwitchCurrentActionMap("Player");
-        }
+        controller_instance_manager.Instance.SwitchCurrentActionMap("Player");
         bool b = _activeInteractors[0].TryInteractEnd();
     }
 

@@ -69,10 +69,12 @@ public class wagon_controller : MonoBehaviour{
         player.transform.rotation = seatPosition.rotation;
 
         playerInputs[player] = Vector2.zero;
-        PlayerInput playerInput = player.GetComponent<PlayerInput>();
-        if(playerInput != null){
-            playerInput.actions["Move"].performed += ctx => UpdateInput(player, ctx.ReadValue<Vector2>());
-            playerInput.actions["Move"].canceled += ctx => UpdateInput(player, Vector2.zero);
+
+        
+        observable_value_collection playerObvc = player.GetComponent<observable_value_collection>();
+        if(playerObvc != null){
+            playerObvc.GetObservableVector2("MovePerformed").UpdateValue += ctx => UpdateInput(player, ctx.Value);
+            playerObvc.GetObservableVector2("MoveCanceled").UpdateValue += ctx => UpdateInput(player, Vector2.zero);
         }
     }
 

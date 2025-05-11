@@ -17,6 +17,7 @@ public class player_movement : MonoBehaviour
     private float _moveSpeedMultiplierPickup;
     private float _moveSpeedMultiplierEnvironment;
     private float _moveSpeedMultiplierOther;
+    private bool _firstEnable=true;
 
     private void Awake()
     {   
@@ -24,10 +25,10 @@ public class player_movement : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
         groundLayer = LayerMask.GetMask("Ground");
     }
-    public void OnUpdateMoveSpeedBase(string s,float f){_moveSpeedBase = f; }
-    public void OnUpdateMoveSpeedMultiplierPickup(string s,float f){_moveSpeedMultiplierPickup = f;}
-    public void OnUpdateMoveSpeedMultiplierEnvironment(string s,float f){_moveSpeedMultiplierEnvironment = f;}
-    public void OnUpdateMoveSpeedMultiplierOther(string s,float f){_moveSpeedMultiplierOther = f;}
+    public void OnUpdateMoveSpeedBase(observable_value<float> context){_moveSpeedBase = context.Value; }
+    public void OnUpdateMoveSpeedMultiplierPickup(observable_value<float> context){_moveSpeedMultiplierPickup = context.Value;}
+    public void OnUpdateMoveSpeedMultiplierEnvironment(observable_value<float> context){_moveSpeedMultiplierEnvironment = context.Value;}
+    public void OnUpdateMoveSpeedMultiplierOther(observable_value<float> context){_moveSpeedMultiplierOther = context.Value;}
 
 
     private void Start()
@@ -43,36 +44,65 @@ public class player_movement : MonoBehaviour
             _obvc.GetObservableFloat("moveSpeedMultiplierPickup").UpdateValue += OnUpdateMoveSpeedMultiplierPickup;
             _obvc.GetObservableFloat("moveSpeedMultiplierEnvironment").UpdateValue += OnUpdateMoveSpeedMultiplierEnvironment;
             _obvc.GetObservableFloat("moveSpeedMultiplierOther").UpdateValue += OnUpdateMoveSpeedMultiplierOther;
-            } catch(Exception e){Debug.Log("Error in getting observable values in player_movement, there may be missing values in the player's observable value collection.");}
-        }
-        var controls = playerInput.actions;
 
-        controls["Move"].performed += Move;
-        controls["Move"].canceled += MoveCanceled;
-        controls["Jump"].started += Jump;
+            _obvc.GetObservableVector2("MovePerformed").UpdateValue+=Move;
+            _obvc.GetObservableVector2("MoveCanceled").UpdateValue+=MoveCanceled;
+            _obvc.GetObservableBool("JumpStarted").UpdateValue+=Jump;
+            } catch(Exception){Debug.Log("Error in getting observable values in player_movement, there may be missing values in the player's observable value collection.");}
+        }
+    }
+    void OnEnable()
+    {
+        if(_firstEnable)
+        {
+            _firstEnable=false;
+        }
+        else
+        {
+            _obvc.GetObservableFloat("moveSpeedBase").UpdateValue += OnUpdateMoveSpeedBase;
+            _obvc.GetObservableFloat("moveSpeedMultiplierPickup").UpdateValue += OnUpdateMoveSpeedMultiplierPickup;
+            _obvc.GetObservableFloat("moveSpeedMultiplierEnvironment").UpdateValue += OnUpdateMoveSpeedMultiplierEnvironment;
+            _obvc.GetObservableFloat("moveSpeedMultiplierOther").UpdateValue += OnUpdateMoveSpeedMultiplierOther;
+
+            _obvc.GetObservableVector2("MovePerformed").UpdateValue+=Move;
+            _obvc.GetObservableVector2("MoveCanceled").UpdateValue+=MoveCanceled;
+            _obvc.GetObservableBool("JumpStarted").UpdateValue+=Jump;
+        }
+        
+    }
+    void OnDisable()
+    {
+        _obvc.GetObservableFloat("moveSpeedBase").UpdateValue -= OnUpdateMoveSpeedBase;
+        _obvc.GetObservableFloat("moveSpeedMultiplierPickup").UpdateValue -= OnUpdateMoveSpeedMultiplierPickup;
+        _obvc.GetObservableFloat("moveSpeedMultiplierEnvironment").UpdateValue -= OnUpdateMoveSpeedMultiplierEnvironment;
+        _obvc.GetObservableFloat("moveSpeedMultiplierOther").UpdateValue -= OnUpdateMoveSpeedMultiplierOther;
+
+        _obvc.GetObservableVector2("MovePerformed").UpdateValue-=Move;
+        _obvc.GetObservableVector2("MoveCanceled").UpdateValue-=MoveCanceled;
+        _obvc.GetObservableBool("JumpStarted").UpdateValue-=Jump;
     }
 
     // Capture the move input when it's pressed
-    private void Move(InputAction.CallbackContext context)
+    private void Move(observable_value<Vector2> context)
     {
         if(_obvc!=null)
         {
-            _obvc.InvokeFloat(_movespeedName,context.ReadValue<Vector2>().magnitude);
+            _obvc.InvokeFloat(_movespeedName,context.Value.magnitude);
                     
         }
          
-        moveInput = context.ReadValue<Vector2>();
+        moveInput = context.Value;
          
     }
 
     // Reset the input when the move action is canceled (button release)
-    private void MoveCanceled(InputAction.CallbackContext context)
+    private void MoveCanceled(observable_value<Vector2> context)
     {
         if(_obvc!=null){_obvc.InvokeFloat(_movespeedName,0f);}
          moveInput = Vector2.zero;
     }
 
-    private void Jump(InputAction.CallbackContext context)
+    private void Jump(observable_value<bool> context)
     {
         if (isGrounded)
         {

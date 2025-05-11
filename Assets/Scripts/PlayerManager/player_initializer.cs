@@ -6,7 +6,7 @@ public class player_initializer : MonoBehaviour
 {
     [SerializeField] observable_value_collection _obvc;
     [SerializeField] float _moveSpeedBase=5f;
-    [SerializeField] string _playerName="Paul";
+    public string PlayerName="Paul";
     void Awake()
     {
         if(_obvc==null && TryGetComponent<observable_value_collection>(out var res)) _obvc = res;
@@ -19,7 +19,7 @@ public class player_initializer : MonoBehaviour
             _obvc.InvokeFloat("moveSpeedMultiplierPickup",1);
             _obvc.InvokeFloat("moveSpeedMultiplierEnvironment",1);
             _obvc.InvokeFloat("moveSpeedMultiplierOther",1);
-            _obvc.InvokeString("playerName", "Paul");
+            _obvc.InvokeString("playerName", PlayerName);
         }
         else{Debug.Log("Warning: observable value collection not found in player_initializer. Player may not be initialized with correct values.");}
     }

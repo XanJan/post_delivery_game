@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 /// <summary>
 /// Keeps track of controller instances. Set the controller position to spawn location on scene load
-/// A spawn location is added to a scene by adding a gameobject named "Spawn" in scene root.
+/// A spawn location is added to a scene by adding a gameobject with the "Respawn" tag in scene root.
 /// </summary>
 [RequireComponent(typeof(PlayerInputManager))]
 [RequireComponent(typeof(observable_value_collection))]
@@ -19,43 +19,42 @@ public class controller_instance_manager : singleton_persistent<controller_insta
     /// Event handler for when players join with a new controller.
     /// </summary>
     /// <param name="inp">Joined PlayerInput</param>
-    private void OnPlayerJoinedHandler(PlayerInput inp)
+    public void OnPlayerJoinedHandler(PlayerInput inp)
     {
         // Keep track of players
         _controllerInstances.Add(inp.gameObject);
         _obvc.InvokeInt("numberOfPlayers",_controllerInstances.Count);
         // Apply offset to players when spawning so they dont occupy the same space
         GameObject temp;
-        inp.transform.position = (temp = GameObject.FindWithTag("Spawn"))==null? new Vector3(_controllerInstances.Count * 0.8f,0,0) : 
+        inp.transform.position = (temp = GameObject.FindWithTag("Respawn"))==null? new Vector3(_controllerInstances.Count * 0.8f,0,0) : 
                 temp.transform.position + new Vector3(_controllerInstances.Count*0.8f,0,0);  
     }
 
-    new void Awake()
+    public void OnPlayerLeaveHandler(PlayerInput inp)
     {
-        base.Awake();
-        if(_playerInputManager==null&&TryGetComponent<PlayerInputManager>(out var res)) _playerInputManager = res;
-        if(_playerInputManager==null&&TryGetComponent<observable_value_collection>(out var res2)) _obvc = res2;
-    }
-    void OnEnable()
-    {
-        _playerInputManager.onPlayerJoined+=OnPlayerJoinedHandler;
-        SceneManager.sceneLoaded += OnSceneLoad;
-    }
-    void OnDisable()
-    {
-        _playerInputManager.onPlayerJoined-=OnPlayerJoinedHandler;
-        SceneManager.sceneLoaded -= OnSceneLoad;    
+        _controllerInstances.Remove(inp.gameObject);
+        _obvc.InvokeInt("numberOfPlayers",_controllerInstances.Count);
     }
 
-    public void OnSceneLoad(Scene s, LoadSceneMode m)
+    public bool TryGetControllerSpawnPos(controller_input controller, out Vector3 spawnPos)
     {
-        GameObject temp;
-        Vector3 spawnPos = (temp=GameObject.FindWithTag("Spawn"))==null? Vector3.zero : temp.transform.position;
-        float f = 0;
-        foreach(GameObject p in _controllerInstances)
+        spawnPos = GameObject.FindWithTag("Respawn")==null?Vector3.zero:GameObject.FindWithTag("Respawn").transform.position;
+        for(int i = 0 ; i < _controllerInstances.Count ; i++)
         {
-            f+=0.8f;
-            p.transform.position = spawnPos + new Vector3(f,0,0);
+            if(controller.gameObject == _controllerInstances[i]) {spawnPos += new Vector3(1f*i,0,0); return true;}
+        }
+        
+        if(spawnPos!=null){spawnPos += new Vector3(1f*_controllerInstances.Count,0,0); return true;}
+        else return false;
+    }
+    public void SwitchCurrentActionMap(string s)
+    {
+        foreach(GameObject go in _controllerInstances)
+        {
+            if(go.TryGetComponent<PlayerInput>(out var playerInput))
+            {
+                playerInput.SwitchCurrentActionMap(s);
+            }
         }
     }
 }
