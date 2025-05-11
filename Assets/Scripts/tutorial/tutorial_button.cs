@@ -17,7 +17,7 @@ public class tutorial_button : interactable_object
             _obvc.InvokeBool("isActive",true);
             _off.SetActive(false);
             _on.SetActive(true);
-            context.GetPlayerObservableValueCollection().GetObservableBool("InteractCancel").UpdateValue+=HandleCancel;
+            context.GetPlayerObservableValueCollection().GetObservableBool("InteractCanceled").UpdateValue+=HandleCancel;
             
         }
     }

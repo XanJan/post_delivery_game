@@ -78,6 +78,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerInput: {fileID: 7488731907213917672}
   _playerPrefab: {fileID: 4891051678069208517, guid: 62fa9d9540a9ab1429e2c6f442d7ba96, type: 3}
+  _interactButtonKeyboard: E
+  _interactButtonGamepad: B
 --- !u!114 &991370954414690792
 MonoBehaviour:
   m_ObjectHideFlags: 0
