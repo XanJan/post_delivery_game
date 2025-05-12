@@ -16,6 +16,8 @@ TagManager:
   - StageColliders
   - Hedge
   - DeliveryZones
+  - Timer
+  - BigPackage
   layers:
   - Default
   - TransparentFX

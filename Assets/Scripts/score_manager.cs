@@ -17,9 +17,10 @@ public class score_manager : MonoBehaviour
         }
     }
 
-    public void AddScore()
+    public void AddScore(int point)
     {
-        this.totalPackageScore++;
+        this.totalPackageScore += point;
         Debug.Log("Total Package Score: " + totalPackageScore);
     }
+
 }

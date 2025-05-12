@@ -10,10 +10,18 @@ public class delivery_zone : MonoBehaviour
 {
     private HashSet<GameObject> detectedPackages = new HashSet<GameObject>();
     private Renderer areaRenderer;
+    int yOffset = 0;
+    float lastYPos;
     public Color red = Color.red;
     public Color green = Color.green;
     public int maxPackages = 5;
     public TextMeshPro textDisplay;
+    private enum packageType
+    {
+        small,
+        big
+    }
+
     /// <summary>
     /// The points where the dropped off packages should appear. 
     /// </summary>
@@ -113,13 +121,23 @@ public class delivery_zone : MonoBehaviour
     }
 
     void OnTriggerEnter(Collider other){
-        if(other.TryGetComponent<pickup_interactable>(out var res))
+        if (other.TryGetComponent<pickup_interactable>(out var res))
         {
-            if(res.GetInteractors().Length==0) // Noone is interacting with the package
+            if (res.GetInteractors().Length == 0) // Noone is interacting with the package
             {
-                TryConsumePackage(other.gameObject);
+                packageType package = packageType.small;
+                TryConsumePackage(other.gameObject, package);
             }
-        } 
+        }
+
+        else if (other.TryGetComponent<big_package_interactable>(out var beegRes))
+        {
+            if (beegRes.GetInteractors().Length == 0)
+            {
+                packageType package = packageType.big;
+                TryConsumePackage(other.gameObject, package);
+            }
+        }
     }
     /// <summary>
     /// If a player stands on the zone and the zone is not full, try to take a package 
@@ -127,21 +145,38 @@ public class delivery_zone : MonoBehaviour
     /// </summary>
     void OnTriggerStay(Collider other)
     {
-        if(other.TryGetComponent<player_interactor>(out var player))
+        if (other.TryGetComponent<player_interactor>(out var player))
         {
-            if(player.TryPeekInteraction(out var res))
+            if (player.TryPeekInteraction(out var res))
             {
-                switch(res)
+                switch (res)
                 {
                     case pickup_interactable:
-                    if(detectedPackages.Count < maxPackages && player.TryForceInteractEnd(null,out var top))
+                    if (detectedPackages.Count < maxPackages && player.TryForceInteractEnd(null, out var top))
                     {
-                        TryConsumePackage(top.gameObject);
+                        packageType package = packageType.small;
+                        TryConsumePackage (top.gameObject, package);
                     }
                     break;
                 }
+            }  
+        }
+        
+        else if (other.TryGetComponent<player_interactor>(out var beegPlayer))
+        {
+            if (player.TryPeekInteraction(out var beegRes))
+            {
+                switch (beegRes)
+                {
+                    case pickup_interactable:
+                        if (detectedPackages.Count < maxPackages && beegPlayer.TryForceInteractEnd(null, out var top))
+                        {
+                            packageType package = packageType.big;
+                            TryConsumePackage(top.gameObject, package);
+                        }
+                        break;
+                }
             }
-            
         }
     }
     /// <summary>
@@ -150,13 +185,23 @@ public class delivery_zone : MonoBehaviour
     /// full, change color and notify current game event.
     /// </summary>
     /// <param name="go">GameObject to "consume" and Destroy.</param>
-    private void TryConsumePackage(GameObject go)
+    private void TryConsumePackage(GameObject go, packageType pType)
     {
-        if(detectedPackages.Count < maxPackages && !detectedPackages.Contains(go))
+        if (detectedPackages.Count < maxPackages && !detectedPackages.Contains(go))
         {
-            float lastYPos = detectedPackages.Count > 0 ? (detectedPackages.Last().transform.localPosition.y + (detectedPackages.Last().TryGetComponent<BoxCollider>(out var collider2) ? collider2.size.y : 1) ) : 0;
+            lastYPos = (float)(0.5 * (detectedPackages.Count + yOffset));
             detectedPackages.Add(go);
-            score_manager.Instance.AddScore();
+            switch (pType)
+            {
+                case packageType.small:
+                    score_manager.Instance.AddScore(1);
+                    break;
+                case packageType.big:
+                    score_manager.Instance.AddScore(5);
+                    break;
+
+            }
+            
             UpdateText();
             if(detectedPackages.Count >= maxPackages && !isCompleted){
                 isCompleted = true;
@@ -174,18 +219,40 @@ public class delivery_zone : MonoBehaviour
                     catch(NullReferenceException){Debug.Log("Warning, game_event instance is null. Game events may not register properly.");}
                 }
             }
+            
             if (go != null) 
             {
                 go.transform.SetParent(transform);
-                go.transform.eulerAngles =new Vector3(0,new int[]{0,90,180,270}[detectedPackages.Count % 4],0);
+
+                //go.transform.eulerAngles =new Vector3(0,new int[]{0,90,180,270}[detectedPackages.Count % 4],0);
                 go.transform.localPosition = (_dropOffPoints!=null && _dropOffPoints.Count>0) ? 
                     _dropOffPoints[(detectedPackages.Count-1) % _dropOffPoints.Count].localPosition : 
                         new Vector3(new float[]{0.1f,0f,-0.1f,0f}[detectedPackages.Count%4], lastYPos ,new float[]{0f,0.1f,0f,-0.1f}[detectedPackages.Count%4]);
                 if(go.TryGetComponent<interactable_object>(out var interactable))
+                go.transform.eulerAngles = new Vector3(0,new int[]{0, 90, 180, 270}[detectedPackages.Count % 4], 0);
+                go.transform.localScale = new Vector3(4, 1, 4);
+                switch (pType)
+                {
+                    case packageType.small:
+                        go.transform.localPosition = (_dropOffPoints != null && _dropOffPoints.Count > 0) ?
+                        _dropOffPoints[detectedPackages.Count - 1 % _dropOffPoints.Count].localPosition :
+                        new Vector3(new float[] { 0.1f, 0f, -0.1f, 0f }[detectedPackages.Count % 4], lastYPos, new float[] { 0f, 0.1f, 0f, -0.1f }[detectedPackages.Count % 4]);
+                        break;
+                    case packageType.big:
+                        UpdateYPos();
+                        go.transform.localPosition = new Vector3(+0, +lastYPos, +0);
+                        yOffset += 1;
+                        break;
+                }
+                
+                
+                    
+                if (go.TryGetComponent<interactable_object>(out var interactable))
                 {
                     interactable.AllowInteractions = false;
                 }
-                if(go.TryGetComponent<Rigidbody>(out var rb))
+                
+                if (go.TryGetComponent<Rigidbody>(out var rb))
                 {
                     rb.isKinematic = true;
                 }
@@ -199,6 +266,12 @@ public class delivery_zone : MonoBehaviour
         if(textDisplay != null){
             textDisplay.text = $"{detectedPackages.Count}/{maxPackages}";
         }
+    }
+
+    private void UpdateYPos()
+    {
+        yOffset += 0;
+        lastYPos = (float)(0.5 * (detectedPackages.Count + yOffset));
     }
 
     //way to sum total score in a gamehandler (add way of counting scores for different types of packages)
