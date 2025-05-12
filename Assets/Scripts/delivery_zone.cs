@@ -1,9 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System;
-using Unity.Mathematics;
 using System.Linq;
 
 public class delivery_zone : MonoBehaviour
@@ -111,5 +109,13 @@ public class delivery_zone : MonoBehaviour
         else{ 
             return 0;
         }
+    }
+
+    public int GetMaxPackages(){
+        return maxPackages;
+    }
+
+    public int GetCurrentPackages(){
+        return detectedPackages.Count;
     }
 }
