@@ -57,5 +57,15 @@ public class wagon_storage_interactable : interactable_object
                 typeof(interactable_object).ToString()+" component to the package gameobject '" + package.name +"'.");}
             }
         }
+    }
+
+    void OnTriggerEnter(Collider other){
+        if(!other.isTrigger &&other.TryGetComponent<pickup_interactable>(out var res))
+        {
+            if(res.GetInteractors().Length==0 && res.AllowInteractions) // Noone is interacting with the package
+            {
+                _wagon.AddPackage(other.gameObject);
+            }
+        } 
     }   
 }

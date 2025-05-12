@@ -24,7 +24,7 @@ public class observable_value<T>
     /// </summary>
     /// <param name="name">String name of value, used for identification.</param>
     /// <param name="v">New value.</param>
-    public delegate void UpdateValueDelegate(string name, T v);
+    public delegate void UpdateValueDelegate(observable_value<T> context);
     /// <summary>
     /// Triggers whenever value gets updated. (Even if it is unchanged!)
     /// </summary>
@@ -43,7 +43,11 @@ public class observable_value<T>
     /// <param name="v"></param>
     public void InvokeEvent(T v)
     {
-        UpdateValue?.Invoke(Name, v);
         Value = v;
-    }    
+        UpdateValue?.Invoke(this);
+    }
+    public void Reset()
+    {
+        UpdateValue=null;
+    }
 }
