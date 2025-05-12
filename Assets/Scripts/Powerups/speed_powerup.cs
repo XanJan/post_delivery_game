@@ -16,10 +16,10 @@ public class speed_powerup : powerup
     private IEnumerator TemporarySpeedBoost(player_movement target)
     {
         //obvc.InvokeFloat("moveSpeedMultiplierOther", NEWVALUE); 
-        target.GetComponent<observable_value_collection>().InvokeFloat("moveSpeedMultiplierOther", speedMultiplier);
+        target.GetComponent<observable_value_collection>().InvokeFloat("moveSpeedBase", speedMultiplier);
         //target.OnUpdateMoveSpeedBase(speedMultiplier);
         yield return new WaitForSeconds(time);
-        target.GetComponent<observable_value_collection>().InvokeFloat("moveSpeedMultiplierOther", 5f);
+        target.GetComponent<observable_value_collection>().InvokeFloat("moveSpeedBase", 5f);
         //target.OnUpdateMoveSpeedBase(5f); // Reset to normal speed
     }
 }
