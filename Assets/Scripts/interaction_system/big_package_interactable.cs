@@ -10,20 +10,20 @@ public class big_package_interactable : interactable_object
     [SerializeField] private Transform _point1;
     [SerializeField] private Transform _point2;
     [SerializeField] private Transform _point3;
-    [SerializeField] private Transform _point4; 
+    [SerializeField] private Transform _point4;
     [SerializeField] private float _pickupWeight = 0;
     [SerializeField] private BoxCollider _collider;
     [SerializeField] private Rigidbody _rb;
     private GameObject[] _spots = new GameObject[4];
-    [SerializeField]private Vector3[] _colliderSizes = new Vector3[] { new Vector3(1,1,1),new Vector3(1,2,2),new Vector3(1,2,3),new Vector3(2,2,3),new Vector3(3,2,3)};
-    [SerializeField]private Vector3[] _colliderOffsets = new Vector3[] {new Vector3(0,0,0),new Vector3(0,0,-0.5f),new Vector3(0,0,0),new Vector3(-0.5f,0,0),new Vector3(0,0,0)};
-    private Dictionary<GameObject,Vector2> _playerMovementInputs = new Dictionary<GameObject, Vector2>();
-    private Dictionary<GameObject,observable_value<Vector2>.UpdateValueDelegate> _activePerformedCallbacks;
-    private Dictionary<GameObject,observable_value<Vector2>.UpdateValueDelegate> _activeCanceledCallbacks;
+    [SerializeField] private Vector3[] _colliderSizes = new Vector3[] { new Vector3(1, 1, 1), new Vector3(1, 2, 2), new Vector3(1, 2, 3), new Vector3(2, 2, 3), new Vector3(3, 2, 3) };
+    [SerializeField] private Vector3[] _colliderOffsets = new Vector3[] { new Vector3(0, 0, 0), new Vector3(0, 0, -0.5f), new Vector3(0, 0, 0), new Vector3(-0.5f, 0, 0), new Vector3(0, 0, 0) };
+    private Dictionary<GameObject, Vector2> _playerMovementInputs = new Dictionary<GameObject, Vector2>();
+    private Dictionary<GameObject, observable_value<Vector2>.UpdateValueDelegate> _activePerformedCallbacks = new Dictionary<GameObject, observable_value<Vector2>.UpdateValueDelegate>();
+    private Dictionary<GameObject, observable_value<Vector2>.UpdateValueDelegate> _activeCanceledCallbacks = new Dictionary<GameObject, observable_value<Vector2>.UpdateValueDelegate>();
     protected override void OnInteractStart(interactor context)
     {
         // Add movement
-        _playerMovementInputs.Add(context.gameObject,Vector2.zero);
+        _playerMovementInputs.Add(context.gameObject, Vector2.zero);
 
         // Find player hands
         Transform playerHands = null;
@@ -36,47 +36,47 @@ public class big_package_interactable : interactable_object
             }
         }
         _collider.size = _colliderSizes[_activeInteractors.Count];
-        _collider.center =_colliderOffsets[_activeInteractors.Count];
+        _collider.center = _colliderOffsets[_activeInteractors.Count];
         // First player, packet to player
-        if(_activeInteractors.Count == 1)
+        if (_activeInteractors.Count == 1)
         {
             transform.rotation = context.transform.rotation;
-            if(playerHands!=null){transform.position = playerHands.position - (_point1.position - transform.position);}
-            else{transform.position = context.transform.position;}
+            if (playerHands != null) { transform.position = playerHands.position - (_point1.position - transform.position); }
+            else { transform.position = context.transform.position; }
             _spots[0] = context.gameObject;
         }
-        else if(_spots[0]==null)
+        else if (_spots[0] == null)
         {
             // Second  player, player to  packet
             context.transform.eulerAngles = transform.eulerAngles;
-            if(playerHands!=null){context.transform.position = transform.position + (_point1.position - transform.position) - (playerHands.position-context.transform.position);}
-            else{context.transform.position = transform.position;}
+            if (playerHands != null) { context.transform.position = transform.position + (_point1.position - transform.position) - (playerHands.position - context.transform.position); }
+            else { context.transform.position = transform.position; }
             _spots[0] = context.gameObject;
         }
-        else if(_spots[1]==null)
+        else if (_spots[1] == null)
         {
             // Second  player, player to  packet
             context.transform.eulerAngles = transform.eulerAngles + 180f * Vector3.up;
-            if(playerHands!=null){context.transform.position = transform.position + (_point2.position - transform.position) - (playerHands.position-context.transform.position);}
-            else{context.transform.position = transform.position;}
+            if (playerHands != null) { context.transform.position = transform.position + (_point2.position - transform.position) - (playerHands.position - context.transform.position); }
+            else { context.transform.position = transform.position; }
             _spots[1] = context.gameObject;
         }
-         else if(_spots[2]==null)
+        else if (_spots[2] == null)
         {
             // Third  player, player to  packet
             context.transform.eulerAngles = transform.eulerAngles + 90f * Vector3.up;
-            if(playerHands!=null){context.transform.position = transform.position + (_point3.position - transform.position) - (playerHands.position-context.transform.position);}
-            else{context.transform.position = transform.position;}
+            if (playerHands != null) { context.transform.position = transform.position + (_point3.position - transform.position) - (playerHands.position - context.transform.position); }
+            else { context.transform.position = transform.position; }
             _spots[2] = context.gameObject;
         }
-        else if(_spots[3]==null)
+        else if (_spots[3] == null)
         {
             // Third  player, player to  packet
             context.transform.eulerAngles = transform.eulerAngles - 90f * Vector3.up;
-            if(playerHands!=null){context.transform.position = transform.position + (_point4.position - transform.position) - (playerHands.position-context.transform.position);}
-            else{context.transform.position = transform.position;}
+            if (playerHands != null) { context.transform.position = transform.position + (_point4.position - transform.position) - (playerHands.position - context.transform.position); }
+            else { context.transform.position = transform.position; }
             _spots[3] = context.gameObject;
-        } 
+        }
         // Set constraints
         _rb.constraints = RigidbodyConstraints.FreezeRotation;
 
@@ -85,128 +85,146 @@ public class big_package_interactable : interactable_object
 
         // Set ignore collisions
         Collider[] colls = context.GetComponents<Collider>();
-        if(colls!=null)
+        if (colls != null)
         {
-            foreach(Collider col in colls)
+            foreach (Collider col in colls)
             {
-                Physics.IgnoreCollision(col, _collider,true);
+                Physics.IgnoreCollision(col, _collider, true);
             }
         }
         // Set player rb to iskinematic
-        if(context.TryGetComponent<Rigidbody>(out var playerRb))
+        if (context.TryGetComponent<Rigidbody>(out var playerRb))
         {
             playerRb.isKinematic = true;
         }
         // Invoke player holding package bool to true, set movespeed.
         observable_value_collection obvc = context.GetPlayerObservableValueCollection();
-        if(obvc!=null)
+        if (obvc != null)
         {
             try
             {
-                obvc.InvokeBool("holdingPackage",true);
-                obvc.InvokeFloat("moveSpeedMultiplierPickup",1/(_pickupWeight+1)); // Slow down player relative to weight
-            } catch{} // Do nothing on exception
+                obvc.InvokeBool("holdingPackage", true);
+                obvc.InvokeFloat("moveSpeedMultiplierPickup", 1 / (_pickupWeight + 1)); // Slow down player relative to weight
+            }
+            catch { } // Do nothing on exception
         }
         // Disable player movement
         player_movement playerMovement = context.GetComponent<player_movement>();
-        if(playerMovement != null){ 
+        if (playerMovement != null)
+        {
             playerMovement.enabled = false;
         }
         // Enable package movement
-        observable_value<Vector2>.UpdateValueDelegate actionMovePerformed = cxt => HandleMovementPerformed(context.gameObject,cxt.Value);
+        observable_value<Vector2>.UpdateValueDelegate actionMovePerformed = cxt => HandleMovementPerformed(context.gameObject, cxt.Value);
         observable_value<Vector2>.UpdateValueDelegate actionMoveCanceled = cxt => HandleMovementCanceled(context.gameObject);
-        _activePerformedCallbacks.Add(gameObject,actionMovePerformed);
-        _activeCanceledCallbacks.Add(gameObject,actionMoveCanceled);
-        context.GetPlayerObservableValueCollection().GetObservableVector2("MovePerformed").UpdateValue+=actionMovePerformed;
-        context.GetPlayerObservableValueCollection().GetObservableVector2("MovePerformed").UpdateValue+=actionMoveCanceled;
+        _activePerformedCallbacks.Add(context.gameObject, actionMovePerformed);
+        _activeCanceledCallbacks.Add(context.gameObject, actionMoveCanceled);
+        context.GetPlayerObservableValueCollection().GetObservableVector2("MovePerformed").UpdateValue += actionMovePerformed;
+        context.GetPlayerObservableValueCollection().GetObservableVector2("MoveCanceled").UpdateValue += actionMoveCanceled;
     }
 
     protected override void OnInteractEnd(interactor context)
     {
         // Update collider size
         _collider.size = _colliderSizes[_activeInteractors.Count];
-        _collider.center =_colliderOffsets[_activeInteractors.Count];
+        _collider.center = _colliderOffsets[_activeInteractors.Count];
         // Remove input
         _playerMovementInputs.Remove(context.gameObject);
         // Set player parent to null and enable DontDestroyOnLoad again
         context.transform.SetParent(null);
-        DontDestroyOnLoad(context);
+
         // Enable collisions
         Collider[] colls = context.GetComponents<Collider>();
-        if(colls!=null)
+        if (colls != null)
         {
-            foreach(Collider col in colls)
+            foreach (Collider col in colls)
             {
-                Physics.IgnoreCollision(_collider,col,false);
+                Physics.IgnoreCollision(_collider, col, false);
             }
         }
         // Set player rb to not be kinematic anymore
-        if(context.TryGetComponent<Rigidbody>(out var playerRb))
+        if (context.TryGetComponent<Rigidbody>(out var playerRb))
         {
             playerRb.isKinematic = false;
         }
         // If it was the last player to exit, reset constraints.
-        if(_activeInteractors.Count == 0)
+        if (_activeInteractors.Count == 0)
         {
-            _rb.constraints = RigidbodyConstraints.None;  
+            _rb.constraints = RigidbodyConstraints.None;
+        }
+
+        // Enable player movement
+        player_movement playerMovement = context.GetComponent<player_movement>();
+        if (playerMovement != null)
+        {
+            playerMovement.enabled = true;
         }
         // Invoke player holding package bool to true, reset movespeed.
         observable_value_collection obvc = context.GetPlayerObservableValueCollection();
-        if(obvc!=null)
+        if (obvc != null)
         {
             try
             {
-                obvc.InvokeBool("holdingPackage",false); 
-                obvc.InvokeFloat("moveSpeedMultiplierPickup",1); // reset movespeed
-            } catch{} // Do nothing on exception
-            
-        }
-        // Enable player movement
-        player_movement playerMovement = context.GetComponent<player_movement>();
-        if(playerMovement != null){ 
-            playerMovement.enabled = true;
+                obvc.InvokeBool("holdingPackage", false);
+                obvc.InvokeFloat("moveSpeedMultiplierPickup", 1); // reset movespeed
+            }
+            catch { } // Do nothing on exception
+
         }
         // Reset spot
-        for(int i = 0 ; i < 4 ; i++)
+        for (int i = 0; i < 4; i++)
         {
-            if(_spots[i]==context.gameObject){_spots[i]=null;}
+            if (_spots[i] == context.gameObject) { _spots[i] = null; }
         }
-        try{
-            observable_value<Vector2>.UpdateValueDelegate actionMovePerformed = _activePerformedCallbacks[gameObject];
-            observable_value<Vector2>.UpdateValueDelegate actionMoveCanceled = _activeCanceledCallbacks[gameObject];
-            context.GetPlayerObservableValueCollection().GetObservableVector2("MovePerformed").UpdateValue-=actionMovePerformed;
-            context.GetPlayerObservableValueCollection().GetObservableVector2("MovePerformed").UpdateValue-=actionMoveCanceled;
-        }catch{Debug.Log("Warning, failed to unsubscribe from movement events on big package.");}
-        
+        try
+        {
+
+            observable_value<Vector2>.UpdateValueDelegate actionMovePerformed = _activePerformedCallbacks[context.gameObject];
+
+            observable_value<Vector2>.UpdateValueDelegate actionMoveCanceled = _activeCanceledCallbacks[context.gameObject];
+
+            context.GetPlayerObservableValueCollection().GetObservableVector2("MovePerformed").UpdateValue -= actionMovePerformed;
+
+            context.GetPlayerObservableValueCollection().GetObservableVector2("MoveCanceled").UpdateValue -= actionMoveCanceled;
+
+            _activePerformedCallbacks.Remove(context.gameObject);
+            _activeCanceledCallbacks.Remove(context.gameObject);
+        }
+        catch { Debug.Log("Warning, failed to unsubscribe from movement events on big package."); }
+
     }
     void FixedUpdate()
     {
-        if(_playerMovementInputs.Count>0)
+        if (_playerMovementInputs.Count > 0)
         {
             Vector2 acc = Vector2.zero;
-            foreach(KeyValuePair<GameObject,Vector2> kvp in _playerMovementInputs)
+            foreach (KeyValuePair<GameObject, Vector2> kvp in _playerMovementInputs)
             {
-                
-                if(kvp.Key.TryGetComponent<observable_value_collection>(out var res))
+
+                if (kvp.Key.TryGetComponent<observable_value_collection>(out var res))
                 {
-                    try{
-                        acc += kvp.Value * res.GetObservableFloat("moveSpeedBase").Value * 
-                            res.GetObservableFloat("moveSpeedMultiplierPickup").Value * 
-                                res.GetObservableFloat("moveSpeedMultiplierEnvironment").Value * 
+                    try
+                    {
+                        acc += kvp.Value * res.GetObservableFloat("moveSpeedBase").Value *
+                            res.GetObservableFloat("moveSpeedMultiplierPickup").Value *
+                                res.GetObservableFloat("moveSpeedMultiplierEnvironment").Value *
                                     res.GetObservableFloat("moveSpeedMultiplierOther").Value;
-                    }catch{acc += kvp.Value;}
-                    
-                } else acc += kvp.Value; 
+                        res.InvokeFloat("moveSpeed", kvp.Value.magnitude);
+                    }
+                    catch { acc += kvp.Value; }
+
+                }
+                else acc += kvp.Value;
             }
-            Vector3 mov = new Vector3(acc.x,0,acc.y);
+            Vector3 mov = new Vector3(acc.x, 0, acc.y);
             _rb.MovePosition(_rb.position + (mov * Time.fixedDeltaTime));
             // Freeze position when not moving. (to prevent unwanted movement applied by mysterious forces)
-            if(_activeInteractors.Count>0 && mov.magnitude==0)
+            if (_activeInteractors.Count > 0 && mov.magnitude == 0)
             {
                 _rb.constraints = RigidbodyConstraints.FreezeAll & ~RigidbodyConstraints.FreezePositionY;
-            } 
+            }
             else // Players are interacting, and moving
-            { 
+            {
                 _rb.constraints = RigidbodyConstraints.FreezeRotation;
             }
         }
@@ -214,10 +232,10 @@ public class big_package_interactable : interactable_object
 
     public void HandleMovementPerformed(GameObject player, Vector2 movement)
     {
-        if(_playerMovementInputs.ContainsKey(player)){_playerMovementInputs[player] = movement.normalized;}
+        if (_playerMovementInputs.ContainsKey(player)) { _playerMovementInputs[player] = movement.normalized; }
     }
     public void HandleMovementCanceled(GameObject player)
     {
-        if(_playerMovementInputs.ContainsKey(player)){_playerMovementInputs[player] = Vector2.zero;}
+        if (_playerMovementInputs.ContainsKey(player)) { _playerMovementInputs[player] = Vector2.zero; }
     }
 }
