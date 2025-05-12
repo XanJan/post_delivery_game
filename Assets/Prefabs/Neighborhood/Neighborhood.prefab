@@ -1929,6 +1929,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 113f09f7e5854cf4b83b655a494952aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  neighborhoodId: 0
+  deliveryZonesParent: {fileID: 0}
 --- !u!1 &2342731216455579845
 GameObject:
   m_ObjectHideFlags: 0
@@ -2390,6 +2392,7 @@ MonoBehaviour:
   green: {r: 0, g: 1, b: 0, a: 1}
   maxPackages: 5
   textDisplay: {fileID: 0}
+  _dropOffPoints: []
 --- !u!1 &2722406173147556175
 GameObject:
   m_ObjectHideFlags: 0
@@ -3682,6 +3685,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 981453585259299285}
+  - component: {fileID: -8874304553860099420}
   m_Layer: 0
   m_Name: Neighborhood
   m_TagString: Untagged
@@ -3726,6 +3730,20 @@ Transform:
   - {fileID: 7375112418296514807}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-8874304553860099420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5005131794947634226}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 113f09f7e5854cf4b83b655a494952aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  neighborhoodId: 0
+  deliveryZonesParent: {fileID: 0}
 --- !u!1 &5012498303520335278
 GameObject:
   m_ObjectHideFlags: 0
@@ -4404,6 +4422,7 @@ MonoBehaviour:
   green: {r: 0, g: 1, b: 0, a: 1}
   maxPackages: 5
   textDisplay: {fileID: 0}
+  _dropOffPoints: []
 --- !u!1 &5774027571447313293
 GameObject:
   m_ObjectHideFlags: 0
@@ -4661,6 +4680,7 @@ MonoBehaviour:
   green: {r: 0, g: 1, b: 0, a: 1}
   maxPackages: 5
   textDisplay: {fileID: 0}
+  _dropOffPoints: []
 --- !u!1 &6132512517589852812
 GameObject:
   m_ObjectHideFlags: 0
@@ -6752,6 +6772,7 @@ MonoBehaviour:
   green: {r: 0, g: 1, b: 0, a: 1}
   maxPackages: 5
   textDisplay: {fileID: 0}
+  _dropOffPoints: []
 --- !u!1 &8150079100481249170
 GameObject:
   m_ObjectHideFlags: 0

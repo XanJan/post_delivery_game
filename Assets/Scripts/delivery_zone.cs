@@ -26,13 +26,100 @@ public class delivery_zone : MonoBehaviour
     /// The points where the dropped off packages should appear. 
     /// </summary>
     [SerializeField] private List<Transform> _dropOffPoints;
+    private neighborhood_manager _neighborhoodManager;
+    private bool isCompleted = false;
+    
     void Start(){
         areaRenderer = GetComponent<Renderer>();
         areaRenderer.material.color = red;   
         UpdateText();
+        
+        // Find the associated neighborhood manager
+        FindCorrectNeighborhoodManager();
     }
 
-    //when a package enters, count it and remove it from the word, turn green and stop when "full"
+    private void FindCorrectNeighborhoodManager()
+    {
+        // find namespace containing name "DELIVERY ZONES"
+        Transform deliveryZonesParent = null;
+        Transform current = transform.parent;
+        
+        // find "DELIVERY ZONES"
+        while (current != null)
+        {
+            if (current.name.Contains("DELIVERY ZONES"))
+            {
+                deliveryZonesParent = current;
+                break;
+            }
+            current = current.parent;
+        }
+        
+        // If found DELIVERY ZONES parent, go up one more level to find the neighborhood
+        if (deliveryZonesParent != null && deliveryZonesParent.parent != null)
+        {
+            // Try find neighborhood manager in the parent of DELIVERY ZONES
+            _neighborhoodManager = deliveryZonesParent.parent.GetComponent<neighborhood_manager>();
+            
+            // If not found there, search in the grandparent
+            if (_neighborhoodManager == null && deliveryZonesParent.parent.parent != null)
+            {
+                _neighborhoodManager = deliveryZonesParent.parent.parent.GetComponent<neighborhood_manager>();
+            }
+        }
+        
+        // If still not found, perform a more expensive search in the entire hierarchy upward
+        if (_neighborhoodManager == null)
+        {
+            current = transform;
+            while (current != null)
+            {
+                _neighborhoodManager = current.GetComponent<neighborhood_manager>();
+                if (_neighborhoodManager != null)
+                    break;
+                current = current.parent;
+            }
+        }
+        
+        // Final fallback - find neighborhood by closest proximity
+        if (_neighborhoodManager == null)
+        {
+            Debug.LogWarning($"Delivery zone {gameObject.name} couldn't find a neighborhood manager in its hierarchy. Trying to find by proximity...");
+            
+            // Get all neighborhood managers
+            neighborhood_manager[] managers = FindObjectsOfType<neighborhood_manager>();
+            if (managers.Length > 0)
+            {
+                float closestDistance = float.MaxValue;
+                foreach (neighborhood_manager manager in managers)
+                {
+                    float distance = Vector3.Distance(transform.position, manager.transform.position);
+                    if (distance < closestDistance)
+                    {
+                        closestDistance = distance;
+                        _neighborhoodManager = manager;
+                    }
+                }
+                
+                if (_neighborhoodManager != null)
+                {
+                    Debug.LogWarning($"Assigned delivery zone {gameObject.name} to neighborhood {_neighborhoodManager.GetNeighborhoodId()} by proximity (distance: {closestDistance})");
+                }
+            }
+        }
+        
+        if (_neighborhoodManager != null)
+        {
+            Debug.Log($"Delivery zone {gameObject.name} is associated with neighborhood {_neighborhoodManager.GetNeighborhoodId()}");
+            
+            _neighborhoodManager.RegisterDeliveryZone(this);
+        }
+        else
+        {
+            Debug.LogError($"Delivery zone {gameObject.name} could not be associated with any neighborhood manager!");
+        }
+    }
+
     void OnTriggerEnter(Collider other){
         if (other.TryGetComponent<pickup_interactable>(out var res))
         {
@@ -116,15 +203,32 @@ public class delivery_zone : MonoBehaviour
             }
             
             UpdateText();
-            if(detectedPackages.Count >= maxPackages){
+            if(detectedPackages.Count >= maxPackages && !isCompleted){
+                isCompleted = true;
                 areaRenderer.material.color = green;
-                try{game_events.current.PackageComplete();} 
-                catch(NullReferenceException){Debug.Log("Warning, game_event instance is null. Game events may not register properly.");}
+                
+                // IMPORTANT CHANGE: Directly notify only this zone's neighborhood manager
+                if (_neighborhoodManager != null)
+                {
+                    _neighborhoodManager.ZoneCompleted(this);
+                    Debug.Log($"Zone completed in neighborhood {_neighborhoodManager.GetNeighborhoodId()}");
+                }
+                else
+                {
+                    try{game_events.current.PackageComplete();} 
+                    catch(NullReferenceException){Debug.Log("Warning, game_event instance is null. Game events may not register properly.");}
+                }
             }
             
             if (go != null) 
             {
                 go.transform.SetParent(transform);
+
+                //go.transform.eulerAngles =new Vector3(0,new int[]{0,90,180,270}[detectedPackages.Count % 4],0);
+                go.transform.localPosition = (_dropOffPoints!=null && _dropOffPoints.Count>0) ? 
+                    _dropOffPoints[(detectedPackages.Count-1) % _dropOffPoints.Count].localPosition : 
+                        new Vector3(new float[]{0.1f,0f,-0.1f,0f}[detectedPackages.Count%4], lastYPos ,new float[]{0f,0.1f,0f,-0.1f}[detectedPackages.Count%4]);
+                if(go.TryGetComponent<interactable_object>(out var interactable))
                 go.transform.eulerAngles = new Vector3(0,new int[]{0, 90, 180, 270}[detectedPackages.Count % 4], 0);
                 go.transform.localScale = new Vector3(4, 1, 4);
                 switch (pType)
@@ -178,5 +282,21 @@ public class delivery_zone : MonoBehaviour
         else{ 
             return 0;
         }
+    }
+    
+    // Get the neighborhood ID this delivery zone belongs to
+    public int GetNeighborhoodId()
+    {
+        if (_neighborhoodManager != null)
+        {
+            return _neighborhoodManager.GetNeighborhoodId();
+        }
+        return -1; // Not associated with any neighborhood
+    }
+    
+    // Check if this delivery zone is completed
+    public bool IsCompleted()
+    {
+        return isCompleted;
     }
 }
