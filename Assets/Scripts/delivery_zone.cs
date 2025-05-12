@@ -228,9 +228,11 @@ public class delivery_zone : MonoBehaviour
                 go.transform.localPosition = (_dropOffPoints!=null && _dropOffPoints.Count>0) ? 
                     _dropOffPoints[(detectedPackages.Count-1) % _dropOffPoints.Count].localPosition : 
                         new Vector3(new float[]{0.1f,0f,-0.1f,0f}[detectedPackages.Count%4], lastYPos ,new float[]{0f,0.1f,0f,-0.1f}[detectedPackages.Count%4]);
+
                 if(go.TryGetComponent<interactable_object>(out var interactable))
                 go.transform.eulerAngles = new Vector3(0,new int[]{0, 90, 180, 270}[detectedPackages.Count % 4], 0);
                 go.transform.localScale = new Vector3(4, 1, 4);
+                interactable.AllowInteractions = false;
                 switch (pType)
                 {
                     case packageType.small:
@@ -247,10 +249,10 @@ public class delivery_zone : MonoBehaviour
                 
                 
                     
-                if (go.TryGetComponent<interactable_object>(out var interactable))
+                /*if (go.TryGetComponent<interactable_object>(out var interactable))
                 {
-                    interactable.AllowInteractions = false;
-                }
+                    
+                }*/
                 
                 if (go.TryGetComponent<Rigidbody>(out var rb))
                 {
