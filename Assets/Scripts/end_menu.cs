@@ -9,6 +9,10 @@ public class end_screen : MonoBehaviour
     {
         SceneManager.LoadSceneAsync(0);
     }
+    public void Continue()
+    {
+        SceneManager.LoadSceneAsync(1);
+    }
 
     private void Start()
     {

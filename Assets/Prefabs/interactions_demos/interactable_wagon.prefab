@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 5538258173663167983}
   - component: {fileID: 3993538855618010057}
   - component: {fileID: 2836886664916548573}
+  - component: {fileID: 6512272265778633970}
   - component: {fileID: 4779568704340746617}
   - component: {fileID: 282050715136815698}
   m_Layer: 2
@@ -160,6 +161,8 @@ MonoBehaviour:
   maxCapacity: 2
   storagePoint: {fileID: 33003720351149963}
   packagePrefab: {fileID: 7229160462547734405, guid: 4c2ca98830e782543adb5422123eb859, type: 3}
+  _obvc: {fileID: 6512272265778633970}
+  _packagesToInit: []
 --- !u!114 &2836886664916548573
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -177,6 +180,26 @@ MonoBehaviour:
   maxSpeed: 4
   turnSpeed: 100
   deceleration: 3
+--- !u!114 &6512272265778633970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3923015741184507435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0db359481445997489767d60736902bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _intNames: []
+  _floatNames: []
+  _boolNames:
+  - isFull
+  - isEmpty
+  _vector2Names: []
+  _stringNames: []
+  _values_to_init_on_start: []
 --- !u!65 &4779568704340746617
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -524,7 +547,7 @@ MonoBehaviour:
   _isTrigger: 1
   _maxNumberOfInteractors: 1
   AllowInteractions: 1
-  _dropOffText: Press E to drop off
+  _dropOffText: Press %interactButton% to drop off
   _pickupText: Press %interactButton% to pick up
   _wagonFullText: Wagon is full!
   _wagonEmptyText: Wagon is empty!

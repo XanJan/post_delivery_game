@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -17,6 +18,8 @@ public class big_package_interactable : interactable_object
     [SerializeField]private Vector3[] _colliderSizes = new Vector3[] { new Vector3(1,1,1),new Vector3(1,2,2),new Vector3(1,2,3),new Vector3(2,2,3),new Vector3(3,2,3)};
     [SerializeField]private Vector3[] _colliderOffsets = new Vector3[] {new Vector3(0,0,0),new Vector3(0,0,-0.5f),new Vector3(0,0,0),new Vector3(-0.5f,0,0),new Vector3(0,0,0)};
     private Dictionary<GameObject,Vector2> _playerMovementInputs = new Dictionary<GameObject, Vector2>();
+    private Dictionary<GameObject,observable_value<Vector2>.UpdateValueDelegate> _activePerformedCallbacks;
+    private Dictionary<GameObject,observable_value<Vector2>.UpdateValueDelegate> _activeCanceledCallbacks;
     protected override void OnInteractStart(interactor context)
     {
         // Add movement
@@ -110,11 +113,12 @@ public class big_package_interactable : interactable_object
             playerMovement.enabled = false;
         }
         // Enable package movement
-        if(context.TryGetComponent<PlayerInput>(out var res))
-        {
-            res.actions["move"].performed += cxt => HandleMovementPerformed(context.gameObject,cxt.ReadValue<Vector2>());
-            res.actions["move"].canceled += cxt => HandleMovementCancled(context.gameObject);
-        }
+        observable_value<Vector2>.UpdateValueDelegate actionMovePerformed = cxt => HandleMovementPerformed(context.gameObject,cxt.Value);
+        observable_value<Vector2>.UpdateValueDelegate actionMoveCanceled = cxt => HandleMovementCanceled(context.gameObject);
+        _activePerformedCallbacks.Add(gameObject,actionMovePerformed);
+        _activeCanceledCallbacks.Add(gameObject,actionMoveCanceled);
+        context.GetPlayerObservableValueCollection().GetObservableVector2("MovePerformed").UpdateValue+=actionMovePerformed;
+        context.GetPlayerObservableValueCollection().GetObservableVector2("MovePerformed").UpdateValue+=actionMoveCanceled;
     }
 
     protected override void OnInteractEnd(interactor context)
@@ -167,6 +171,13 @@ public class big_package_interactable : interactable_object
         {
             if(_spots[i]==context.gameObject){_spots[i]=null;}
         }
+        try{
+            observable_value<Vector2>.UpdateValueDelegate actionMovePerformed = _activePerformedCallbacks[gameObject];
+            observable_value<Vector2>.UpdateValueDelegate actionMoveCanceled = _activeCanceledCallbacks[gameObject];
+            context.GetPlayerObservableValueCollection().GetObservableVector2("MovePerformed").UpdateValue-=actionMovePerformed;
+            context.GetPlayerObservableValueCollection().GetObservableVector2("MovePerformed").UpdateValue-=actionMoveCanceled;
+        }catch{Debug.Log("Warning, failed to unsubscribe from movement events on big package.");}
+        
     }
     void FixedUpdate()
     {
@@ -205,7 +216,7 @@ public class big_package_interactable : interactable_object
     {
         if(_playerMovementInputs.ContainsKey(player)){_playerMovementInputs[player] = movement.normalized;}
     }
-    public void HandleMovementCancled(GameObject player)
+    public void HandleMovementCanceled(GameObject player)
     {
         if(_playerMovementInputs.ContainsKey(player)){_playerMovementInputs[player] = Vector2.zero;}
     }

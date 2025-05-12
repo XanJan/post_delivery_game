@@ -10,9 +10,12 @@ GameObject:
   m_Component:
   - component: {fileID: 1787767376837410998}
   - component: {fileID: 5359965639916270643}
+  - component: {fileID: 5733374493744705645}
+  - component: {fileID: 6614814133854808374}
+  - component: {fileID: 6384932314335708151}
   m_Layer: 0
   m_Name: PlayerManager
-  m_TagString: Untagged
+  m_TagString: PlayerManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -50,7 +53,31 @@ MonoBehaviour:
   m_JoinBehavior: 0
   m_PlayerJoinedEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6384932314335708151}
+        m_TargetAssemblyTypeName: controller_instance_manager, Assembly-CSharp
+        m_MethodName: OnPlayerJoinedHandler
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 5733374493744705645}
+        m_TargetAssemblyTypeName: player_prefab_switcher, Assembly-CSharp
+        m_MethodName: NextPrefab
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_PlayerLeftEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -66,7 +93,7 @@ MonoBehaviour:
       m_SingletonActionBindings: []
       m_Flags: 0
     m_Reference: {fileID: 0}
-  m_PlayerPrefab: {fileID: 8722575334612491203, guid: c7221607c3f392d4e934ef3ce8bc5f19, type: 3}
+  m_PlayerPrefab: {fileID: 4084499211124809556, guid: cfe462f5f12475d4f825111f54444b68, type: 3}
   m_SplitScreen: 0
   m_MaintainAspectRatioInSplitScreen: 0
   m_FixedNumberOfSplitScreens: -1
@@ -76,3 +103,53 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
+--- !u!114 &5733374493744705645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6891384186434538554}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ee38385329b3d941a96b3db2174fdd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerPrefabs:
+  - {fileID: 4084499211124809556, guid: cfe462f5f12475d4f825111f54444b68, type: 3}
+  - {fileID: 4084499211124809556, guid: a80013b7579d7ff49986f000253e14f4, type: 3}
+  - {fileID: 4084499211124809556, guid: 49b6ec998fa518f48a2c4b3e76ef5e01, type: 3}
+  - {fileID: 4084499211124809556, guid: ae9ece1101329124a8ca79a2a4df360f, type: 3}
+--- !u!114 &6614814133854808374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6891384186434538554}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0db359481445997489767d60736902bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _intNames:
+  - numberOfPlayers
+  _floatNames: []
+  _boolNames: []
+  _vector2Names: []
+  _stringNames: []
+  _values_to_init_on_start: []
+--- !u!114 &6384932314335708151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6891384186434538554}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6e1e7990d7607b40ab9a52ea61f40f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _obvc: {fileID: 6614814133854808374}
+  _playerInputManager: {fileID: 5359965639916270643}

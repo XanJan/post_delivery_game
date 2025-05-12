@@ -95,33 +95,33 @@ public class animator_handler : MonoBehaviour
 
     // Event handlers
     //---------------------------------------------------------------------------------------------
-    private void HandleIntUpdateEvent(string name, int i)
+    private void HandleIntUpdateEvent(observable_value<int> context)
     {
         foreach(Animator a in _animators)
         {
-            if(AnimatorContainsParameter(a,name))
+            if(AnimatorContainsParameter(a,context.Name))
             {
-                a.SetInteger(name, i);
+                a.SetInteger(context.Name, context.Value);
             }
         }
     }
-    private void HandleFloatUpdateEvent(string name, float f)
+    private void HandleFloatUpdateEvent(observable_value<float> context)
     {
         foreach(Animator a in _animators)
         {
-            if(AnimatorContainsParameter(a,name))
+            if(AnimatorContainsParameter(a,context.Name))
             {
-                a.SetFloat(name, f); 
+                a.SetFloat(context.Name, context.Value); 
             }
         }
     }
-    private void HandleBoolUpdateEvent(string name, bool b)
+    private void HandleBoolUpdateEvent(observable_value<bool> context)
     {
         foreach(Animator a in _animators)
         {
-            if(AnimatorContainsParameter(a,name))
+            if(AnimatorContainsParameter(a,context.Name))
             {
-                a.SetBool(name, b);
+                a.SetBool(context.Name, context.Value);
             }
         }
     }
