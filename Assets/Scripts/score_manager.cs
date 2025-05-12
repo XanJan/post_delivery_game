@@ -24,12 +24,13 @@ public class score_manager : MonoBehaviour
     }
     public void OnSceneLoad(UnityEngine.SceneManagement.Scene s, LoadSceneMode mode)
     {
-        if(s.name!="end_screen_revamped")
+        if (s.name != "end_screen_revamped")
         {
             Debug.Log("Resetting score");
             totalPackageScore = 0;
         }
 
+    }
 
     public void AddScore(int point)
     {
