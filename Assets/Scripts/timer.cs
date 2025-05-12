@@ -23,9 +23,9 @@ public class timer : MonoBehaviour
         else
         {
             remainingTime = 0;
-            GameOver(); 
+            GameOver();
         }
-        
+
 
         int minutes = Mathf.FloorToInt(remainingTime / 60);
         int seconds = Mathf.FloorToInt(remainingTime % 60);
@@ -35,6 +35,11 @@ public class timer : MonoBehaviour
     public void GameOver()
     {
         SceneManager.LoadSceneAsync(2);
+    }
+
+    public void AddTime(float amount)
+    {
+        remainingTime += amount;
     }
 }
 
