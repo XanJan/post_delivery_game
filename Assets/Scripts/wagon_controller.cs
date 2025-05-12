@@ -8,7 +8,7 @@ public class wagon_controller : MonoBehaviour{
     public Transform seatPosition;
     private List<GameObject> playersInside = new List<GameObject>();
     private Dictionary<GameObject, Vector2> playerInputs = new Dictionary<GameObject, Vector2>();
-
+    private GameObject[] _spots = new GameObject[4];
     private Rigidbody rb;
     public float acceleration = 5f; // wagon acceleration
     public float maxSpeed = 10f;    // wagon max speed
@@ -18,6 +18,7 @@ public class wagon_controller : MonoBehaviour{
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        for(int i = 0; i < _spots.Length ; i++) _spots[i]=null;
     }
 
     // add palyer to list when entering trigger
@@ -57,6 +58,7 @@ public class wagon_controller : MonoBehaviour{
         if(playerRb != null){
             playerRb.useGravity = false;
             playerRb.constraints |= RigidbodyConstraints.FreezePositionY;
+            playerRb.isKinematic = true;
         }
 
         Collider wagonCollider = GetComponent<Collider>();
@@ -64,15 +66,30 @@ public class wagon_controller : MonoBehaviour{
         Physics.IgnoreCollision(playerCollider, wagonCollider, true);
 
         player.transform.SetParent(transform);
-        int seatOffset = playersInside.Count - 1;
-        player.transform.position = seatPosition.position - transform.forward * seatOffset;
+        
+        int seatOffset = 0;
+        for(int i = 0 ; i < _spots.Length ; i++) {
+            Debug.Log("beforeIf");
+            if(_spots[i] == null)
+            {
+                Debug.Log("FoundSpot");
+                _spots[i]=player;
+                seatOffset=i;
+                Debug.Log("Offset = " + i);
+                break;
+                
+            }
+        }
+        player.transform.localPosition = seatPosition.localPosition - new Vector3(0,0,seatOffset/2f);
         player.transform.rotation = seatPosition.rotation;
 
         playerInputs[player] = Vector2.zero;
-        PlayerInput playerInput = player.GetComponent<PlayerInput>();
-        if(playerInput != null){
-            playerInput.actions["Move"].performed += ctx => UpdateInput(player, ctx.ReadValue<Vector2>());
-            playerInput.actions["Move"].canceled += ctx => UpdateInput(player, Vector2.zero);
+
+        
+        observable_value_collection playerObvc = player.GetComponent<observable_value_collection>();
+        if(playerObvc != null){
+            playerObvc.GetObservableVector2("MovePerformed").UpdateValue += ctx => UpdateInput(player, ctx.Value);
+            playerObvc.GetObservableVector2("MoveCanceled").UpdateValue += ctx => UpdateInput(player, Vector2.zero);
         }
     }
 
@@ -91,6 +108,7 @@ public class wagon_controller : MonoBehaviour{
         if(playerRb != null){
             playerRb.useGravity = true;
             playerRb.constraints &= ~RigidbodyConstraints.FreezePositionY;
+            playerRb.isKinematic = false;
         }
 
         Collider wagonCollider = GetComponent<Collider>();
@@ -98,6 +116,8 @@ public class wagon_controller : MonoBehaviour{
         Physics.IgnoreCollision(playerCollider, wagonCollider, false);
 
         player.transform.SetParent(null);
+        for(int i = 0 ; i < _spots.Length ; i++) {if(_spots[i] == player)_spots[i]=null;}
+
         player.transform.position = transform.position - transform.forward * 2f;
 
         playerInputs.Remove(player);
@@ -112,9 +132,11 @@ public class wagon_controller : MonoBehaviour{
         if(playerInputs.ContainsKey(player)){
             if(input.magnitude < 0.1f){
                 playerInputs[player] = Vector2.zero;
+                if(player.TryGetComponent<observable_value_collection>(out var obvc)){obvc.InvokeFloat("moveSpeed",0f);}
             }
             else{
                 playerInputs[player] = input;
+                if(player.TryGetComponent<observable_value_collection>(out var obvc)){obvc.InvokeFloat("moveSpeed",input.magnitude);}
             }
         }
     }
@@ -124,7 +146,7 @@ public class wagon_controller : MonoBehaviour{
         // if no inputs, slow down
         if(playerInputs.Count == 0){
             rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, Vector3.zero, Time.fixedDeltaTime * deceleration);
-            UpdatePlayerPositions();
+            //UpdatePlayerPositions();
             return;
         }
 
@@ -142,7 +164,7 @@ public class wagon_controller : MonoBehaviour{
         // if resulting input is negligible, decelerate
         if(combinedInput.magnitude < 0.1f){
             rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, Vector3.zero, Time.fixedDeltaTime * deceleration);
-            UpdatePlayerPositions();
+            //UpdatePlayerPositions();
             return;
         }
 
@@ -196,7 +218,7 @@ public class wagon_controller : MonoBehaviour{
 
         rb.linearVelocity = newVelocity;
 
-        UpdatePlayerPositions();
+        //UpdatePlayerPositions();
     } 
 
     // ensure that player models stays in the correct position during wagon movement
@@ -204,6 +226,7 @@ public class wagon_controller : MonoBehaviour{
         foreach (GameObject player in playerInputs.Keys){
             if(player != null){
                 player.transform.position = seatPosition.position;
+                
                 player.transform.rotation = seatPosition.rotation;
             }
         }

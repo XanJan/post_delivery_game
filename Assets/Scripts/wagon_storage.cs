@@ -7,6 +7,7 @@ public class wagon_storage : MonoBehaviour{
     private Stack<GameObject> storedPackages = new Stack<GameObject>();
     public Transform storagePoint;
     public GameObject packagePrefab;
+    [SerializeField] private observable_value_collection _obvc;
     [SerializeField] private List<GameObject> _packagesToInit;
 
     public bool IsFull() => storedPackages.Count >= maxCapacity;
@@ -57,7 +58,10 @@ public class wagon_storage : MonoBehaviour{
             Collider wagonCollider = GetComponent<Collider>();
             Collider[] packageColliders = package.GetComponentsInChildren<Collider>();
             Physics.IgnoreCollision(packageColliders[0], wagonCollider, true);
+            foreach(Collider c in packageColliders) c.enabled=false;
             packageColliders[1].enabled = false;
+            if(storedPackages.Count == maxCapacity && _obvc!=null) try{_obvc.InvokeBool("isFull",true);}catch{}
+            if(_obvc!=null) try{_obvc.InvokeBool("isEmpty",false);}catch{}
         }
         else{
             Debug.Log("Wagon is full!");
@@ -75,8 +79,11 @@ public class wagon_storage : MonoBehaviour{
             }
             Collider wagonCollider = GetComponent<Collider>();
             Collider[] packageColliders = package.GetComponentsInChildren<Collider>();
+            foreach(Collider c in packageColliders) c.enabled=true;
             Physics.IgnoreCollision(packageColliders[0], wagonCollider, false);
             packageColliders[1].enabled = true;
+            if(_obvc!=null) try{_obvc.InvokeBool("isFull",false);}catch{}
+            if(storedPackages.Count == 0 && _obvc!=null) try{_obvc.InvokeBool("isEmpty",true);}catch{}
             return package;
         }
         return null;   

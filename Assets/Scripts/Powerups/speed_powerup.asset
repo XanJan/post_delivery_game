@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f9b137f107656e45813372c415d512b, type: 3}
   m_Name: speed_powerup
   m_EditorClassIdentifier: 
-  speedMultiplier: 8
+  speedMultiplier: 2
   time: 10

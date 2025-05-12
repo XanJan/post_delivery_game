@@ -31,8 +31,8 @@ public class rotation_functionality : MonoBehaviour
         } else {Debug.Log("Warning: Observable value collection " + NullMessage);}
     }
 
-    private void HandleValueUpdate(string name, Vector2 v)
+    private void HandleValueUpdate(observable_value<Vector2> context)
     {
-        if(_toRotate!=null){_toRotate.rotation = Quaternion.LookRotation(v);}
+        if(_toRotate!=null){_toRotate.rotation = Quaternion.LookRotation(context.Value);}
     }
 }

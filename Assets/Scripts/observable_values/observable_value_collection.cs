@@ -18,15 +18,15 @@ public class observable_value_collection : MonoBehaviour
     // for each name specified, an ObservableValue is instantiated and added to the
     // Dictionary corresponding to its type. Duplicates are discarded.
     [Header("Observable Value Names... NO DUPLICATES")]
-    [SerializeField] private List<string> _intNames;
-    [SerializeField] private List<string> _floatNames;
-    [SerializeField] private List<string> _boolNames;
-    [SerializeField] private List<string> _vector2Names;
-    [SerializeField] private List<string> _stringNames;
-    [SerializeField] private List<value_names> _values_to_init_on_start;
+    [SerializeField] private List<string> _intNames = new List<string>();
+    [SerializeField] private List<string> _floatNames = new List<string>();
+    [SerializeField] private List<string> _boolNames = new List<string>();
+    [SerializeField] private List<string> _vector2Names = new List<string>();
+    [SerializeField] private List<string> _stringNames = new List<string>();
+    [SerializeField] private List<value_names> _values_to_init_on_start = new List<value_names>();
 
     // List of all the names of the currently active observable values.
-    private List<string> _names;
+    private List<string> _names = new List<string>();
     /// <summary>
     /// Dictionary of observable ints. Use ObservableInts[name] to get a value. Don't
     /// forget to handle exceptions when getting.
