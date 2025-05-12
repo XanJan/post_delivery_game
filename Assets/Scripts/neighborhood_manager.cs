@@ -10,10 +10,11 @@ public class neighborhood_manager : MonoBehaviour
     private int completedZones = 0;
     private bool isCompleted = false;
     private List<delivery_zone> deliveryZones = new List<delivery_zone>();
-
+    private int deliveryZonesCount;
+    private int finishedDeliveryZones;
     void Start()
     {
-        deliveryZones = this.transform.childCount;
+        deliveryZonesCount = this.transform.childCount;
         Debug.Log(deliveryZones);
 
         game_events.current.onPackageTrigger += CountFinishedDeliveryZones;
@@ -23,7 +24,7 @@ public class neighborhood_manager : MonoBehaviour
     private void CountFinishedDeliveryZones()
     {
         finishedDeliveryZones++;
-        if (deliveryZones <= finishedDeliveryZones)
+        if (deliveryZonesCount <= finishedDeliveryZones)
         // Register neighborhood with the tracker
         neighborhood_delivery_tracker.Instance.RegisterNeighborhood(neighborhoodId);
         

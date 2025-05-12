@@ -288,9 +288,10 @@ public class delivery_zone : MonoBehaviour
         return maxPackages;
     }
 
-    public int GetCurrentPackages(){
+    public int GetCurrentPackages()
+    {
         return detectedPackages.Count;
-    
+    }
     // Get the neighborhood ID this delivery zone belongs to
     public int GetNeighborhoodId()
     {
