@@ -168,8 +168,19 @@ public class wagon_controller : MonoBehaviour{
 
         int activePlayers = playerInputs.Values.Count(input => input.sqrMagnitude > 0); 
 
-        float playerCountFactor = Mathf.Lerp(0.5f, 1f, (activePlayers - 1) / 3f);
-        playerCountFactor = Mathf.Clamp(playerCountFactor, 0.5f, 1f);
+        float playerCountFactor;
+        switch(activePlayers) {
+            case 1:
+            case 2:
+                playerCountFactor = 0.2f;
+                break;
+            case 3:
+                playerCountFactor = 0.7f;
+                break;
+            default:
+                playerCountFactor = 1f;
+                break;  
+        }
         
         Vector3 targetVelocity = alignmentFactor * inputMagnitude * maxSpeed * playerCountFactor * -transform.forward;
 

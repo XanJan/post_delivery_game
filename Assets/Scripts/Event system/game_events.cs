@@ -37,4 +37,8 @@ public class game_events : MonoBehaviour
             onNeighborhoodFinished();
         }
     }
+    public event Action onNeighborhoodGenerated;
+    public void RaiseNeighborhoodGenerated(){
+        onNeighborhoodGenerated?.Invoke();
+    }
 }

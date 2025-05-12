@@ -47,3 +47,4 @@ MonoBehaviour:
   neighborhoods:
   - {fileID: 5005131794947634226, guid: 62fce1eca27c7c94497b8444d87e8510, type: 3}
   - {fileID: 77188317421640709, guid: 3d01c2b2fc4f86e4ab436f76a14b71c3, type: 3}
+  startingNeighborhood: {fileID: 5005131794947634226, guid: 62fce1eca27c7c94497b8444d87e8510, type: 3}

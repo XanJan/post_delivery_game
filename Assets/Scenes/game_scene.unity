@@ -954,6 +954,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1588745253}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &251714740 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5005131794947634226, guid: 62fce1eca27c7c94497b8444d87e8510, type: 3}
+  m_PrefabInstance: {fileID: 1080673476}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &272142323
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6432,6 +6437,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: LevelCreateManger
       objectReference: {fileID: 0}
+    - target: {fileID: 2519620828626869195, guid: 02f41d40607ec1441ae19f4ffe38a311, type: 3}
+      propertyPath: startingNeighborhood
+      value: 
+      objectReference: {fileID: 251714740}
     - target: {fileID: 6298366039430532214, guid: 02f41d40607ec1441ae19f4ffe38a311, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -6810,7 +6819,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3993538855618010057, guid: a6428ad72173eac4cb30d0701621932a, type: 3}
       propertyPath: maxCapacity
-      value: 20
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 3993538855618010057, guid: a6428ad72173eac4cb30d0701621932a, type: 3}
       propertyPath: _packagesToInit.Array.size

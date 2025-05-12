@@ -13,6 +13,17 @@ public class neighborhood_manager : MonoBehaviour
 
     void Start()
     {
+        deliveryZones = this.transform.childCount;
+        Debug.Log(deliveryZones);
+
+        game_events.current.onPackageTrigger += CountFinishedDeliveryZones;
+        game_events.current.RaiseNeighborhoodGenerated();
+    }
+
+    private void CountFinishedDeliveryZones()
+    {
+        finishedDeliveryZones++;
+        if (deliveryZones <= finishedDeliveryZones)
         // Register neighborhood with the tracker
         neighborhood_delivery_tracker.Instance.RegisterNeighborhood(neighborhoodId);
         

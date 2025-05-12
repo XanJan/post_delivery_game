@@ -6748,7 +6748,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3993538855618010057, guid: a6428ad72173eac4cb30d0701621932a, type: 3}
       propertyPath: maxCapacity
-      value: 10
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 8838821214776784029, guid: a6428ad72173eac4cb30d0701621932a, type: 3}
       propertyPath: m_LocalPosition.x

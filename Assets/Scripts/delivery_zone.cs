@@ -1,9 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System;
-using Unity.Mathematics;
 using System.Linq;
 
 public class delivery_zone : MonoBehaviour
@@ -285,6 +283,13 @@ public class delivery_zone : MonoBehaviour
             return 0;
         }
     }
+
+    public int GetMaxPackages(){
+        return maxPackages;
+    }
+
+    public int GetCurrentPackages(){
+        return detectedPackages.Count;
     
     // Get the neighborhood ID this delivery zone belongs to
     public int GetNeighborhoodId()
