@@ -125,6 +125,8 @@ public class player_movement : MonoBehaviour
             isGrounded = false;
         }
     }
+
+
     private void CheckIfGrounded()
     {
         // Check if the player is touching the ground using a raycast or overlap
