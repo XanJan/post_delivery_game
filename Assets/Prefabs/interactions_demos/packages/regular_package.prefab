@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8723625326511797880}
   - component: {fileID: 6572301296395799999}
   m_Layer: 0
-  m_Name: interactable_regular_package
+  m_Name: regular_package
   m_TagString: Package
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

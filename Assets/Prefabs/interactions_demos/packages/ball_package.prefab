@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8723625326511797880}
   - component: {fileID: 6572301296395799999}
   m_Layer: 0
-  m_Name: interactable_regular_package
+  m_Name: ball_package
   m_TagString: Package
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -82,8 +82,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.4, y: 0.4, z: 0.4}
-  m_Center: {x: 0, y: 0.2, z: 0}
+  m_Size: {x: 0.5, y: 0.5, z: 0.5}
+  m_Center: {x: 0, y: 0.25, z: 0}
 --- !u!135 &8723625326511797880
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -156,7 +156,7 @@ Transform:
   m_GameObject: {fileID: 8957943979286810275}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.45, y: 0, z: 0.05}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -169,7 +169,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8957943979286810275}
-  m_Mesh: {fileID: -2432090755550338912, guid: bc5644bcea478624faa1cafcc1581da2, type: 3}
+  m_Mesh: {fileID: -2432090755550338912, guid: 93b0c720d2bc89e49a69e60197187ab9, type: 3}
 --- !u!23 &2636860984109471264
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -193,7 +193,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a3259e4992fdf794987e80f3f817a45d, type: 2}
+  - {fileID: 2100000, guid: 1fd302e2632c85c4d80eff1735a1224c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

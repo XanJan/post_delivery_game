@@ -17,6 +17,7 @@ TagManager:
   - Hedge
   - DeliveryZones
   - Timer
+  - BigPackage
   layers:
   - Default
   - TransparentFX

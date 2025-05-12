@@ -128,11 +128,10 @@ GameObject:
   - component: {fileID: 6235521466334607834}
   - component: {fileID: 5649787931192219376}
   - component: {fileID: 4539495000047940128}
-  - component: {fileID: 7952854529686023564}
   - component: {fileID: 4055361712303835322}
   m_Layer: 0
   m_Name: bigpacket
-  m_TagString: Untagged
+  m_TagString: BigPackage
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -205,27 +204,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &7952854529686023564
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1639809437790792157}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 3, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &4055361712303835322
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -255,6 +233,18 @@ MonoBehaviour:
   _pickupWeight: 4
   _collider: {fileID: 4539495000047940128}
   _rb: {fileID: 5649787931192219376}
+  _colliderSizes:
+  - {x: 1, y: 1, z: 1}
+  - {x: 1, y: 2, z: 2}
+  - {x: 1, y: 2, z: 3}
+  - {x: 2, y: 2, z: 3}
+  - {x: 3, y: 2, z: 3}
+  _colliderOffsets:
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: -0.5}
+  - {x: 0, y: 0, z: 0}
+  - {x: -0.5, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
 --- !u!1 &5094315520805993212
 GameObject:
   m_ObjectHideFlags: 0

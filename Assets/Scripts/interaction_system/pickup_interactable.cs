@@ -189,8 +189,6 @@ public class pickup_interactable : interactable_object
             
         }
     }
-    private void ThrowStart(interactor context)
-    {
-
-    }
+    
 }
+
