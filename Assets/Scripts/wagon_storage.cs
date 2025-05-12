@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEditor.SearchService;
 public class wagon_storage : MonoBehaviour{
-    public int maxCapacity = 10; // amount of packages that can be stored
+    public int maxCapacity = 50; // amount of packages that can be stored
     private int totalPackagedPackages = 0;
     private Stack<GameObject> storedPackages = new Stack<GameObject>();
     public Transform storagePoint;
