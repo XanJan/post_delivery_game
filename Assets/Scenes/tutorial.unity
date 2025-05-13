@@ -2326,13 +2326,13 @@ MonoBehaviour:
   _arrowExit: {fileID: 1182958964}
   _defaultWriteSpeed: 30
   _tmp: {fileID: 1572834593}
-  _preEnter: 'Paul, where are you? Get over here! [Press X to enter]'
+  _preEnter: 'Paul, where are you? Get over here! [Press B to enter]'
   _postEnter: Great, hope you're ready to work Paul.
   _missionDescription1: There's too much online shopping, we're getting overstocked
     with parcels.
   _missionDescription2: You need to deliver them ASAP Paul!
   _nameChangeDirections: 
-  _pickupDirections: Pickup the packages by looking at them and pressing X.
+  _pickupDirections: Pickup the packages by looking at them and pressing B.
   _dropOffDirections: Then fill the delivery wagon with packages!
   _wagonFull: Excellent work Paul!
   _steerWagonDirection1: Steer the wagon by interacting with its front!
@@ -2513,6 +2513,83 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 668e7924116e24b45b0c55c24619b99f, type: 3}
   m_PrefabInstance: {fileID: 804996757}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1881295257
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4196013423910927219, guid: c96b799d2159f524891e8776d9d18e70, type: 3}
+      propertyPath: m_Name
+      value: SoundManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 6637383801823637813, guid: c96b799d2159f524891e8776d9d18e70, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7746405111176747405, guid: c96b799d2159f524891e8776d9d18e70, type: 3}
+      propertyPath: soundClips.Array.size
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 7746405111176747405, guid: c96b799d2159f524891e8776d9d18e70, type: 3}
+      propertyPath: 'soundClips.Array.data[9]'
+      value: 
+      objectReference: {fileID: 8300000, guid: cc34c1f20f72c89449cbac773e95ff82, type: 3}
+    - target: {fileID: 7746405111176747405, guid: c96b799d2159f524891e8776d9d18e70, type: 3}
+      propertyPath: 'soundClips.Array.data[10]'
+      value: 
+      objectReference: {fileID: 8300000, guid: e90c1886dd5e93c41a43fbdab007de65, type: 3}
+    - target: {fileID: 7746405111176747405, guid: c96b799d2159f524891e8776d9d18e70, type: 3}
+      propertyPath: 'soundClips.Array.data[11]'
+      value: 
+      objectReference: {fileID: 8300000, guid: d2abf357feb7de54990ffcfa0d1ab4a6, type: 3}
+    - target: {fileID: 8343806756960051604, guid: c96b799d2159f524891e8776d9d18e70, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 9.807288
+      objectReference: {fileID: 0}
+    - target: {fileID: 8343806756960051604, guid: c96b799d2159f524891e8776d9d18e70, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -10.492714
+      objectReference: {fileID: 0}
+    - target: {fileID: 8343806756960051604, guid: c96b799d2159f524891e8776d9d18e70, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 12.746959
+      objectReference: {fileID: 0}
+    - target: {fileID: 8343806756960051604, guid: c96b799d2159f524891e8776d9d18e70, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8343806756960051604, guid: c96b799d2159f524891e8776d9d18e70, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8343806756960051604, guid: c96b799d2159f524891e8776d9d18e70, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8343806756960051604, guid: c96b799d2159f524891e8776d9d18e70, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8343806756960051604, guid: c96b799d2159f524891e8776d9d18e70, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8343806756960051604, guid: c96b799d2159f524891e8776d9d18e70, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8343806756960051604, guid: c96b799d2159f524891e8776d9d18e70, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c96b799d2159f524891e8776d9d18e70, type: 3}
 --- !u!1 &1961993331
 GameObject:
   m_ObjectHideFlags: 0
@@ -4837,3 +4914,4 @@ SceneRoots:
   - {fileID: 40992155}
   - {fileID: 1961993334}
   - {fileID: 88873327}
+  - {fileID: 1881295257}

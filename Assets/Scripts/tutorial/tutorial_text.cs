@@ -140,7 +140,7 @@ public class tutorial_text : MonoBehaviour
 
     public void HandlePlayerJoin(observable_value<int> context)
     {
-        if(context.Value>0)
+        if(context.Value==1)
         {
             QueueString(_postEnter);
             QueueString(_missionDescription1);

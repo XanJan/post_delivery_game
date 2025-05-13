@@ -11,7 +11,7 @@ public class end_screen : MonoBehaviour
     }
     public void Continue()
     {
-        SceneManager.LoadSceneAsync(1);
+        SceneManager.LoadSceneAsync(2);
     }
 
     private void Start()

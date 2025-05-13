@@ -34,7 +34,7 @@ public class timer : MonoBehaviour
 
     public void GameOver()
     {
-        SceneManager.LoadSceneAsync(2);
+        SceneManager.LoadSceneAsync(3);
     }
 
     public void AddTime(float amount)
