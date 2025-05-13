@@ -18,9 +18,16 @@ public class spawn_powerup : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(waitTime);
-            Instantiate(powerups[Random.Range(0, powerups.Count)], new Vector3(this.transform.position.x + Random.Range(-8f, 8f), this.transform.position.y, this.transform.position.z + Random.Range(-18f, 18f)), Quaternion.identity);
-            //StartCoroutine(SpawnPowerup(Random.Range(1f, 10f)));
+            GameObject stamp = Instantiate(powerups[Random.Range(0, powerups.Count)], new Vector3(this.transform.position.x + Random.Range(-8f, 8f), this.transform.position.y, this.transform.position.z + Random.Range(-18f, 18f)), Quaternion.identity);
+            StartCoroutine(DeletePowerup(10f, stamp));
+
         }
+    }
+
+    private IEnumerator DeletePowerup(float waitTime, GameObject stampObject)
+    {
+        yield return new WaitForSeconds(waitTime);
+        Destroy(stampObject);
     }
 
 }

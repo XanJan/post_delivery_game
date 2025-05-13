@@ -1081,6 +1081,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1532112052}
     m_Modifications:
+    - target: {fileID: 5045473585012174440, guid: 8be49312a2d1a2148aee6e8407c30670, type: 3}
+      propertyPath: maxPackages
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 5680416596114794138, guid: 8be49312a2d1a2148aee6e8407c30670, type: 3}
       propertyPath: m_Name
       value: delivery_zone
@@ -4796,6 +4800,10 @@ PrefabInstance:
     - target: {fileID: 4196013423910927219, guid: c96b799d2159f524891e8776d9d18e70, type: 3}
       propertyPath: m_Name
       value: SoundManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 6637383801823637813, guid: c96b799d2159f524891e8776d9d18e70, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7746405111176747405, guid: c96b799d2159f524891e8776d9d18e70, type: 3}
       propertyPath: soundClips.Array.size
