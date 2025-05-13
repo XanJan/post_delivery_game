@@ -108,10 +108,12 @@ public class gate : MonoBehaviour
             
             if (shouldOpen)
             {
+                SoundManager.PlaySound(SoundType.GateOpenSuccess);
                 OpenGate();
             }
             else
             {
+                SoundManager.PlaySound(SoundType.GateOpenFail);
                 Debug.Log($"Gate buttons pressed but neighborhood {neighborhoodId} is not complete yet!");
             }
         }
