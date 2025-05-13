@@ -9,6 +9,7 @@ public class powerup_collide : MonoBehaviour
         if(other.CompareTag("Player"))
         {
             pu.ApplyPowerup(other.gameObject);
+            SoundManager.PlaySound(SoundType.PowerupPickup);
             Destroy(this.gameObject);
         }
     }

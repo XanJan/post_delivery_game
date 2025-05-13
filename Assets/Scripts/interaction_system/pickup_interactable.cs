@@ -79,6 +79,7 @@ public class pickup_interactable : interactable_object
                 {
                     context.GetPlayerObservableValueCollection().InvokeBool("throwPackageHold",true);
                     
+
                 }
                 
             }
@@ -170,7 +171,16 @@ public class pickup_interactable : interactable_object
             {
                 Vector3 throwVelocity = player.transform.forward * _throwForce + (playerRb.linearVelocity*playerRb.linearVelocity.magnitude) + Vector3.up * 3;
                 itemRb.linearVelocity = throwVelocity;
+                
             }
+        }
+        if(_throwForce >= 3f)
+        {
+            SoundManager.PlaySound(SoundType.PackageThrown);
+        }
+        else
+        {
+            //SoundManager.PlaySound(SoundType.DropPackage);
         }
         if (TryGetComponent<Collider>(out var collider))
         {

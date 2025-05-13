@@ -3177,6 +3177,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d8b5050c100a41741adf40666337afe2, type: 3}
+--- !u!4 &1027405581 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8343806756960051604, guid: c96b799d2159f524891e8776d9d18e70, type: 3}
+  m_PrefabInstance: {fileID: 1544880524}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1057471924
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4780,6 +4785,79 @@ Transform:
   - {fileID: 486465194}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1544880524
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1588745253}
+    m_Modifications:
+    - target: {fileID: 4196013423910927219, guid: c96b799d2159f524891e8776d9d18e70, type: 3}
+      propertyPath: m_Name
+      value: SoundManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 7746405111176747405, guid: c96b799d2159f524891e8776d9d18e70, type: 3}
+      propertyPath: soundClips.Array.size
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 7746405111176747405, guid: c96b799d2159f524891e8776d9d18e70, type: 3}
+      propertyPath: 'soundClips.Array.data[9]'
+      value: 
+      objectReference: {fileID: 8300000, guid: cc34c1f20f72c89449cbac773e95ff82, type: 3}
+    - target: {fileID: 7746405111176747405, guid: c96b799d2159f524891e8776d9d18e70, type: 3}
+      propertyPath: 'soundClips.Array.data[10]'
+      value: 
+      objectReference: {fileID: 8300000, guid: e90c1886dd5e93c41a43fbdab007de65, type: 3}
+    - target: {fileID: 7746405111176747405, guid: c96b799d2159f524891e8776d9d18e70, type: 3}
+      propertyPath: 'soundClips.Array.data[11]'
+      value: 
+      objectReference: {fileID: 8300000, guid: d2abf357feb7de54990ffcfa0d1ab4a6, type: 3}
+    - target: {fileID: 8343806756960051604, guid: c96b799d2159f524891e8776d9d18e70, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8343806756960051604, guid: c96b799d2159f524891e8776d9d18e70, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8343806756960051604, guid: c96b799d2159f524891e8776d9d18e70, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8343806756960051604, guid: c96b799d2159f524891e8776d9d18e70, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8343806756960051604, guid: c96b799d2159f524891e8776d9d18e70, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8343806756960051604, guid: c96b799d2159f524891e8776d9d18e70, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8343806756960051604, guid: c96b799d2159f524891e8776d9d18e70, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8343806756960051604, guid: c96b799d2159f524891e8776d9d18e70, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8343806756960051604, guid: c96b799d2159f524891e8776d9d18e70, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8343806756960051604, guid: c96b799d2159f524891e8776d9d18e70, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c96b799d2159f524891e8776d9d18e70, type: 3}
 --- !u!4 &1547193780 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d8b5050c100a41741adf40666337afe2, type: 3}
@@ -5077,6 +5155,7 @@ Transform:
   - {fileID: 868397485}
   - {fileID: 1419781376}
   - {fileID: 1742205462}
+  - {fileID: 1027405581}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1591270769 stripped

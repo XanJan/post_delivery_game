@@ -13,6 +13,8 @@ public enum SoundType
     DeliveryZoneFourCompleted,
     NeighborhoodCompleted,
     PackageThrown,
+    DropPackage,
+    PowerupPickup,
 }
 
 [RequireComponent(typeof(AudioSource))]
