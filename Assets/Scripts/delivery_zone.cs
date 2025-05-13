@@ -199,8 +199,9 @@ public class delivery_zone : MonoBehaviour
                 case packageType.big:
                     score_manager.Instance.AddScore(5);
                     break;
-
             }
+            
+            SoundManager.PlaySound(SoundType.PackageDelivered);
             
             UpdateText();
             if(detectedPackages.Count >= maxPackages && !isCompleted){
@@ -210,12 +211,21 @@ public class delivery_zone : MonoBehaviour
                 // IMPORTANT CHANGE: Directly notify only this zone's neighborhood manager
                 if (_neighborhoodManager != null)
                 {
+                    int zoneIndex = _neighborhoodManager.GetZoneIndex(this);
+                    if (zoneIndex >= 0 && zoneIndex < 4)
+                    {
+                        SoundManager.PlayZoneCompletionSound(zoneIndex + 1);
+                    }
+                    
                     _neighborhoodManager.ZoneCompleted(this);
                     Debug.Log($"Zone completed in neighborhood {_neighborhoodManager.GetNeighborhoodId()}");
                 }
                 else
                 {
-                    try{game_events.current.PackageComplete();} 
+                    try{
+                        game_events.current.PackageComplete();
+                        SoundManager.PlaySound(SoundType.DeliveryZoneOneCompleted);
+                    } 
                     catch(NullReferenceException){Debug.Log("Warning, game_event instance is null. Game events may not register properly.");}
                 }
             }

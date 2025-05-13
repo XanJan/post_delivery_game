@@ -85,17 +85,20 @@ public class neighborhood_manager : MonoBehaviour
         {
             isCompleted = true;
             
-            // Mark neighborhood as completed in tracker
             neighborhood_delivery_tracker.Instance.SetNeighborhoodComplete(neighborhoodId);
             
-            // Notify that neighborhood is finished
+            SoundManager.PlaySound(SoundType.NeighborhoodCompleted);
+            
             game_events.current.NeighborhoodFinished();
             
             Debug.Log($"Neighborhood {neighborhoodId} is now complete!");
         }
-    }
-    public int GetNeighborhoodId()
+    }    public int GetNeighborhoodId()
     {
         return neighborhoodId;
+    }
+        public int GetZoneIndex(delivery_zone zone)
+    {
+        return deliveryZones.IndexOf(zone);
     }
 }
