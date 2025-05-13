@@ -28,7 +28,11 @@ public class delivery_zone : MonoBehaviour
     [SerializeField] private List<Transform> _dropOffPoints;
     private neighborhood_manager _neighborhoodManager;
     private bool isCompleted = false;
-    
+
+    void Awake()
+    {
+        maxPackages = (int)(UnityEngine.Random.Range(1f, maxPackages + 1));
+    }
     void Start(){
         areaRenderer = GetComponent<Renderer>();
         areaRenderer.material.color = red;   
